@@ -359,10 +359,10 @@ export const builds: Build[] = [
   },
   {
     id: "b10",
-    name: "The Org Snowball",
+    name: "Talent Flow Map",
     description:
       "一眼看清硅谷头部公司过去两年人才流入流出情况的可视化工具。",
-    category: "DEMO",
+    category: "SKILL",
     coverImage: "https://picsum.photos/seed/org-snowball/800/450",
     screenshots: ["https://picsum.photos/seed/talent-flow-viz/1200/675", "https://picsum.photos/seed/sankey-chart/1200/675"],
     problem:
@@ -508,7 +508,7 @@ export const builds: Build[] = [
     name: "人群理解到素材生成",
     description:
       "通过小红书高爆内容分析与人群理解，自动生成投放素材，CPA降低30%，七日留存提升5%。",
-    category: "DEMO",
+    category: "SKILL",
     coverImage: "https://picsum.photos/seed/crowd-creative/800/450",
     screenshots: ["https://picsum.photos/seed/crowd-insights/1200/675", "https://picsum.photos/seed/ad-material-gen/1200/675"],
     problem:
@@ -889,7 +889,7 @@ export const posts: Post[] = [
     content:
       "分享一下笔记灵感生成的Demo效果🎉 用户输入感兴趣的话题方向，AI会结合站内热点趋势，生成多条笔记创作灵感和文案框架。内测创作者反馈：'终于不用对着空白页发呆了'。目前正在扩大内测范围，欢迎大家试用反馈。",
     linkedBuild: builds[2],
-    images: ["https://picsum.photos/seed/note-inspire-demo1/800/450", "https://picsum.photos/seed/note-inspire-demo2/800/450"],
+    images: ["https://picsum.photos/seed/laptop-workspace/800/450", "https://picsum.photos/seed/code-editor-dark/800/450"],
     likes: 38,
     comments: comments.p3,
     visibility: "PUBLIC",
