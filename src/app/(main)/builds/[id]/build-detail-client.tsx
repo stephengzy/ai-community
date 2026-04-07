@@ -477,6 +477,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
   const [activeTab, setActiveTab] = useState<BottomTab>("comments")
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [buildComments, setBuildComments] = useState<Comment[] | null>(null)
+  const isOwner = build?.author.id === currentUser.id
 
   if (!build) {
     return (
@@ -613,12 +614,25 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
               </Link>
               <CategoryTag category={build.category} />
             </div>
-            <h1 className="font-headline text-[36px] font-semibold text-on-surface tracking-tight leading-[1.2]">
-              {build.name}
-            </h1>
-            <p className="text-[14px] text-on-surface/50 leading-[1.8] font-body max-w-2xl">
-              {build.description}
-            </p>
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-2 min-w-0">
+                <h1 className="font-headline text-[36px] font-semibold text-on-surface tracking-tight leading-[1.2]">
+                  {build.name}
+                </h1>
+                <p className="text-[14px] text-on-surface/50 leading-[1.8] font-body max-w-2xl">
+                  {build.description}
+                </p>
+              </div>
+              {isOwner && (
+                <Link
+                  href={`/builds/${build.id}/edit`}
+                  className="hidden lg:flex items-center gap-2 shrink-0 px-4 py-2 rounded-xl border border-outline-variant/15 text-[13px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
+                >
+                  <span className="material-symbols-outlined text-[16px]">edit</span>
+                  Edit Build
+                </Link>
+              )}
+            </div>
           </header>
 
           {/* Image Gallery (cover + screenshots) */}

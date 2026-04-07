@@ -68,6 +68,8 @@ function toPost(state: StoreState, postId: string): Post | undefined {
       .filter(Boolean)
       .map((nc) => toComment(state, nc)),
     visibility: p.visibility,
+    department: p.department,
+    topicIds: p.topicIds,
     createdAt: p.createdAt,
   }
 }
@@ -277,6 +279,16 @@ export function useUnreadNotificationCount(): number {
   return useStore((s) => s.notifications.filter((n) => !n.isRead).length)
 }
 
+/** IDs of users the current user follows */
+export function useFollowedUserIds(): string[] {
+  return useStore((s) => s.followedUserIds)
+}
+
+/** Check if current user follows a specific user */
+export function useIsFollowing(userId: string): boolean {
+  return useStore((s) => s.followedUserIds.includes(userId))
+}
+
 /** Check if current user has liked a post */
 export function useIsPostLiked(postId: string): boolean {
   return useStore((s) => s.likedPostIds.includes(postId))
@@ -298,6 +310,7 @@ export function useIsCommentLiked(commentId: string): boolean {
 export function useActions() {
   return useStore((s) => ({
     updateUser: s.updateUser,
+    toggleFollow: s.toggleFollow,
     createBuild: s.createBuild,
     updateBuild: s.updateBuild,
     toggleUpvote: s.toggleUpvote,

@@ -2,6 +2,7 @@
 
 import type { Notification } from "@/types"
 import { Avatar } from "@/components/content/avatar"
+import { UserHoverCard } from "@/components/content/user-hover-card"
 import { cn } from "@/lib/utils"
 
 function getActionText(n: Notification): string {
@@ -55,20 +56,22 @@ export function NotificationItem({ notification, onClick }: NotificationItemProp
       )}
     >
       {/* Avatar */}
-      <Avatar
-        src={notification.actor.avatar}
-        name={notification.actor.name}
-        size="md"
-        className="mt-0.5 shrink-0"
-      />
+      <UserHoverCard user={notification.actor} avatarSize="md" showAvatar={true} className="shrink-0">
+        <Avatar
+          src={notification.actor.avatar}
+          name={notification.actor.name}
+          size="md"
+          className="mt-0.5 cursor-pointer"
+        />
+      </UserHoverCard>
 
       {/* Text content */}
       <div className="flex-1 min-w-0 pt-0.5">
-        <p className="text-[14px] leading-snug">
-          <span className="font-semibold text-on-surface tracking-tight">{displayName}</span>
+        <div className="text-[14px] leading-snug">
+          <UserHoverCard user={notification.actor} showAvatar={false} nameClassName="font-semibold text-on-surface tracking-tight cursor-pointer hover:underline" />
           <span className="text-secondary"> {action}</span>
           <span className="text-secondary/40 text-[12px] ml-1.5">{getTimeAgo(notification.createdAt)}</span>
-        </p>
+        </div>
 
         {notification.contentPreview && (
           <p className="mt-1 text-[13px] text-secondary/60 leading-relaxed line-clamp-2">

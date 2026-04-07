@@ -12,12 +12,15 @@ interface UploadedFile {
 interface MediaUploadProps {
   className?: string
   onHasCoverChange?: (hasCover: boolean) => void
+  onHasIconChange?: (hasIcon: boolean) => void
 }
 
-export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
+export function MediaUpload({ className, onHasCoverChange, onHasIconChange }: MediaUploadProps) {
   const [cover, setCover] = useState<UploadedFile | null>(null)
+  const [icon, setIcon] = useState<UploadedFile | null>(null)
   const [gallery, setGallery] = useState<UploadedFile[]>([])
   const coverRef = useRef<HTMLInputElement>(null)
+  const iconRef = useRef<HTMLInputElement>(null)
   const galleryRef = useRef<HTMLInputElement>(null)
 
   const createFile = (file: File): UploadedFile => ({
@@ -40,6 +43,20 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
     onHasCoverChange?.(false)
   }
 
+  const handleIcon = (file: File | undefined) => {
+    if (!file || !file.type.startsWith("image/")) return
+    if (icon) URL.revokeObjectURL(icon.preview)
+    setIcon(createFile(file))
+    onHasIconChange?.(true)
+  }
+
+  const removeIcon = () => {
+    if (icon) URL.revokeObjectURL(icon.preview)
+    setIcon(null)
+    if (iconRef.current) iconRef.current.value = ""
+    onHasIconChange?.(false)
+  }
+
   const handleGalleryFiles = (files: FileList | null) => {
     if (!files) return
     const newFiles = Array.from(files).filter((f) => f.type.startsWith("image/")).map(createFile)
@@ -55,9 +72,10 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
   return (
     <div className={cn(className)}>
       <input ref={coverRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleCover(e.target.files?.[0])} />
+      <input ref={iconRef} type="file" accept="image/*" className="hidden" onChange={(e) => handleIcon(e.target.files?.[0])} />
       <input ref={galleryRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleGalleryFiles(e.target.files)} />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
         {/* Cover */}
         <div>
           <p className="text-[12px] text-on-surface/50 mb-2">Cover image <span className="text-primary/60">*</span></p>
@@ -80,6 +98,30 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
             </button>
           )}
           <p className="mt-1.5 text-[11px] text-on-surface/35">Shown in Gallery</p>
+        </div>
+
+        {/* Icon image */}
+        <div className="w-[140px]">
+          <p className="text-[12px] text-on-surface/50 mb-2">Icon image</p>
+          {icon ? (
+            <div className="relative group w-[140px] h-[140px] rounded-xl overflow-hidden border border-outline-variant/8 bg-surface-container-low">
+              <img src={icon.preview} alt="Icon" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                <button type="button" onClick={() => iconRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">Replace</button>
+                <button type="button" onClick={removeIcon} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-red-500 hover:bg-white transition-colors">Remove</button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => iconRef.current?.click()}
+              className="w-[140px] h-[140px] rounded-xl border border-dashed border-outline-variant/35 flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
+            >
+              <span className="material-symbols-outlined text-[24px] text-on-surface/35 group-hover:text-primary/60 transition-colors">crop_square</span>
+              <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">1:1 square</span>
+            </button>
+          )}
+          <p className="mt-1.5 text-[11px] text-on-surface/35">Shown in lists & posts</p>
         </div>
 
         {/* Additional images */}

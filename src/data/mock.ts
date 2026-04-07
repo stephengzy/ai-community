@@ -122,6 +122,7 @@ export const builds: Build[] = [
       "基于语义理解的简历与JD智能匹配工具，初筛效率提升70%，技术岗筛选准确率92%。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/resume-screener/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=resume-screener&backgroundColor=f5e6d3",
     screenshots: [
       "https://picsum.photos/seed/resume-dash/1200/675",
       "https://picsum.photos/seed/resume-results/1200/675",
@@ -141,7 +142,11 @@ export const builds: Build[] = [
     weeklyUpvotes: 28,
     downloads: 62,
     visibility: "PUBLIC",
-    demoUrl: "https://resume-screener.internal.co",
+    links: [
+      { label: "Live Demo", url: "https://resume-screener.internal.co" },
+      { label: "Documentation", url: "https://docs.internal.co/resume-screener" },
+    ],
+    version: "1.2",
     createdAt: "2026-03-12T10:00:00Z",
     updatedAt: "2026-03-28T14:30:00Z",
     comments: [],
@@ -153,6 +158,7 @@ export const builds: Build[] = [
       "自动检查代码风格和常见逻辑问题，每周为团队节省12小时Review时间。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/code-review/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=code-review&backgroundColor=d4e8e0",
     screenshots: [
       "https://picsum.photos/seed/code-pr-review/1200/675",
       "https://picsum.photos/seed/code-diff-view/1200/675",
@@ -172,7 +178,10 @@ export const builds: Build[] = [
     weeklyUpvotes: 19,
     downloads: 55,
     visibility: "PUBLIC",
-    demoUrl: "https://github.com/internal/code-review-bot",
+    links: [
+      { label: "GitHub", url: "https://github.com/internal/code-review-bot" },
+    ],
+    version: "1.1",
     createdAt: "2026-03-05T09:00:00Z",
     updatedAt: "2026-03-25T16:00:00Z",
     comments: [],
@@ -184,6 +193,7 @@ export const builds: Build[] = [
       "基于站内热点趋势和用户兴趣，AI生成多条笔记创作灵感和文案框架，帮助创作者告别'空白页焦虑'。",
     category: "DEMO",
     coverImage: "https://picsum.photos/seed/note-inspire/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=note-inspire&backgroundColor=e8dff5",
     screenshots: [
       "https://picsum.photos/seed/note-inspire-ui/1200/675",
       "https://picsum.photos/seed/note-inspire-result/1200/675",
@@ -202,7 +212,12 @@ export const builds: Build[] = [
     upvotes: 185,
     weeklyUpvotes: 42,
     downloads: 78,
+    links: [
+      { label: "Live Demo", url: "https://note-inspire.internal.co" },
+    ],
+    topicIds: ["t5"],
     visibility: "PUBLIC",
+    version: "1.0",
     createdAt: "2026-03-25T11:00:00Z",
     updatedAt: "2026-04-03T09:00:00Z",
     comments: [],
@@ -214,6 +229,7 @@ export const builds: Build[] = [
       "自动汇总研报、新闻和公告，提取关键观点和信号，让投资团队的信息消化效率提升5倍。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/invest-digest/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=invest-digest&backgroundColor=dce8f5",
     screenshots: ["https://picsum.photos/seed/invest-digest-ui/1200/675"],
     problem:
       "投研团队每天需要阅读几十篇研报、新闻和公告，信息量巨大但关键信号隐藏在大量文字中。靠人工阅读，重要信号经常被遗漏或延迟发现。",
@@ -226,6 +242,7 @@ export const builds: Build[] = [
     weeklyUpvotes: 9,
     downloads: 31,
     visibility: "PUBLIC",
+    version: "2.0",
     createdAt: "2026-02-28T08:00:00Z",
     updatedAt: "2026-03-20T12:00:00Z",
     comments: [],
@@ -237,6 +254,7 @@ export const builds: Build[] = [
       "帮助创作者高效管理评论互动，AI辅助生成回复、识别高价值评论，粉丝互动率提升60%。",
     category: "DEMO",
     coverImage: "https://picsum.photos/seed/comment-assistant/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=comment-bot&backgroundColor=f5e0d3",
     screenshots: ["https://picsum.photos/seed/comment-assist-ui/1200/675"],
     problem:
       "头部创作者每条笔记有几百到几千条评论，根本回复不过来。但粉丝互动率直接影响流量分发和商业化能力，不回复又损失粘性。",
@@ -252,7 +270,12 @@ export const builds: Build[] = [
     upvotes: 112,
     weeklyUpvotes: 16,
     downloads: 47,
+    links: [
+      { label: "Live Demo", url: "https://comment-assist.internal.co" },
+      { label: "API Docs", url: "https://api.internal.co/comment-assist" },
+    ],
     visibility: "PUBLIC",
+    version: "1.1",
     createdAt: "2026-03-20T14:00:00Z",
     updatedAt: "2026-04-02T10:00:00Z",
     comments: [],
@@ -264,6 +287,7 @@ export const builds: Build[] = [
       "汇总飞书日程、项目管理工具和代码仓库的活动记录，自动生成结构化周报。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/weekly-report/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=weekly-report&backgroundColor=e0e8d4",
     screenshots: ["https://picsum.photos/seed/weekly-report-auto/1200/675"],
     problem:
       "每周五下午大家都在写周报，信息其实早就散落在飞书、Jira和代码仓库里了。手动汇总不仅耗时，还容易遗漏。",
@@ -276,6 +300,7 @@ export const builds: Build[] = [
     weeklyUpvotes: 11,
     downloads: 39,
     visibility: "PUBLIC",
+    version: "1.3",
     createdAt: "2026-02-20T10:00:00Z",
     updatedAt: "2026-03-15T16:00:00Z",
     comments: [],
@@ -287,6 +312,7 @@ export const builds: Build[] = [
       "用AI理解用户搜索背后的真实意图，优化结果排序，搜索满意度提升18%。",
     category: "DEMO",
     coverImage: "https://picsum.photos/seed/search-intent/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=search-intent&backgroundColor=f5ecd3",
     screenshots: [
       "https://picsum.photos/seed/search-intent-ui/1200/675",
       "https://picsum.photos/seed/search-intent-result/1200/675",
@@ -305,7 +331,9 @@ export const builds: Build[] = [
     upvotes: 167,
     weeklyUpvotes: 35,
     downloads: 73,
+    topicIds: ["t5"],
     visibility: "PUBLIC",
+    version: "1.0",
     createdAt: "2026-03-28T09:00:00Z",
     updatedAt: "2026-04-05T11:00:00Z",
     comments: [],
@@ -317,6 +345,7 @@ export const builds: Build[] = [
       "自动追踪竞品产品动态、用户口碑和行业趋势，每日推送摘要到飞书群。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/competitive-intel/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=competitive-intel&backgroundColor=d3e4f5",
     screenshots: ["https://picsum.photos/seed/competitive-dashboard/1200/675"],
     problem:
       "战略和产品团队需要持续关注竞品动态，但靠手动搜索和截图效率太低。很多重要的竞品功能更新和用户反馈，发现时已经过了最佳应对窗口。",
@@ -330,6 +359,7 @@ export const builds: Build[] = [
     downloads: 24,
     visibility: "DEPARTMENT",
     department: "战略",
+    version: "1.0",
     createdAt: "2026-03-08T13:00:00Z",
     updatedAt: "2026-03-30T09:00:00Z",
     comments: [],
@@ -341,6 +371,7 @@ export const builds: Build[] = [
       "接入飞书会议，自动转录并提取决策事项和Action Item，按参会人分发待办。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/meeting-notes/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=meeting-notes&backgroundColor=f0d4e8",
     screenshots: ["https://picsum.photos/seed/meeting-summary/1200/675"],
     problem:
       "每周花在写会议纪要上的时间加起来有3小时+，而且经常遗漏Action Item。最头疼的是跨部门会议，事后谁该做什么说不清楚。",
@@ -352,7 +383,11 @@ export const builds: Build[] = [
     upvotes: 96,
     weeklyUpvotes: 14,
     downloads: 44,
+    links: [
+      { label: "Live Demo", url: "https://meeting-notes.internal.co" },
+    ],
     visibility: "PUBLIC",
+    version: "1.1",
     createdAt: "2026-03-15T15:00:00Z",
     updatedAt: "2026-04-01T10:00:00Z",
     comments: [],
@@ -364,6 +399,7 @@ export const builds: Build[] = [
       "一眼看清硅谷头部公司过去两年人才流入流出情况的可视化工具。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/org-snowball/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=talent-flow&backgroundColor=d3f5e8",
     screenshots: ["https://picsum.photos/seed/talent-flow-viz/1200/675", "https://picsum.photos/seed/sankey-chart/1200/675"],
     problem:
       "投资和战略团队缺乏对硅谷头部科技公司人才流动的系统性观察。依赖零散新闻和LinkedIn手动检索，难以形成全局判断。",
@@ -379,7 +415,12 @@ export const builds: Build[] = [
     upvotes: 342,
     weeklyUpvotes: 89,
     downloads: 127,
+    links: [
+      { label: "Live Demo", url: "https://talent-flow.internal.co" },
+      { label: "GitHub", url: "https://github.com/internal/talent-flow" },
+    ],
     visibility: "PUBLIC",
+    version: "1.0",
     createdAt: "2026-04-02T09:00:00Z",
     updatedAt: "2026-04-04T16:00:00Z",
     comments: [
@@ -510,6 +551,7 @@ export const builds: Build[] = [
       "通过小红书高爆内容分析与人群理解，自动生成投放素材，CPA降低30%，七日留存提升5%。",
     category: "SKILL",
     coverImage: "https://picsum.photos/seed/crowd-creative/800/450",
+    iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=crowd-creative&backgroundColor=f5f0d3",
     screenshots: ["https://picsum.photos/seed/crowd-insights/1200/675", "https://picsum.photos/seed/ad-material-gen/1200/675"],
     problem:
       "增长团队的投放素材制作流程依赖人工经验，从人群洞察到素材产出周期长、成本高，且难以规模化。",
@@ -525,7 +567,12 @@ export const builds: Build[] = [
     upvotes: 289,
     weeklyUpvotes: 67,
     downloads: 95,
+    links: [
+      { label: "Live Demo", url: "https://crowd-creative.internal.co" },
+      { label: "Deck", url: "https://docs.internal.co/crowd-creative/deck" },
+    ],
     visibility: "PUBLIC",
+    version: "2.1",
     createdAt: "2026-04-01T14:00:00Z",
     updatedAt: "2026-04-04T11:00:00Z",
     comments: [],
@@ -891,6 +938,7 @@ export const posts: Post[] = [
     likes: 38,
     comments: comments.p3,
     visibility: "PUBLIC",
+    topicIds: ["t5"],
     createdAt: "2026-03-26T10:30:00Z",
   },
   {
@@ -902,7 +950,8 @@ export const posts: Post[] = [
     images: ["https://picsum.photos/seed/meeting-notes-demo/800/450"],
     likes: 26,
     comments: comments.p4,
-    visibility: "PUBLIC",
+    visibility: "DEPARTMENT",
+    department: "战略",
     createdAt: "2026-03-16T11:00:00Z",
   },
   {
@@ -933,7 +982,7 @@ export const posts: Post[] = [
     content:
       "通过小红书站内的高爆内容分析、搜索词分析、以及人群理解相关分析和数据，自动生成相关人群的投放素材。和运营实验发现投放CPA降低30%，七日留存提升5%。",
     linkedBuild: builds[10],
-    likes: 64,
+    likes: 128,
     comments: comments.p7,
     visibility: "PUBLIC",
     createdAt: "2026-04-01T14:30:00Z",

@@ -20,6 +20,16 @@ export const useStore = create<Store>()(
         if (user) Object.assign(user, patch)
       }),
 
+    toggleFollow: (userId) =>
+      set((s) => {
+        const idx = s.followedUserIds.indexOf(userId)
+        if (idx >= 0) {
+          s.followedUserIds.splice(idx, 1)
+        } else {
+          s.followedUserIds.push(userId)
+        }
+      }),
+
     // ── Builds ───────────────────────────────────────────
 
     createBuild: (data) => {
@@ -29,6 +39,7 @@ export const useStore = create<Store>()(
         s.builds[id] = {
           ...data,
           id,
+          version: "1.0",
           upvotes: 0,
           weeklyUpvotes: 0,
           downloads: 0,
@@ -76,6 +87,7 @@ export const useStore = create<Store>()(
           likes: 0,
           commentIds: [],
           visibility: data.visibility,
+          topicIds: data.topicIds,
           createdAt: new Date().toISOString(),
         }
       })

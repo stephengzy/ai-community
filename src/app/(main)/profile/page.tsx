@@ -52,6 +52,14 @@ function ProfileContent() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 lg:px-8 py-6">
+      {/* Disclaimer banner */}
+      <div className="flex items-center gap-3 px-5 py-3.5 mb-5 rounded-xl bg-primary/[0.07] border border-primary/15">
+        <span className="material-symbols-outlined text-[18px] text-primary/70 shrink-0">info</span>
+        <p className="text-[13px] text-on-surface/60 leading-[1.5] font-medium">
+          计划接入 Workspace 的统一个人页，此处仅为示意，最终以 Workspace 侧的个人页为准。
+        </p>
+      </div>
+
       {/* ===== Profile Hero ===== */}
 
       {/* Mobile: centered layout */}
@@ -149,26 +157,25 @@ function ProfileContent() {
       </div>
 
       {/* ===== Tabs ===== */}
-      <div className="mt-8 border-b border-outline-variant/8">
-        <div className="flex gap-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setTab(tab.key)}
-              className={cn(
-                "pb-3 text-[12px] uppercase tracking-[0.15em] font-bold transition-colors relative",
-                activeTab === tab.key
-                  ? "text-primary"
-                  : "text-secondary hover:text-on-surface"
-              )}
-            >
-              {tab.label}
-              {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary rounded-full" />
-              )}
-            </button>
-          ))}
-        </div>
+      <div className="flex items-center border-b border-outline-variant/8 mt-8">
+        {tabs.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => setTab(tab.key)}
+            className={cn(
+              "px-5 py-3 text-[14px] font-headline font-semibold transition-colors relative",
+              activeTab === tab.key
+                ? "text-primary"
+                : "text-on-surface/35 hover:text-on-surface/60"
+            )}
+          >
+            {tab.label}
+            {activeTab === tab.key && (
+              <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary rounded-full" />
+            )}
+          </button>
+        ))}
       </div>
 
       {/* ===== Content ===== */}

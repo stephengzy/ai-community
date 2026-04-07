@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils"
 
-const tabs = ["All", "Mentions"] as const
+const tabs = ["All", "Comments", "Upvotes"] as const
 
 interface NotificationTabsProps {
   activeTab: string

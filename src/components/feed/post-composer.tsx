@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser, useUsers, useBuildsByUser } from "@/hooks/use-store"
-import { categoryIcons } from "@/data/constants"
+import { categoryIcons, TOPICS } from "@/data/constants"
 import { CategoryTag } from "@/components/content/category-tag"
-import type { User, Build } from "@/types"
+import type { User, Build, Visibility } from "@/types"
 import { cn } from "@/lib/utils"
 
 // Rich text overlay: renders all text, with @mentions in primary color
@@ -37,6 +37,12 @@ export function PostComposer() {
   const [showBuildPicker, setShowBuildPicker] = useState(false)
   const [buildQuery, setBuildQuery] = useState("")
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null)
+  const [visibility, setVisibility] = useState<Visibility>("PUBLIC")
+  const [showVisibilityMenu, setShowVisibilityMenu] = useState(false)
+  const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([])
+  const [showTopicPicker, setShowTopicPicker] = useState(false)
+  const topicPickerRef = useRef<HTMLDivElement>(null)
+  const visibilityRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const mentionDropdownRef = useRef<HTMLDivElement>(null)
@@ -178,6 +184,19 @@ export function PostComposer() {
       ) {
         setShowBuildPicker(false)
       }
+      if (
+        visibilityRef.current &&
+        !visibilityRef.current.contains(e.target as Node)
+      ) {
+        setShowVisibilityMenu(false)
+      }
+      if (
+        topicPickerRef.current &&
+        !topicPickerRef.current.contains(e.target as Node) &&
+        !(e.target as HTMLElement).closest("[data-topic-trigger]")
+      ) {
+        setShowTopicPicker(false)
+      }
     }
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
@@ -265,6 +284,29 @@ export function PostComposer() {
             )}
           </div>
 
+          {/* Selected topics */}
+          {selectedTopicIds.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-1 mb-1">
+              {selectedTopicIds.map((id) => {
+                const topic = TOPICS.find((t) => t.id === id)
+                if (!topic) return null
+                return (
+                  <span key={id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/8 text-primary text-[11px] font-medium">
+                    {topic.emoji && <span>{topic.emoji}</span>}
+                    {topic.name}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedTopicIds((prev) => prev.filter((tid) => tid !== id))}
+                      className="ml-0.5 hover:text-primary/60 cursor-pointer"
+                    >
+                      <span className="material-symbols-outlined text-[12px]">close</span>
+                    </button>
+                  </span>
+                )
+              })}
+            </div>
+          )}
+
           {/* Attached Build - compact preview matching BuildBar style */}
           {selectedBuild && (
             <div className="relative mt-1 mb-1 flex items-center gap-3 rounded-xl py-3 px-3.5 bg-surface-container-low/50 border border-outline-variant/8">
@@ -284,10 +326,6 @@ export function PostComposer() {
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   <CategoryTag category={selectedBuild.category} size="xs" />
-                  <span className="flex items-center gap-1 text-[11px] text-secondary">
-                    <span className="material-symbols-outlined text-[12px]">download</span>
-                    {selectedBuild.downloads}
-                  </span>
                 </div>
               </div>
               {/* Close button */}
@@ -310,7 +348,7 @@ export function PostComposer() {
               <button
                 type="button"
                 className="w-8 h-8 flex items-center justify-center text-secondary hover:text-primary rounded-full hover:bg-surface-container transition-colors cursor-pointer"
-                title="添加图片"
+                title="Add image"
               >
                 <span
                   className="material-symbols-outlined text-[19px]"
@@ -323,7 +361,7 @@ export function PostComposer() {
                 type="button"
                 onClick={triggerMention}
                 className="w-8 h-8 flex items-center justify-center text-secondary hover:text-primary rounded-full hover:bg-surface-container transition-colors cursor-pointer"
-                title="@提及"
+                title="@mention"
               >
                 <span
                   className="material-symbols-outlined text-[19px]"
@@ -332,6 +370,55 @@ export function PostComposer() {
                   alternate_email
                 </span>
               </button>
+
+              {/* Topic picker */}
+              <div className="relative">
+                <button
+                  type="button"
+                  data-topic-trigger
+                  onClick={() => setShowTopicPicker(!showTopicPicker)}
+                  className={cn(
+                    "w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer",
+                    selectedTopicIds.length > 0
+                      ? "text-primary bg-primary/8"
+                      : "text-secondary hover:text-primary hover:bg-surface-container"
+                  )}
+                  title="Add topic"
+                >
+                  <span className="material-symbols-outlined text-[19px]" style={iconStyle}>
+                    tag
+                  </span>
+                </button>
+                {showTopicPicker && (
+                  <div ref={topicPickerRef} className="absolute left-0 bottom-full z-50 mb-1.5 w-[240px] bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg py-3 px-3">
+                    <p className="text-[11px] text-secondary/50 px-1 mb-2">Select Topic</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {TOPICS.map((topic) => (
+                        <button
+                          key={topic.id}
+                          type="button"
+                          onClick={() => {
+                            setSelectedTopicIds((prev) =>
+                              prev.includes(topic.id)
+                                ? prev.filter((id) => id !== topic.id)
+                                : [...prev, topic.id]
+                            )
+                          }}
+                          className={cn(
+                            "px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border cursor-pointer",
+                            selectedTopicIds.includes(topic.id)
+                              ? "bg-primary text-on-primary border-primary"
+                              : "bg-transparent text-on-surface/50 border-outline-variant/12 hover:border-primary/30"
+                          )}
+                        >
+                          {topic.emoji && <span className="mr-0.5">{topic.emoji}</span>}
+                          {topic.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Divider */}
               <div className="w-px h-4 bg-outline-variant/15 mx-1.5" />
@@ -371,7 +458,7 @@ export function PostComposer() {
                         </span>
                         <input
                           type="text"
-                          placeholder="搜索我的作品..."
+                          placeholder="Search my builds..."
                           value={buildQuery}
                           onChange={(e) => setBuildQuery(e.target.value)}
                           className="flex-1 bg-transparent border-none text-[13px] focus:ring-0 focus:outline-none placeholder:text-outline-variant"
@@ -382,7 +469,7 @@ export function PostComposer() {
                     <div className="max-h-[220px] overflow-y-auto px-1.5 pb-1.5">
                       {filteredBuilds.length === 0 ? (
                         <p className="text-[12px] text-secondary text-center py-4">
-                          没有找到匹配的作品
+                          No builds found
                         </p>
                       ) : (
                         filteredBuilds.map((build) => (
@@ -420,19 +507,79 @@ export function PostComposer() {
               </div>
             </div>
 
-            {/* Post Button */}
-            <button
-              type="button"
-              disabled={content.trim().length === 0 && !selectedBuild}
-              className={cn(
-                "bg-primary text-on-primary rounded-lg px-5 py-1.5 text-[13px] font-headline font-semibold tracking-tight transition-all cursor-pointer",
-                content.trim().length === 0 && !selectedBuild
-                  ? "opacity-40 cursor-not-allowed"
-                  : "hover:opacity-90 active:scale-[0.97]"
-              )}
-            >
-              Post
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Visibility Selector */}
+              <div className="relative" ref={visibilityRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowVisibilityMenu(!showVisibilityMenu)}
+                  className={cn(
+                    "h-8 flex items-center gap-1 pl-2 pr-2.5 rounded-full text-[12px] font-medium transition-all cursor-pointer border",
+                    showVisibilityMenu
+                      ? "bg-primary/8 text-primary border-primary/20"
+                      : "bg-surface-container-lowest text-secondary border-outline-variant/12 hover:border-primary/30 hover:text-primary"
+                  )}
+                >
+                  <span
+                    className="material-symbols-outlined text-[15px]"
+                    style={{ fontVariationSettings: visibility === "PUBLIC" ? "'FILL' 0" : "'FILL' 1" }}
+                  >
+                    {visibility === "PUBLIC" ? "public" : "lock"}
+                  </span>
+                  <span>{visibility === "PUBLIC" ? "Public" : "Dept"}</span>
+                  <span className="material-symbols-outlined text-[14px] -mr-0.5" style={iconStyle}>expand_more</span>
+                </button>
+
+                {showVisibilityMenu && (
+                  <div className="absolute right-0 top-full z-50 mt-1.5 w-[220px] bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg overflow-hidden py-1.5 px-1.5">
+                    <button
+                      type="button"
+                      onClick={() => { setVisibility("PUBLIC"); setShowVisibilityMenu(false) }}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors cursor-pointer",
+                        visibility === "PUBLIC" ? "bg-primary/6" : "hover:bg-surface-container-low"
+                      )}
+                    >
+                      <span className={cn("material-symbols-outlined text-[18px]", visibility === "PUBLIC" ? "text-primary" : "text-on-surface/40")}>public</span>
+                      <div className="flex-1">
+                        <p className={cn("text-[13px] font-medium", visibility === "PUBLIC" ? "text-primary" : "text-on-surface")}>Public</p>
+                        <p className="text-[11px] text-on-surface/30">Visible to everyone</p>
+                      </div>
+                      {visibility === "PUBLIC" && <span className="material-symbols-outlined text-[14px] text-primary">check</span>}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setVisibility("DEPARTMENT"); setShowVisibilityMenu(false) }}
+                      className={cn(
+                        "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors cursor-pointer",
+                        visibility === "DEPARTMENT" ? "bg-primary/6" : "hover:bg-surface-container-low"
+                      )}
+                    >
+                      <span className={cn("material-symbols-outlined text-[18px]", visibility === "DEPARTMENT" ? "text-primary" : "text-on-surface/40")} style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
+                      <div className="flex-1">
+                        <p className={cn("text-[13px] font-medium", visibility === "DEPARTMENT" ? "text-primary" : "text-on-surface")}>Dept only</p>
+                        <p className="text-[11px] text-on-surface/30">Your department only</p>
+                      </div>
+                      {visibility === "DEPARTMENT" && <span className="material-symbols-outlined text-[14px] text-primary">check</span>}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Post Button */}
+              <button
+                type="button"
+                disabled={content.trim().length === 0 && !selectedBuild}
+                className={cn(
+                  "bg-primary text-on-primary rounded-lg px-5 py-1.5 text-[13px] font-headline font-semibold tracking-tight transition-all cursor-pointer",
+                  content.trim().length === 0 && !selectedBuild
+                    ? "opacity-40 cursor-not-allowed"
+                    : "hover:opacity-90 active:scale-[0.97]"
+                )}
+              >
+                Post
+              </button>
+            </div>
           </div>
         </div>
       </div>

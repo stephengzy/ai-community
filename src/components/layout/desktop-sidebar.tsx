@@ -68,10 +68,11 @@ export function DesktopSidebar() {
           <div className="space-y-0.5">
             {desktopNavMeItems.map((item) => {
               const isUpvote = item.icon === "arrow_upward"
+              const currentTab = searchParams.get("tab")
               const isActive = pathname === "/profile" && (
-                isUpvote
-                  ? searchParams.get("tab") === "upvotes"
-                  : searchParams.get("tab") !== "upvotes"
+                item.href === "/profile?tab=upvotes" ? currentTab === "upvotes"
+                : item.href === "/profile?tab=posts" ? currentTab === "posts"
+                : !currentTab || currentTab === "builds"
               )
               return (
                 <Link

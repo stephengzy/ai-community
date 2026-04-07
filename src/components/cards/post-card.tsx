@@ -10,9 +10,10 @@ import { LikeButton } from "@/components/interactions/like-button"
 import { ShareButton } from "@/components/interactions/share-button"
 import { CommentInput } from "@/components/interactions/comment-input"
 import { useCurrentUser, useUsers } from "@/hooks/use-store"
+import { TOPIC_MAP } from "@/data/constants"
 import { cn } from "@/lib/utils"
 
-const PREVIEW_COMMENTS = 2
+const PREVIEW_NON_SPONSOR = 1
 const PREVIEW_REPLIES = 1
 
 // Single source of truth for comment font size — change here to resize all comments
@@ -185,8 +186,15 @@ export function PostCard({ post, className }: PostCardProps) {
   // Which thread is being replied to? Used to position the input inline
   const replyThreadId = replyingTo ? findTopLevelParent(replyingTo) : null
 
-  const visibleComments = expanded ? comments : comments.slice(0, PREVIEW_COMMENTS)
-  const hiddenCount = comments.length - PREVIEW_COMMENTS
+  // Always show all sponsor comments; if none, show 1 non-sponsor comment
+  const visibleComments = expanded
+    ? comments
+    : (() => {
+        const sponsors = comments.filter((c) => c.isSponsor)
+        if (sponsors.length > 0) return sponsors
+        return comments.slice(0, PREVIEW_NON_SPONSOR)
+      })()
+  const hiddenCount = comments.length - visibleComments.length
 
   // Render the comment input
   const renderInput = (inline?: boolean) => (
@@ -230,7 +238,7 @@ export function PostCard({ post, className }: PostCardProps) {
   return (
     <article
       className={cn(
-        "bg-surface-container-lowest rounded-xl border border-outline-variant/6 px-5 py-4",
+        "bg-surface-container-lowest rounded-xl border border-surface-container/50 shadow-sm px-5 py-4",
         className
       )}
     >
@@ -238,6 +246,23 @@ export function PostCard({ post, className }: PostCardProps) {
       <div className="flex items-center gap-3 mb-2">
         <UserHoverCard user={post.author} avatarSize="sm" nameClassName="text-[14px] tracking-tight" />
         <span className="text-[12px] text-secondary">{timeAgo}</span>
+        <span className="text-[11px] text-secondary/40">
+          {post.visibility === "DEPARTMENT" ? "Dept only" : "Public"}
+        </span>
+        {post.topicIds && post.topicIds.length > 0 && (
+          <>
+            <span className="text-[11px] text-secondary/20">·</span>
+            {post.topicIds.map((tid) => {
+              const topic = TOPIC_MAP[tid]
+              if (!topic) return null
+              return (
+                <span key={tid} className="text-[11px] text-primary/50 font-medium">
+                  {topic.emoji} {topic.name}
+                </span>
+              )
+            })}
+          </>
+        )}
       </div>
 
       {/* Content */}

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Build } from "@/types"
 import { Avatar } from "@/components/content/avatar"
+import { UserHoverCard } from "@/components/content/user-hover-card"
 import { CategoryTag } from "@/components/content/category-tag"
 import { UpvoteButton } from "@/components/interactions/upvote-button"
 import { cn } from "@/lib/utils"
@@ -17,7 +18,7 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
     <Link
       href={`/builds/${build.id}`}
       className={cn(
-        "group flex flex-col bg-surface-container-lowest border border-outline-variant/6 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/12 h-full",
+        "group flex flex-col bg-surface-container-lowest border border-surface-container/50 shadow-sm rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/12 h-full",
         className
       )}
     >
@@ -62,10 +63,10 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
 
         {/* Footer: author */}
         <div className="flex items-center gap-1.5 md:gap-2 pt-0.5 md:pt-1">
-          <Avatar src={build.author.avatar} name={build.author.name} size="sm" className="w-5 h-5 md:w-7 md:h-7" />
-          <span className="text-[10px] md:text-[11px] font-medium text-on-surface/55 truncate">
-            {build.author.name}({build.author.realName})
-          </span>
+          <UserHoverCard user={build.author} avatarSize="sm" showAvatar={true} className="shrink-0">
+            <Avatar src={build.author.avatar} name={build.author.name} size="sm" className="w-5 h-5 md:w-7 md:h-7 cursor-pointer" />
+          </UserHoverCard>
+          <UserHoverCard user={build.author} showAvatar={false} nameClassName="text-[10px] md:text-[11px] font-medium text-on-surface/55 cursor-pointer hover:underline" />
         </div>
       </div>
     </Link>

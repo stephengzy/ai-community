@@ -4,7 +4,7 @@
  * The original types in @/types remain as "view model" types for component props.
  */
 
-import type { BuildCategory, Department, NotificationType, UserLevel, Visibility } from "@/types"
+import type { BuildCategory, BuildLink, Department, NotificationType, UserLevel, Visibility } from "@/types"
 
 // ── Entities (normalized) ──────────────────────────────────
 
@@ -26,6 +26,7 @@ export interface NBuild {
   description: string
   category: BuildCategory
   coverImage: string
+  iconImage: string
   screenshots: string[]
   problem: string
   solution: string
@@ -39,8 +40,10 @@ export interface NBuild {
   downloads: number
   visibility: Visibility
   department?: Department
-  demoUrl?: string
+  links?: BuildLink[]
+  topicIds?: string[]
   attachments?: string[]
+  version: string
   commentIds: string[]
   createdAt: string
   updatedAt: string
@@ -55,6 +58,8 @@ export interface NPost {
   likes: number
   commentIds: string[] // top-level comment IDs only
   visibility: Visibility
+  department?: string
+  topicIds?: string[]
   createdAt: string
 }
 
@@ -113,6 +118,9 @@ export interface StoreState {
   // Notifications
   notifications: NNotification[]
 
+  // Social
+  followedUserIds: string[]
+
   // Interaction tracking (client-side)
   likedPostIds: string[]
   likedCommentIds: string[]
@@ -124,14 +132,15 @@ export interface StoreState {
 export interface StoreActions {
   // Users
   updateUser: (userId: string, patch: Partial<Omit<NUser, "id">>) => void
+  toggleFollow: (userId: string) => void
 
   // Builds
-  createBuild: (data: Omit<NBuild, "id" | "createdAt" | "updatedAt" | "upvotes" | "weeklyUpvotes" | "downloads">) => string
+  createBuild: (data: Omit<NBuild, "id" | "version" | "createdAt" | "updatedAt" | "upvotes" | "weeklyUpvotes" | "downloads">) => string
   updateBuild: (buildId: string, patch: Partial<Omit<NBuild, "id">>) => void
   toggleUpvote: (buildId: string) => void
 
   // Posts
-  createPost: (data: { content: string; images?: string[]; linkedBuildId?: string; visibility: Visibility }) => string
+  createPost: (data: { content: string; images?: string[]; linkedBuildId?: string; visibility: Visibility; topicIds?: string[] }) => string
   updatePost: (postId: string, patch: Partial<Pick<NPost, "content" | "images" | "visibility">>) => void
   deletePost: (postId: string) => void
   togglePostLike: (postId: string) => void

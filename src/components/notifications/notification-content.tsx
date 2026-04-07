@@ -14,8 +14,15 @@ export function NotificationContent() {
   const markAllNotificationsRead = useStore((s) => s.markAllNotificationsRead)
 
   const filteredNotifications = useMemo(() => {
-    if (activeTab === "Mentions") {
-      return notifications.filter((n) => n.type === "mention")
+    if (activeTab === "Comments") {
+      return notifications.filter((n) =>
+        n.type === "comment" || n.type === "reply" || n.type === "mention"
+      )
+    }
+    if (activeTab === "Upvotes") {
+      return notifications.filter((n) =>
+        n.type === "upvote" || n.type === "like" || n.type === "sponsor"
+      )
     }
     return notifications
   }, [notifications, activeTab])
@@ -57,11 +64,13 @@ export function NotificationContent() {
       ) : (
         <div className="flex flex-col items-center justify-center px-6 py-20">
           <span className="material-symbols-outlined text-[40px] text-primary/15 mb-3">
-            {activeTab === "Mentions" ? "alternate_email" : "notifications"}
+            {activeTab === "Comments" ? "chat_bubble_outline" : activeTab === "Upvotes" ? "thumb_up" : "notifications"}
           </span>
           <p className="text-[14px] text-secondary/50 text-center max-w-[260px]">
-            {activeTab === "Mentions"
-              ? "When someone @mentions you in a post or comment, it will show up here."
+            {activeTab === "Comments"
+              ? "When someone comments, replies, or @mentions you, it will show up here."
+              : activeTab === "Upvotes"
+              ? "When someone upvotes your build, likes your post, or sponsors you, it will show up here."
               : "When someone interacts with your builds or posts, you'll see it here."}
           </p>
         </div>

@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import type { Build } from "@/types"
-import { categoryIcons } from "@/data/constants"
 import { CategoryTag } from "@/components/content/category-tag"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
 import { cn } from "@/lib/utils"
@@ -16,7 +15,6 @@ interface BuildBarProps {
 export function BuildBar({ build, className }: BuildBarProps) {
   const [upvoted, setUpvoted] = useState(false)
   const [count, setCount] = useState(build.upvotes)
-  const isDemo = build.category === "DEMO"
 
   const handleUpvote = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -33,17 +31,13 @@ export function BuildBar({ build, className }: BuildBarProps) {
         className
       )}
     >
-      {/* Icon */}
-      <div className={cn(
-        "w-12 h-12 rounded-lg flex items-center justify-center shrink-0",
-        isDemo ? "bg-demo/10" : "bg-primary/6"
-      )}>
-        <span className={cn(
-          "material-symbols-outlined text-[22px]",
-          isDemo ? "text-demo" : "text-primary"
-        )}>
-          {categoryIcons[build.category] ?? "category"}
-        </span>
+      {/* Icon image */}
+      <div className="w-12 h-12 rounded-xl overflow-hidden bg-surface-container-low shrink-0 border border-outline-variant/10 shadow-sm">
+        <img
+          src={build.iconImage}
+          alt={build.name}
+          className="w-full h-full object-cover"
+        />
       </div>
 
       {/* Content */}
@@ -56,10 +50,6 @@ export function BuildBar({ build, className }: BuildBarProps) {
         </p>
         <div className="flex items-center gap-2 mt-1.5">
           <CategoryTag category={build.category} size="xs" />
-          <span className="flex items-center gap-1 text-[11px] text-secondary">
-            <span className="material-symbols-outlined text-[13px]">download</span>
-            {build.downloads}
-          </span>
         </div>
       </div>
 

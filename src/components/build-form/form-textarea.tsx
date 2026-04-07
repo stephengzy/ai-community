@@ -11,6 +11,7 @@ interface FormTextareaProps {
   isRequired?: boolean
   maxLength?: number
   className?: string
+  defaultValue?: string
   onChange?: (html: string) => void
   error?: boolean
 }
@@ -52,6 +53,7 @@ export function FormTextarea({
   isRequired,
   maxLength,
   className,
+  defaultValue,
   onChange,
   error,
 }: FormTextareaProps) {
@@ -64,6 +66,7 @@ export function FormTextarea({
 
   const editor = useEditor({
     immediatelyRender: false,
+    content: defaultValue ? `<p>${defaultValue}</p>` : undefined,
     extensions: [
       StarterKit.configure({
         heading: { levels: [1] },

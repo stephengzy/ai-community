@@ -9,7 +9,7 @@ export function TrendingList() {
   const trendingBuilds = useTrendingBuilds(5)
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/6 overflow-hidden">
+    <div className="bg-surface-container-lowest rounded-xl border border-surface-container/50 shadow-sm overflow-hidden">
       <div className="px-5 pt-4 pb-3">
         <h4 className="text-base font-headline font-semibold tracking-tight text-on-surface">
           Trending Builds This Week

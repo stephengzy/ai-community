@@ -32,6 +32,7 @@ export interface Build {
   description: string
   category: BuildCategory
   coverImage: string
+  iconImage: string
   screenshots: string[]
   problem: string
   solution: string
@@ -45,8 +46,10 @@ export interface Build {
   downloads: number
   visibility: Visibility
   department?: Department
-  demoUrl?: string
+  links?: BuildLink[]
+  topicIds?: string[]
   attachments?: string[]
+  version: string
   comments: Comment[]
   createdAt: string
   updatedAt: string
@@ -61,6 +64,8 @@ export interface Post {
   likes: number
   comments: Comment[]
   visibility: Visibility
+  department?: string
+  topicIds?: string[]
   createdAt: string
 }
 
@@ -97,6 +102,21 @@ export interface Notification {
   contentPreview?: string
   isRead: boolean
   createdAt: string
+}
+
+export interface BuildLink {
+  label: string
+  url: string
+}
+
+export interface Topic {
+  id: string
+  name: string
+  emoji?: string
+  type: "permanent" | "campaign"
+  description?: string
+  startDate?: string
+  endDate?: string
 }
 
 export type NavItem = {

@@ -1,4 +1,4 @@
-import type { NavItem } from "@/types"
+import type { NavItem, Topic } from "@/types"
 
 // ===== Category Labels =====
 export const categoryLabels: Record<string, string> = {
@@ -19,6 +19,14 @@ export const categoryDescriptions: Record<string, string> = {
   OTHER: "其他值得分享的作品",
 }
 
+// ===== Topics =====
+export const TOPICS: Topic[] = [
+  { id: "t5", name: "社区Demo大赛", emoji: "🏆", type: "campaign", description: "展示你的Demo作品", startDate: "2026-04-01", endDate: "2026-04-30" },
+  { id: "t6", name: "商业化Demo大赛", emoji: "💼", type: "campaign", description: "商业化场景的Demo展示", startDate: "2026-05-01", endDate: "2026-05-31" },
+]
+
+export const TOPIC_MAP: Record<string, Topic> = Object.fromEntries(TOPICS.map((t) => [t.id, t]))
+
 // ===== Navigation Items =====
 export const desktopNavItems: NavItem[] = [
   { label: "Posts", href: "/", icon: "home" },
@@ -28,6 +36,7 @@ export const desktopNavItems: NavItem[] = [
 
 export const desktopNavMeItems: NavItem[] = [
   { label: "My Builds", href: "/profile", icon: "construction" },
+  { label: "My Posts", href: "/profile?tab=posts", icon: "edit_note" },
   { label: "My Upvotes", href: "/profile?tab=upvotes", icon: "arrow_upward" },
 ]
 

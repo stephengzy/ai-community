@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import type { User } from "@/types"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser } from "@/hooks/use-store"
+import { useStore } from "@/store"
 import { cn } from "@/lib/utils"
 
 interface UserHoverCardProps {
@@ -26,20 +27,26 @@ export function UserHoverCard({
   children,
 }: UserHoverCardProps) {
   const currentUser = useCurrentUser()
+  const following = useStore((s) => s.followedUserIds.includes(user.id))
+  const toggleFollow = useStore((s) => s.toggleFollow)
   const [open, setOpen] = useState(false)
-  const [following, setFollowing] = useState(false)
-  const [openAbove, setOpenAbove] = useState(false)
+  const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({})
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
 
   const handleEnter = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
     timeoutRef.current = setTimeout(() => {
-      // Check if there's enough space below
       if (triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect()
         const spaceBelow = window.innerHeight - rect.bottom
-        setOpenAbove(spaceBelow < 220)
+        const openAbove = spaceBelow < 220
+        const left = Math.min(rect.left, window.innerWidth - 268)
+        setPopupStyle(
+          openAbove
+            ? { position: "fixed", bottom: window.innerHeight - rect.top + 8, left }
+            : { position: "fixed", top: rect.bottom + 8, left }
+        )
       }
       setOpen(true)
     }, 300)
@@ -81,10 +88,8 @@ export function UserHoverCard({
 
       {open && (
         <div
-          className={cn(
-            "absolute left-0 z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg p-4 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150",
-            openAbove ? "bottom-full mb-2" : "top-full mt-2"
-          )}
+          className="z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg p-4 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150"
+          style={popupStyle}
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
@@ -114,7 +119,7 @@ export function UserHoverCard({
               type="button"
               onClick={(e) => {
                 e.stopPropagation()
-                setFollowing(!following)
+                toggleFollow(user.id)
               }}
               className={cn(
                 "w-full mt-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all cursor-pointer",

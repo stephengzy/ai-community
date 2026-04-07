@@ -5,6 +5,7 @@ import Link from "next/link"
 import type { Build, BuildCategory } from "@/types"
 import { BuildCard } from "@/components/cards/build-card"
 import { Avatar } from "@/components/content/avatar"
+import { UserHoverCard } from "@/components/content/user-hover-card"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
 import { CategoryTag } from "@/components/content/category-tag"
 import { useEditorsPicks, useUsers, usePosts, useCurrentUser } from "@/hooks/use-store"
@@ -395,7 +396,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
             {editorsPicks.map((pick) => (
               <div
                 key={pick.id}
-                className="w-[260px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-outline-variant/6 overflow-hidden"
+                className="w-[260px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-surface-container/50 shadow-sm overflow-hidden"
               >
                 {/* Collection header */}
                 <div className="px-5 pt-5 pb-3">
@@ -418,13 +419,14 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                       href={`/builds/${build.id}`}
                       className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container/50 transition-colors group"
                     >
-                      {/* Rank number */}
-                      <span className={cn(
-                        "text-[13px] font-bold font-headline w-5 text-center shrink-0 tabular-nums",
-                        idx === 0 ? "text-primary" : "text-secondary/25"
-                      )}>
-                        {idx + 1}
-                      </span>
+                      {/* Icon image */}
+                      <div className="w-9 h-9 rounded-[10px] overflow-hidden bg-surface-container-low shrink-0 border border-outline-variant/10 shadow-sm">
+                        <img
+                          src={build.iconImage}
+                          alt={build.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
 
                       {/* Build info */}
                       <div className="flex-1 min-w-0">
@@ -433,9 +435,10 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <CategoryTag category={build.category} size="xs" />
-                          <p className="text-[11px] text-secondary/35 truncate">
-                            {build.author.name}({build.author.realName}) · {build.author.department}
-                          </p>
+                          <div className="text-[11px] text-secondary/35 truncate">
+                            <UserHoverCard user={build.author} showAvatar={false} nameClassName="text-[11px] text-secondary/35 cursor-pointer hover:underline hover:text-secondary/60" />
+                            <span> · {build.author.department}</span>
+                          </div>
                         </div>
                       </div>
 
