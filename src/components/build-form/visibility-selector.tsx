@@ -13,14 +13,14 @@ interface VisibilitySelectorProps {
 const options = [
   {
     value: "PUBLIC" as Visibility,
-    label: "Public",
-    description: "Visible to all employees.",
+    label: "全公司可见",
+    description: "所有员工都可以看到。",
     icon: "public",
   },
   {
     value: "DEPARTMENT" as Visibility,
-    label: "Department Only",
-    description: "Restricted to your department.",
+    label: "仅部门可见",
+    description: "仅限你所在部门的同事查看。",
     icon: "lock",
   },
 ]
@@ -41,10 +41,10 @@ export function VisibilitySelector({
   return (
     <div className={cn(className)}>
       <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-        Visibility <span className="text-primary/50">*</span>
+        可见范围 <span className="text-primary/50">*</span>
       </label>
       {error && (
-        <p className="text-[12px] text-red-500 mb-2">Please select a visibility option</p>
+        <p className="text-[12px] text-red-500 mb-2">请选择可见范围</p>
       )}
       <div className="grid grid-cols-2 gap-3">
         {options.map((option) => {

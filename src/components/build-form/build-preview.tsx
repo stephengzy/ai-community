@@ -1,14 +1,12 @@
 "use client"
 
-import { CategoryTag } from "@/components/content/category-tag"
 import { Avatar } from "@/components/content/avatar"
-import type { BuildCategory, User } from "@/types"
+import type { User } from "@/types"
 import { cn } from "@/lib/utils"
 
 interface BuildPreviewProps {
   name: string
   tagline: string
-  category: BuildCategory | ""
   pitch: string
   problem: string
   solution: string
@@ -46,7 +44,6 @@ function StoryBlock({ label, content }: { label: string; content: string }) {
 export function BuildPreview({
   name,
   tagline,
-  category,
   pitch,
   problem,
   solution,
@@ -98,7 +95,6 @@ export function BuildPreview({
           {/* Header */}
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-3">
-              {category && <CategoryTag category={category as BuildCategory} />}
               <span className="text-[12px] text-secondary/40">v{version}</span>
             </div>
             <h1 className="text-[32px] font-headline font-semibold tracking-tight text-on-surface leading-tight">

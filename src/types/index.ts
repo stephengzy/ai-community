@@ -14,15 +14,11 @@ export interface User {
   realName: string
   avatar: string
   department: Department
+  subDepartment?: string
   role: string
   level: UserLevel
   bio?: string
 }
-
-export type BuildCategory =
-  | "SKILL"
-  | "DEMO"
-  | "OTHER"
 
 export type Visibility = "PUBLIC" | "DEPARTMENT"
 
@@ -30,7 +26,6 @@ export interface Build {
   id: string
   name: string
   description: string
-  category: BuildCategory
   coverImage: string
   iconImage: string
   screenshots: string[]
@@ -43,11 +38,12 @@ export interface Build {
   collaborators: User[]
   upvotes: number
   weeklyUpvotes: number
+  monthlyUpvotes: number
   downloads: number
   visibility: Visibility
   department?: Department
   links?: BuildLink[]
-  topicIds?: string[]
+
   attachments?: string[]
   version: string
   comments: Comment[]
@@ -65,7 +61,7 @@ export interface Post {
   comments: Comment[]
   visibility: Visibility
   department?: string
-  topicIds?: string[]
+
   createdAt: string
 }
 
@@ -73,8 +69,6 @@ export interface Comment {
   id: string
   author: User
   content: string
-  isSponsor: boolean
-  sponsorAmount?: number
   likes: number
   replyTo?: User
   replies?: Comment[]
@@ -90,7 +84,6 @@ export type NotificationType =
   | "reply"
   | "mention"
   | "collaborator"
-  | "sponsor"
 
 export interface Notification {
   id: string
@@ -107,16 +100,6 @@ export interface Notification {
 export interface BuildLink {
   label: string
   url: string
-}
-
-export interface Topic {
-  id: string
-  name: string
-  emoji?: string
-  type: "permanent" | "campaign"
-  description?: string
-  startDate?: string
-  endDate?: string
 }
 
 export type NavItem = {

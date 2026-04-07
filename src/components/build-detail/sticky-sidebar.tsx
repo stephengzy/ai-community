@@ -5,7 +5,6 @@ import type { Build } from "@/types"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
 import { Avatar } from "@/components/content/avatar"
 import { UserHoverCard } from "@/components/content/user-hover-card"
-import { CategoryTag } from "@/components/content/category-tag"
 import { cn } from "@/lib/utils"
 
 interface StickySidebarProps {
@@ -14,19 +13,18 @@ interface StickySidebarProps {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
+  return new Date(iso).toLocaleDateString("zh-CN", {
     year: "numeric",
+    month: "long",
+    day: "numeric",
   })
 }
 
 export function StickySidebar({ build, className }: StickySidebarProps) {
   const [upvoted, setUpvoted] = useState(false)
-  const [following, setFollowing] = useState(false)
   const displayUpvotes = build.upvotes + (upvoted ? 1 : 0)
   return (
-    <div className={cn("sticky top-8 space-y-4", className)}>
+    <div className={cn("sticky top-8 space-y-4 pt-10", className)}>
 
       {/* Upvote */}
       <button
@@ -65,7 +63,7 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
             "text-[12px] mt-0.5 transition-colors",
             upvoted ? "text-primary/60" : "text-on-surface/40 group-hover:text-on-surface/55"
           )}>
-            {upvoted ? "You upvoted this" : "Upvote this build"}
+            {upvoted ? "已顶" : "顶一下"}
           </p>
         </div>
       </button>
@@ -83,23 +81,10 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
             </p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => setFollowing(!following)}
-          className={cn(
-            "w-full py-2.5 rounded-xl text-[14px] font-headline font-semibold transition-all",
-            following
-              ? "border border-outline-variant/15 text-on-surface/45 hover:text-on-surface/70"
-              : "bg-primary text-on-primary hover:opacity-90"
-          )}
-        >
-          {following ? "Following" : "Follow"}
-        </button>
-
         {/* Collaborators */}
         {build.collaborators.length > 0 && (
           <div className="pt-3 border-t border-outline-variant/6">
-            <p className="text-[12px] text-on-surface/45 mb-2.5">Collaborators</p>
+            <p className="text-[12px] text-on-surface/45 mb-2.5">合作者</p>
             <div className="space-y-2">
               {build.collaborators.map((user) => (
                 <div key={user.id} className="flex items-center gap-2.5">
@@ -117,7 +102,7 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
       {/* Links */}
       {build.links && build.links.length > 0 && (
         <div className="bg-surface-container-low rounded-2xl p-5 space-y-3">
-          <p className="text-[12px] text-on-surface/45">Links</p>
+          <p className="text-[12px] text-on-surface/45">作品链接</p>
           <div className="space-y-2">
             {build.links.map((link, i) => (
               <a
@@ -149,31 +134,26 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
 
       {/* Meta info */}
       <div className="bg-surface-container-low rounded-2xl p-5 space-y-3">
-        <p className="text-[12px] text-on-surface/45">Details</p>
+        <p className="text-[12px] text-on-surface/45">详细信息</p>
 
         <div className="flex items-center justify-between">
-          <span className="text-[12px] text-on-surface/45">Published</span>
+          <span className="text-[12px] text-on-surface/45">发布时间</span>
           <span className="text-[12px] text-on-surface/70 font-medium">{formatDate(build.createdAt)}</span>
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-[12px] text-on-surface/45">Updated</span>
+          <span className="text-[12px] text-on-surface/45">更新时间</span>
           <span className="text-[12px] text-on-surface/70 font-medium">{formatDate(build.updatedAt)}</span>
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="text-[12px] text-on-surface/45">Version</span>
+          <span className="text-[12px] text-on-surface/45">版本</span>
           <span className="text-[12px] text-on-surface/70 font-medium">v{build.version}</span>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <span className="text-[12px] text-on-surface/45">Category</span>
-          <CategoryTag category={build.category} />
         </div>
 
         {build.techStack.length > 0 && (
           <div className="pt-2 border-t border-outline-variant/6">
-            <p className="text-[12px] text-on-surface/45 mb-2">Keywords</p>
+            <p className="text-[12px] text-on-surface/45 mb-2">关键词</p>
             <div className="flex flex-wrap gap-1.5">
               {build.techStack.map((tag) => (
                 <span

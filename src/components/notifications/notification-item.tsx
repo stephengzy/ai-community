@@ -8,19 +8,17 @@ import { cn } from "@/lib/utils"
 function getActionText(n: Notification): string {
   switch (n.type) {
     case "upvote":
-      return `upvoted your build${n.targetName ? ` "${n.targetName}"` : ""}`
+      return `顶了你的作品${n.targetName ? `「${n.targetName}」` : ""}`
     case "like":
-      return "liked your post"
+      return "赞了你的帖子"
     case "comment":
-      return `commented on your ${n.targetType === "build" ? "build" : "post"}`
+      return `评论了你的${n.targetType === "build" ? "作品" : "帖子"}`
     case "reply":
-      return "replied to your comment"
+      return "回复了你的评论"
     case "mention":
-      return "mentioned you"
+      return "@了你"
     case "collaborator":
-      return `added you as a collaborator on "${n.targetName}"`
-    case "sponsor":
-      return "sponsored your post"
+      return `将你添加为「${n.targetName}」的合作者`
   }
 }
 
@@ -31,10 +29,10 @@ function getTimeAgo(dateString: string): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDays = Math.floor(diffHours / 24)
 
-  if (diffDays > 30) return `${Math.floor(diffDays / 30)}m ago`
-  if (diffDays > 0) return `${diffDays}d ago`
-  if (diffHours > 0) return `${diffHours}h ago`
-  return "just now"
+  if (diffDays > 30) return `${Math.floor(diffDays / 30)}个月前`
+  if (diffDays > 0) return `${diffDays}天前`
+  if (diffHours > 0) return `${diffHours}小时前`
+  return "刚刚"
 }
 
 interface NotificationItemProps {

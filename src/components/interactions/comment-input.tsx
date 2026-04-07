@@ -25,7 +25,7 @@ export function CommentInput({
   replyTarget,
   onCancelReply,
   onSubmit,
-  placeholder = "Write a comment...",
+  placeholder = "写评论...",
   inline,
   className,
 }: CommentInputProps) {
@@ -186,7 +186,7 @@ export function CommentInput({
           onKeyDown={handleKeyDown}
           placeholder={
             replyTarget
-              ? `Reply to ${replyTarget.author.name}...`
+              ? `回复 ${replyTarget.author.name}...`
               : placeholder
           }
           className="flex-1 min-w-0 bg-transparent text-[14px] text-on-surface placeholder:text-on-surface/30 border-none focus:outline-none py-1"
@@ -216,7 +216,7 @@ export function CommentInput({
             }
           }}
           className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-on-surface/25 hover:text-primary hover:bg-primary/5 transition-colors"
-          title="Mention someone"
+          title="提及某人"
         >
           <span className="text-[14px] font-bold">@</span>
         </button>

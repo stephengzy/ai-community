@@ -38,6 +38,8 @@ yarn-error.log*
 
 # local data
 /User Info/
+/Stitch Design/
+/Stitch Design2/
 
 # claude local settings
 .claude/settings.local.json

@@ -40,8 +40,6 @@ function toComment(state: StoreState, nc: NComment): Comment {
     id: nc.id,
     author: toUser(state.users, nc.authorId),
     content: nc.content,
-    isSponsor: nc.isSponsor,
-    sponsorAmount: nc.sponsorAmount,
     likes: nc.likes,
     replyTo: nc.replyToUserId ? toUser(state.users, nc.replyToUserId) : undefined,
     replies: nc.replyIds
@@ -69,7 +67,6 @@ function toPost(state: StoreState, postId: string): Post | undefined {
       .map((nc) => toComment(state, nc)),
     visibility: p.visibility,
     department: p.department,
-    topicIds: p.topicIds,
     createdAt: p.createdAt,
   }
 }
@@ -192,12 +189,16 @@ export function useTopBuilders(limit = 5) {
   return useMemo(() => {
     const builderMap = new Map<string, { weeklyUpvotes: number; buildCount: number }>()
     for (const b of Object.values(builds)) {
-      const existing = builderMap.get(b.authorId)
-      if (existing) {
-        existing.weeklyUpvotes += b.weeklyUpvotes
-        existing.buildCount += 1
-      } else {
-        builderMap.set(b.authorId, { weeklyUpvotes: b.weeklyUpvotes, buildCount: 1 })
+      // Collect all contributors: author + collaborators (deduplicated)
+      const contributorIds = new Set([b.authorId, ...b.collaboratorIds])
+      for (const userId of contributorIds) {
+        const existing = builderMap.get(userId)
+        if (existing) {
+          existing.weeklyUpvotes += b.weeklyUpvotes
+          existing.buildCount += 1
+        } else {
+          builderMap.set(userId, { weeklyUpvotes: b.weeklyUpvotes, buildCount: 1 })
+        }
       }
     }
     return Array.from(builderMap.entries())
@@ -279,16 +280,6 @@ export function useUnreadNotificationCount(): number {
   return useStore((s) => s.notifications.filter((n) => !n.isRead).length)
 }
 
-/** IDs of users the current user follows */
-export function useFollowedUserIds(): string[] {
-  return useStore((s) => s.followedUserIds)
-}
-
-/** Check if current user follows a specific user */
-export function useIsFollowing(userId: string): boolean {
-  return useStore((s) => s.followedUserIds.includes(userId))
-}
-
 /** Check if current user has liked a post */
 export function useIsPostLiked(postId: string): boolean {
   return useStore((s) => s.likedPostIds.includes(postId))
@@ -322,7 +313,6 @@ export function useActions() {
     addReply: s.addReply,
     deleteComment: s.deleteComment,
     toggleCommentLike: s.toggleCommentLike,
-    addSponsorComment: s.addSponsorComment,
     markNotificationRead: s.markNotificationRead,
     markAllNotificationsRead: s.markAllNotificationsRead,
     updateEditorsPicks: s.updateEditorsPicks,

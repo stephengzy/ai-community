@@ -32,7 +32,7 @@ export function ShareButton({ className }: ShareButtonProps) {
       >
         {copied ? "check" : "share"}
       </span>
-      <span className="text-[13px]">{copied ? "Copied" : "Share"}</span>
+      <span className="text-[13px]">{copied ? "已复制" : "分享"}</span>
     </button>
   )
 }

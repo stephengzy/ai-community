@@ -83,7 +83,7 @@ export function FormTextarea({
       attributes: {
         class:
           "tiptap focus:outline-none min-h-[40px] text-[14px] leading-[1.8] font-body text-on-surface",
-        "data-placeholder": placeholder || "Start writing...",
+        "data-placeholder": placeholder || "开始输入...",
       },
       handleTextInput: maxLength
         ? (view, from, to, text) => {

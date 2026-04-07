@@ -5,7 +5,6 @@ import Link from "next/link"
 import type { Comment, User } from "@/types"
 import { useBuild, usePosts, useCurrentUser, useUsers } from "@/hooks/use-store"
 import { PageContainer } from "@/components/layout/page-container"
-import { CategoryTag } from "@/components/content/category-tag"
 import { ContentSection } from "@/components/build-detail/content-section"
 import { StickySidebar } from "@/components/build-detail/sticky-sidebar"
 import { PostCard } from "@/components/cards/post-card"
@@ -23,10 +22,10 @@ function getTimeAgo(dateString: string): string {
   const diffMs = now.getTime() - date.getTime()
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDays = Math.floor(diffHours / 24)
-  if (diffDays > 30) return `${Math.floor(diffDays / 30)}m ago`
-  if (diffDays > 0) return `${diffDays}d ago`
-  if (diffHours > 0) return `${diffHours}h ago`
-  return "just now"
+  if (diffDays > 30) return `${Math.floor(diffDays / 30)}个月前`
+  if (diffDays > 0) return `${diffDays}天前`
+  if (diffHours > 0) return `${diffHours}小时前`
+  return "刚刚"
 }
 
 function formatTokens(amount: number) {
@@ -201,7 +200,7 @@ function BuildCommentItem({
                 onClick={() => onReply(comment)}
                 className="hover:text-primary transition-colors"
               >
-                Reply
+                回复
               </button>
             )}
           </div>
@@ -293,7 +292,7 @@ function BuildReplyItem({
                 onClick={() => onReply(comment)}
                 className="hover:text-primary transition-colors"
               >
-                Reply
+                回复
               </button>
             )}
           </div>
@@ -365,8 +364,7 @@ function CommentThread({
               onClick={() => setShowAllReplies(true)}
               className="text-[12px] text-secondary hover:text-primary font-medium py-1 pl-1 transition-colors"
             >
-              View {hiddenCount} more{" "}
-              {hiddenCount === 1 ? "reply" : "replies"}
+              查看其余 {hiddenCount} 条回复
             </button>
           )}
           {showAllReplies && hasMoreReplies && (
@@ -375,7 +373,7 @@ function CommentThread({
               onClick={() => setShowAllReplies(false)}
               className="text-[12px] text-secondary hover:text-primary font-medium py-1 pl-1 transition-colors"
             >
-              Hide replies
+              收起回复
             </button>
           )}
           {inputSlot}
@@ -385,90 +383,9 @@ function CommentThread({
   )
 }
 
-// ===== Sponsor Comment (from post, feed-style with border) =====
-
-function SponsorCommentItem({ comment }: { comment: Comment }) {
-  const [liked, setLiked] = useState(false)
-  const [likeCount, setLikeCount] = useState(comment.likes)
-
-  return (
-    <div className="border-l-2 border-l-primary/50 pl-3 -ml-0.5 bg-primary/[0.03] rounded-r-lg py-2.5 pr-3">
-      <div className="flex items-start gap-2">
-        <UserHoverCard
-          user={comment.author}
-          avatarSize="sm"
-          showAvatar={true}
-          className="shrink-0"
-        >
-          <Avatar
-            src={comment.author.avatar}
-            name={comment.author.name}
-            size="sm"
-            className="mt-0.5 cursor-pointer"
-          />
-        </UserHoverCard>
-        <div className="flex-1 min-w-0">
-          <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
-            <UserHoverCard
-              user={comment.author}
-              showAvatar={false}
-              nameClassName={cn("font-semibold text-on-surface cursor-pointer hover:underline", COMMENT_TEXT_SIZE)}
-            />
-            <span className="ml-1.5">
-              <MentionText text={comment.content} />
-            </span>
-          </div>
-          <div className="flex items-center flex-wrap gap-y-1 justify-between mt-0.5">
-            <div className="flex items-center gap-3 text-[11px] text-secondary/50 flex-wrap">
-              <span>{getTimeAgo(comment.createdAt)}</span>
-              {comment.sponsorAmount && (
-                <span className="inline-flex items-center gap-1 text-primary/80">
-                  <span
-                    className="material-symbols-outlined text-[12px]"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    toll
-                  </span>
-                  <span className="font-semibold">
-                    Sponsored {formatTokens(comment.sponsorAmount)} tokens
-                  </span>
-                </span>
-              )}
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setLiked(!liked)
-                setLikeCount(liked ? likeCount - 1 : likeCount + 1)
-              }}
-              className={cn(
-                "flex items-center gap-1 text-secondary/60 hover:text-primary transition-colors shrink-0",
-                liked && "text-primary"
-              )}
-            >
-              <span
-                className={cn(
-                  "material-symbols-outlined text-[9px]",
-                  liked ? "material-symbols-fill" : ""
-                )}
-                style={{ fontVariationSettings: "'wght' 300" }}
-              >
-                thumb_up
-              </span>
-              {likeCount > 0 && (
-                <span className="text-[11px]">{likeCount}</span>
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ===== Main Component =====
 
-type BottomTab = "comments" | "sponsors" | "posts"
+type BottomTab = "comments" | "posts"
 
 export function BuildDetailClient({ buildId }: { buildId: string }) {
   const build = useBuild(buildId)
@@ -486,7 +403,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
           <span className="material-symbols-outlined text-[48px] text-primary/15 mb-4">
             error
           </span>
-          <p className="text-[14px] text-on-surface/40">Build not found</p>
+          <p className="text-[14px] text-on-surface/40">未找到该作品</p>
         </div>
       </PageContainer>
     )
@@ -497,11 +414,6 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
 
   // Related posts that link to this build
   const relatedPosts = posts.filter((p) => p.linkedBuild?.id === build.id)
-
-  // Sponsor comments from related posts (sponsors live at the post level)
-  const sponsorComments = relatedPosts.flatMap((p) =>
-    p.comments.filter((c) => c.isSponsor)
-  )
 
   // ── Reply helpers ──
 
@@ -538,7 +450,6 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
       id: `new-${Date.now()}`,
       author: currentUser,
       content: text,
-      isSponsor: false,
       likes: 0,
       replyTo: replyToComment?.author,
       createdAt: new Date().toISOString(),
@@ -566,16 +477,15 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
       replyTarget={replyTarget}
       onCancelReply={() => setReplyingTo(null)}
       onSubmit={handleSubmit}
-      placeholder="Share your thoughts on this build..."
+      placeholder="说说你的看法..."
       inline={inline}
       className={inline ? "mt-2" : ""}
     />
   )
 
   const tabs: { key: BottomTab; label: string; count: number }[] = [
-    { key: "comments", label: "Comments", count: comments.length },
-    { key: "sponsors", label: "Sponsors", count: sponsorComments.length },
-    { key: "posts", label: "Related Posts", count: relatedPosts.length },
+    { key: "comments", label: "评论", count: comments.length },
+    { key: "posts", label: "相关帖子", count: relatedPosts.length },
   ]
 
   return (
@@ -583,7 +493,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
       {/* Mobile sticky header */}
       <div className="sticky top-0 z-40 lg:hidden bg-surface/90 backdrop-blur-xl -mx-4 px-4 py-3 flex items-center gap-3 border-b border-outline-variant/6">
         <Link
-          href="/gallery"
+          href="/"
           className="text-on-surface/50 hover:text-on-surface transition-colors"
         >
           <span className="material-symbols-outlined text-[20px]">
@@ -593,6 +503,14 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
         <p className="flex-1 text-[14px] font-headline font-semibold truncate">
           {build.name}
         </p>
+        {isOwner && (
+          <Link
+            href={`/builds/${build.id}/edit`}
+            className="shrink-0 p-1.5 text-on-surface/50 hover:text-primary transition-colors"
+          >
+            <span className="material-symbols-outlined text-[20px]">edit</span>
+          </Link>
+        )}
         <span className="shrink-0 bg-primary text-on-primary text-[12px] font-semibold px-2.5 py-1 rounded-full">
           {build.upvotes}
         </span>
@@ -601,18 +519,23 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
       <div className="flex gap-10">
         {/* Main content */}
         <div className="flex-1 min-w-0 space-y-8">
+          {/* Notice banner */}
+          <div className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-primary/[0.05] border border-primary/10">
+            <span className="material-symbols-outlined text-[18px] text-primary/50">info</span>
+            <p className="text-[13px] text-on-surface/50">作品详情页以 CoWork 的整体作品详情页面为准，此处仅供参考</p>
+          </div>
+
           {/* Hero */}
           <header className="space-y-4">
             <div className="flex items-center gap-3">
               <Link
-                href="/gallery"
+                href="/"
                 className="hidden lg:flex items-center gap-2 text-on-surface/40 hover:text-on-surface/70 transition-colors"
               >
                 <span className="material-symbols-outlined text-[20px]">
                   arrow_back
                 </span>
               </Link>
-              <CategoryTag category={build.category} />
             </div>
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2 min-w-0">
@@ -629,7 +552,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
                   className="hidden lg:flex items-center gap-2 shrink-0 px-4 py-2 rounded-xl border border-outline-variant/15 text-[13px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
                 >
                   <span className="material-symbols-outlined text-[16px]">edit</span>
-                  Edit Build
+                  修改作品
                 </Link>
               )}
             </div>
@@ -641,20 +564,17 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
             alt={build.name}
           />
 
-          {/* ===== The Story ===== */}
+          {/* ===== 作品简介 ===== */}
           <section className="space-y-6">
-            <SectionDivider title="The Story" />
-
-            {build.pitch && (
-              <ContentSection label="The Pitch">{build.pitch}</ContentSection>
+            {build.description && (
+              <ContentSection label="一句话介绍">{build.description}</ContentSection>
             )}
 
-            <ContentSection label="The Problem">
-              {build.problem}
-            </ContentSection>
-
-            <ContentSection label="The Solution">
-              {build.solution}
+            <ContentSection label="项目介绍">
+              {build.pitch || build.problem}
+              {build.solution && build.pitch !== build.solution && (
+                <>{"\n\n"}{build.solution}</>
+              )}
             </ContentSection>
           </section>
 
@@ -713,22 +633,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
                   ))
                 ) : (
                   <p className="text-[14px] text-on-surface/30 italic text-center py-6">
-                    No comments yet. Be the first to share your thoughts.
-                  </p>
-                )}
-              </div>
-            )}
-
-            {/* ── Sponsors tab ── */}
-            {activeTab === "sponsors" && (
-              <div className="space-y-3">
-                {sponsorComments.length > 0 ? (
-                  sponsorComments.map((comment) => (
-                    <SponsorCommentItem key={comment.id} comment={comment} />
-                  ))
-                ) : (
-                  <p className="text-[14px] text-on-surface/30 italic text-center py-6">
-                    No sponsors yet.
+                    暂无评论，来说说你的看法吧
                   </p>
                 )}
               </div>
@@ -743,7 +648,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
                   ))
                 ) : (
                   <p className="text-[14px] text-on-surface/30 italic text-center py-6">
-                    No posts mentioning this build yet.
+                    暂无相关帖子
                   </p>
                 )}
               </div>

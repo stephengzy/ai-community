@@ -4,7 +4,7 @@
  * The original types in @/types remain as "view model" types for component props.
  */
 
-import type { BuildCategory, BuildLink, Department, NotificationType, UserLevel, Visibility } from "@/types"
+import type { BuildLink, Department, NotificationType, UserLevel, Visibility } from "@/types"
 
 // ── Entities (normalized) ──────────────────────────────────
 
@@ -15,6 +15,7 @@ export interface NUser {
   realName: string
   avatar: string
   department: Department
+  subDepartment?: string
   role: string
   level: UserLevel
   bio?: string
@@ -24,7 +25,6 @@ export interface NBuild {
   id: string
   name: string
   description: string
-  category: BuildCategory
   coverImage: string
   iconImage: string
   screenshots: string[]
@@ -37,11 +37,12 @@ export interface NBuild {
   collaboratorIds: string[]
   upvotes: number
   weeklyUpvotes: number
+  monthlyUpvotes: number
   downloads: number
   visibility: Visibility
   department?: Department
   links?: BuildLink[]
-  topicIds?: string[]
+
   attachments?: string[]
   version: string
   commentIds: string[]
@@ -59,7 +60,7 @@ export interface NPost {
   commentIds: string[] // top-level comment IDs only
   visibility: Visibility
   department?: string
-  topicIds?: string[]
+
   createdAt: string
 }
 
@@ -69,8 +70,6 @@ export interface NComment {
   buildId?: string // back-reference (build comments)
   authorId: string
   content: string
-  isSponsor: boolean
-  sponsorAmount?: number
   likes: number
   replyToUserId?: string
   parentId?: string // null for top-level
@@ -135,12 +134,12 @@ export interface StoreActions {
   toggleFollow: (userId: string) => void
 
   // Builds
-  createBuild: (data: Omit<NBuild, "id" | "version" | "createdAt" | "updatedAt" | "upvotes" | "weeklyUpvotes" | "downloads">) => string
+  createBuild: (data: Omit<NBuild, "id" | "version" | "createdAt" | "updatedAt" | "upvotes" | "weeklyUpvotes" | "monthlyUpvotes" | "downloads">) => string
   updateBuild: (buildId: string, patch: Partial<Omit<NBuild, "id">>) => void
   toggleUpvote: (buildId: string) => void
 
   // Posts
-  createPost: (data: { content: string; images?: string[]; linkedBuildId?: string; visibility: Visibility; topicIds?: string[] }) => string
+  createPost: (data: { content: string; images?: string[]; linkedBuildId?: string; visibility: Visibility }) => string
   updatePost: (postId: string, patch: Partial<Pick<NPost, "content" | "images" | "visibility">>) => void
   deletePost: (postId: string) => void
   togglePostLike: (postId: string) => void
@@ -150,8 +149,6 @@ export interface StoreActions {
   addReply: (parentCommentId: string, content: string) => string
   deleteComment: (commentId: string) => void
   toggleCommentLike: (commentId: string) => void
-  addSponsorComment: (postId: string, content: string, amount: number) => string
-
   // Notifications
   markNotificationRead: (notificationId: string) => void
   markAllNotificationsRead: () => void

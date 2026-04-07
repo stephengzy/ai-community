@@ -1,58 +1,19 @@
 "use client"
 
-import { useState, useMemo, useRef, useEffect } from "react"
+import { useState, useMemo, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
-import type { Build, BuildCategory } from "@/types"
+import type { Build } from "@/types"
 import { BuildCard } from "@/components/cards/build-card"
-import { Avatar } from "@/components/content/avatar"
 import { UserHoverCard } from "@/components/content/user-hover-card"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
-import { CategoryTag } from "@/components/content/category-tag"
-import { useEditorsPicks, useUsers, usePosts, useCurrentUser } from "@/hooks/use-store"
+import { useEditorsPicks, useUsers } from "@/hooks/use-store"
 import { cn } from "@/lib/utils"
 
 /** Consistent horizontal padding used across all sections */
 const SECTION_PX = "px-4 md:px-10"
 
-/* ── Category definitions with user-friendly labels ── */
-const CATEGORIES: {
-  key: string
-  label: string
-  desc: string
-  icon: string
-  value: BuildCategory | null
-}[] = [
-  { key: "all", label: "全部", desc: "", icon: "apps", value: null },
-  { key: "skill", label: "Skill", desc: "技能提效", icon: "psychology", value: "SKILL" },
-  { key: "demo", label: "Demo", desc: "产品演示", icon: "deployed_code", value: "DEMO" },
-  { key: "other", label: "其他", desc: "更多探索", icon: "explore", value: "OTHER" },
-]
-
 /* Department filter modes */
 type DeptFilter = "all" | "mine" | string
-
-type ResultType = "post" | "user" | "build"
-
-interface SearchResult {
-  type: ResultType
-  id: string
-  title: string
-  subtitle: string
-  avatar?: string
-  href: string
-}
-
-const typeLabels: Record<ResultType, string> = {
-  user: "用户",
-  build: "产品",
-  post: "帖子",
-}
-
-const typeIcons: Record<ResultType, string> = {
-  user: "person",
-  build: "deployed_code",
-  post: "article",
-}
 
 type SortOrder = "latest" | "most-upvoted"
 type TimePeriod = "week" | "month"
@@ -82,6 +43,101 @@ function ScrollArrow({
         {direction === "left" ? "chevron_left" : "chevron_right"}
       </span>
     </button>
+  )
+}
+
+/* ── Pick detail modal ── */
+interface PickModalData {
+  title: string
+  description: string
+  builds: Build[]
+}
+
+function PickDetailModal({
+  data,
+  onClose,
+}: {
+  data: PickModalData
+  onClose: () => void
+}) {
+  // Close on Escape key
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+    }
+    document.addEventListener("keydown", handleKey)
+    return () => document.removeEventListener("keydown", handleKey)
+  }, [onClose])
+
+  // Prevent body scroll
+  useEffect(() => {
+    document.body.style.overflow = "hidden"
+    return () => { document.body.style.overflow = "" }
+  }, [])
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        className="relative w-full max-w-[480px] max-h-[80vh] bg-surface-container-lowest rounded-2xl border border-outline-variant/10 shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="px-6 pt-6 pb-4 border-b border-outline-variant/8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-[17px] font-headline font-semibold text-on-surface">
+                {data.title}
+              </h3>
+              <p className="text-[12px] text-secondary/40 mt-1 leading-relaxed">
+                {data.description}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-on-surface/30 hover:text-on-surface/60 hover:bg-surface-container transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px]">close</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Build list */}
+        <div className="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+          {data.builds.map((build) => (
+            <Link
+              key={build.id}
+              href={`/builds/${build.id}`}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface-container/50 transition-colors group"
+              onClick={onClose}
+            >
+              <div className="w-10 h-10 rounded-[10px] overflow-hidden bg-surface-container-low shrink-0 border border-outline-variant/10 shadow-sm">
+                <img src={build.iconImage} alt={build.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[13px] font-semibold font-headline text-on-surface group-hover:text-primary transition-colors truncate">
+                  {build.name}
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <div className="text-[11px] text-secondary/35 truncate">
+                    <UserHoverCard user={build.author} showAvatar={false} nameClassName="text-[11px] text-secondary/35 cursor-pointer hover:underline hover:text-secondary/60" />
+                    <span> · {build.author.department}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-0.5 text-on-surface/25 shrink-0 w-12 justify-end">
+                <UpvoteIcon size={11} />
+                <span className="text-[11px] font-bold tabular-nums">{build.upvotes}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -117,33 +173,31 @@ function TogglePills<T extends string>({
 }
 
 export function GalleryContent({ builds }: GalleryContentProps) {
-  const [activeCategory, setActiveCategory] = useState("all")
   const [deptFilter, setDeptFilter] = useState<DeptFilter>("all")
+  const [deptFilterLabel, setDeptFilterLabel] = useState("")
   const [deptDropdownOpen, setDeptDropdownOpen] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchFocused, setSearchFocused] = useState(false)
+  const [hoveredL1, setHoveredL1] = useState(0)
   const [sortOrder, setSortOrder] = useState<SortOrder>("latest")
   const [timePeriod, setTimePeriod] = useState<TimePeriod>("week")
+  const [pickModal, setPickModal] = useState<PickModalData | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [debouncedSearch, setDebouncedSearch] = useState("")
+  const [committedSearch, setCommittedSearch] = useState("")
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(20)
 
-  const currentUser = useCurrentUser()
   const editorsPicks = useEditorsPicks()
   const allUsers = useUsers()
-  const allPosts = usePosts()
   const trendingScrollRef = useRef<HTMLDivElement>(null)
+  const searchRef = useRef<HTMLDivElement>(null)
   const picksScrollRef = useRef<HTMLDivElement>(null)
-  const searchContainerRef = useRef<HTMLDivElement>(null)
   const deptDropdownRef = useRef<HTMLDivElement>(null)
 
-  const categoryValue = CATEGORIES.find((c) => c.key === activeCategory)?.value ?? null
-
-  // Derive all unique departments from builds data
-  const allDepartments = useMemo(() => {
-    const depts = new Set<string>()
-    for (const b of builds) {
-      if (b.author.department) depts.add(b.author.department)
-    }
-    return Array.from(depts).sort()
-  }, [builds])
+  const selectDept = useCallback((filterValue: string, label: string) => {
+    setDeptFilter(filterValue)
+    setDeptFilterLabel(label)
+    setDeptDropdownOpen(false)
+  }, [])
 
   // Close dept dropdown on outside click
   useEffect(() => {
@@ -156,108 +210,129 @@ export function GalleryContent({ builds }: GalleryContentProps) {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  /* ── "Big search" results: builds + users + posts ── */
-  const searchResults: SearchResult[] = useMemo(() => {
-    if (!searchQuery.trim()) return []
-    const q = searchQuery.toLowerCase()
-    const res: SearchResult[] = []
-
-    for (const user of allUsers) {
-      if (
-        user.name.toLowerCase().includes(q) ||
-        user.realName.toLowerCase().includes(q) ||
-        user.department.toLowerCase().includes(q)
-      ) {
-        res.push({
-          type: "user",
-          id: user.id,
-          title: `${user.name}(${user.realName})`,
-          subtitle: `${user.department} · ${user.role}`,
-          avatar: user.avatar,
-          href: "/profile",
-        })
-      }
-    }
-
-    for (const build of builds) {
-      if (
-        build.name.toLowerCase().includes(q) ||
-        build.description.toLowerCase().includes(q)
-      ) {
-        res.push({
-          type: "build",
-          id: build.id,
-          title: build.name,
-          subtitle: build.description,
-          href: `/builds/${build.id}`,
-        })
-      }
-    }
-
-    for (const post of allPosts) {
-      if (post.content.toLowerCase().includes(q)) {
-        res.push({
-          type: "post",
-          id: post.id,
-          title: post.content.slice(0, 60) + (post.content.length > 60 ? "…" : ""),
-          subtitle: `${post.author.name}(${post.author.realName})`,
-          href: "/",
-        })
-      }
-    }
-
-    return res.slice(0, 8)
-  }, [searchQuery, allUsers, builds, allPosts])
-
-  // Close search dropdown when clicking outside
+  // Debounce search for suggestions only
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
-        setSearchFocused(false)
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 300)
+    return () => clearTimeout(timer)
+  }, [searchQuery])
+
+  // Auto-commit when no user suggestions (project name search), or when cleared
+  useEffect(() => {
+    if (!debouncedSearch.trim()) {
+      setCommittedSearch("")
+      setPage(1)
+    } else {
+      // If no users match, auto-commit as project name search
+      const q = debouncedSearch.trim().toLowerCase()
+      const hasUserMatch = allUsers.some(
+        (u) => u.name.toLowerCase().includes(q) || u.realName.toLowerCase().includes(q)
+      )
+      if (!hasUserMatch) {
+        setCommittedSearch(debouncedSearch)
+        setPage(1)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [debouncedSearch, allUsers])
+
+  const commitSearch = useCallback((q: string) => {
+    setCommittedSearch(q)
+    setPage(1)
   }, [])
 
-  const showSearchDropdown = searchFocused && searchQuery.trim().length > 0
+  // Reset page when filter/sort changes
+  useEffect(() => { setPage(1) }, [deptFilter, sortOrder])
 
   // Resolve the actual department name from the filter mode
-  const resolvedDept = deptFilter === "all" ? null : deptFilter === "mine" ? currentUser.department : deptFilter
+  const resolvedDept = deptFilter === "all" ? null : deptFilter
 
+  // Matched users for search suggestions (driven by debounced input)
+  const matchedUsers = useMemo(() => {
+    if (!debouncedSearch.trim()) return []
+    const q = debouncedSearch.trim().toLowerCase()
+    return allUsers.filter(
+      (u) => u.name.toLowerCase().includes(q) || u.realName.toLowerCase().includes(q)
+    ).slice(0, 5)
+  }, [allUsers, debouncedSearch])
+
+  // Show suggestions only when typing and not yet committed to this exact query
+  const showSuggestions = matchedUsers.length > 0 && debouncedSearch.trim().length > 0 && debouncedSearch !== committedSearch
+
+  // Is the committed search matching a person?
+  const isPersonSearch = useMemo(() => {
+    if (!committedSearch.trim()) return false
+    const q = committedSearch.trim().toLowerCase()
+    return allUsers.some((u) => u.name.toLowerCase().includes(q) || u.realName.toLowerCase().includes(q))
+  }, [allUsers, committedSearch])
+
+  // Build filtering uses committedSearch (not debounced)
   const filteredBuilds = useMemo(() => {
     let result = builds
-
-    if (categoryValue) {
-      result = result.filter((b) => b.category === categoryValue)
-    }
 
     if (resolvedDept) {
       result = result.filter((b) => b.author.department === resolvedDept)
     }
 
-    return result
-  }, [builds, categoryValue, resolvedDept])
-
-  const sortedBuilds = useMemo(() => {
-    const sorted = filteredBuilds.slice()
-    if (sortOrder === "latest") {
-      sorted.sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    if (committedSearch.trim()) {
+      const q = committedSearch.trim().toLowerCase()
+      result = result.filter(
+        (b) =>
+          b.name.toLowerCase().includes(q) ||
+          b.author.name.toLowerCase().includes(q) ||
+          b.author.realName.toLowerCase().includes(q) ||
+          b.collaborators.some(
+            (c) => c.name.toLowerCase().includes(q) || c.realName.toLowerCase().includes(q)
+          )
       )
+    }
+
+    return result
+  }, [builds, resolvedDept, committedSearch])
+
+  // Split into "as author" and "as collaborator" when searching by person
+  const { authorBuilds, collabBuilds } = useMemo(() => {
+    if (!isPersonSearch || !committedSearch.trim()) {
+      return { authorBuilds: filteredBuilds, collabBuilds: [] as Build[] }
+    }
+    const q = committedSearch.trim().toLowerCase()
+    const asAuthor: Build[] = []
+    const asCollab: Build[] = []
+    for (const b of filteredBuilds) {
+      const authorMatch =
+        b.author.name.toLowerCase().includes(q) ||
+        b.author.realName.toLowerCase().includes(q) ||
+        b.name.toLowerCase().includes(q)
+      if (authorMatch) {
+        asAuthor.push(b)
+      } else {
+        asCollab.push(b)
+      }
+    }
+    return { authorBuilds: asAuthor, collabBuilds: asCollab }
+  }, [filteredBuilds, isPersonSearch, committedSearch])
+
+  const sortFn = useCallback((list: Build[]) => {
+    const sorted = list.slice()
+    if (sortOrder === "latest") {
+      sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     } else {
       sorted.sort((a, b) => b.upvotes - a.upvotes)
     }
     return sorted
-  }, [filteredBuilds, sortOrder])
+  }, [sortOrder])
+
+  const sortedAuthorBuilds = useMemo(() => sortFn(authorBuilds), [authorBuilds, sortFn])
+  const sortedCollabBuilds = useMemo(() => sortFn(collabBuilds), [collabBuilds, sortFn])
 
   const trendingBuilds = useMemo(() => {
     return builds
       .slice()
-      .sort((a, b) => b.upvotes - a.upvotes)
+      .sort((a, b) =>
+        timePeriod === "week"
+          ? b.weeklyUpvotes - a.weeklyUpvotes
+          : b.monthlyUpvotes - a.monthlyUpvotes
+      )
       .slice(0, 10)
-  }, [builds])
+  }, [builds, timePeriod])
 
   const scrollContainer = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
     if (!ref.current) return
@@ -272,82 +347,17 @@ export function GalleryContent({ builds }: GalleryContentProps) {
   return (
     <div className="w-full">
       {/* ══════════════════════════════════════════════
-          Page header + Big search
-          ══════════════════════════════════════════════ */}
-      <div className={cn(SECTION_PX, "pt-5 md:pt-6 pb-4")}>
-        <div ref={searchContainerRef} className="relative">
-          <div className="relative">
-            <span className="material-symbols-outlined text-[20px] text-secondary/50 absolute left-4 top-1/2 -translate-y-1/2">
-              search
-            </span>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setSearchFocused(true)}
-              placeholder="Search posts, people, builds..."
-              className="w-full pl-11 pr-4 py-3 text-[15px] bg-surface-container-lowest border border-outline-variant/8 rounded-xl text-on-surface placeholder:text-secondary/35 placeholder:font-headline placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
-            />
-          </div>
-
-          {/* Search dropdown */}
-          {showSearchDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50">
-              {searchResults.length === 0 ? (
-                <div className="px-4 py-6 text-center text-[13px] text-secondary">
-                  未找到相关结果
-                </div>
-              ) : (
-                <div className="py-1.5">
-                  {searchResults.map((result) => (
-                    <a
-                      key={`${result.type}-${result.id}`}
-                      href={result.href}
-                      className="flex items-center gap-3 px-3.5 py-2.5 hover:bg-surface-container-low/60 transition-colors"
-                      onClick={() => {
-                        setSearchFocused(false)
-                        setSearchQuery("")
-                      }}
-                    >
-                      {result.type === "user" && result.avatar !== undefined ? (
-                        <Avatar src={result.avatar} name={result.title} size="sm" />
-                      ) : (
-                        <div className="w-7 h-7 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
-                          <span className="material-symbols-outlined text-[14px] text-secondary">
-                            {typeIcons[result.type]}
-                          </span>
-                        </div>
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[13px] font-medium text-on-surface truncate">
-                          {result.title}
-                        </p>
-                        <p className="text-[11px] text-secondary truncate">{result.subtitle}</p>
-                      </div>
-                      <span className="text-[10px] text-secondary/50 shrink-0">
-                        {typeLabels[result.type]}
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════
           Trending This Week / Month
           ══════════════════════════════════════════════ */}
-      <section className="pt-2 pb-5">
+      <section className="pt-4 lg:pt-24 pb-5">
         <div className={cn(SECTION_PX, "flex items-center justify-between mb-3 md:mb-4")}>
           <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
-            Trending {timePeriod === "week" ? "This Week" : "This Month"}
+            最热作品
           </h2>
           <TogglePills
             options={[
-              { label: "This Week", value: "week" as TimePeriod },
-              { label: "This Month", value: "month" as TimePeriod },
+              { label: "近一周", value: "week" as TimePeriod },
+              { label: "近一月", value: "month" as TimePeriod },
             ]}
             value={timePeriod}
             onChange={setTimePeriod}
@@ -381,7 +391,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           ══════════════════════════════════════════════ */}
       <section className="pt-5 pb-5 border-t border-outline-variant/5">
         <h2 className={cn(SECTION_PX, "text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface mb-3 md:mb-4")}>
-          Editor&apos;s Pick
+          专题精选
         </h2>
 
         <div className={cn("relative group/scroll", SECTION_PX)}>
@@ -410,9 +420,9 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                   </p>
                 </div>
 
-                {/* Build list — clean, no images */}
+                {/* Build list — show first 3, with "查看更多" */}
                 <div className="px-3 pb-3 space-y-0.5">
-                  {pick.builds.map((build, idx) => (
+                  {pick.builds.slice(0, 3).map((build) => (
                     <Link
                       key={build.id}
                       href={`/builds/${build.id}`}
@@ -433,7 +443,6 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                           {build.name}
                         </p>
                         <div className="flex items-center gap-1.5 mt-0.5">
-                          <CategoryTag category={build.category} size="xs" />
                           <div className="text-[11px] text-secondary/35 truncate">
                             <UserHoverCard user={build.author} showAvatar={false} nameClassName="text-[11px] text-secondary/35 cursor-pointer hover:underline hover:text-secondary/60" />
                             <span> · {build.author.department}</span>
@@ -448,6 +457,17 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                       </div>
                     </Link>
                   ))}
+
+                  {pick.builds.length > 3 && (
+                    <button
+                      type="button"
+                      onClick={() => setPickModal({ title: pick.title, description: pick.description, builds: pick.builds })}
+                      className="w-full flex items-center justify-center gap-1 px-3 py-2 rounded-xl text-[12px] font-medium text-primary/70 hover:text-primary hover:bg-primary/5 transition-colors"
+                    >
+                      查看全部 {pick.builds.length} 个作品
+                      <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -463,144 +483,299 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           All Builds — search, filters, sort, grid
           ══════════════════════════════════════════════ */}
       <section className={cn(SECTION_PX, "pt-5 pb-12 border-t border-outline-variant/5")}>
-        {/* Section title + sort */}
-        <div className="flex items-center justify-between mb-4 md:mb-5">
+        {/* Section title + filter & sort */}
+        <div className="flex items-center justify-between mb-3 md:mb-4">
           <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
-            All Builds
+            全部作品
           </h2>
-          <TogglePills
-            options={[
-              { label: "Latest", value: "latest" as SortOrder },
-              { label: "Most Upvoted", value: "most-upvoted" as SortOrder },
-            ]}
-            value={sortOrder}
-            onChange={setSortOrder}
-          />
-        </div>
-
-        {/* Category + department filters */}
-        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar md:overflow-visible md:flex-wrap mb-5">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat.key
-            return (
-              <button
-                key={cat.key}
-                type="button"
-                onClick={() => setActiveCategory(cat.key)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
-                  isActive
-                    ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
-                )}
-              >
-                <span className={cn("material-symbols-outlined text-[14px]", isActive ? "text-on-primary" : "text-on-surface/35")}>
-                  {cat.icon}
-                </span>
-                <span>{cat.label}</span>
-                {cat.desc && (
-                  <span className={cn(
-                    "text-[10px] font-normal",
-                    isActive ? "text-on-primary/70" : "text-on-surface/30"
-                  )}>
-                    {cat.desc}
-                  </span>
-                )}
-              </button>
-            )
-          })}
-
-          {/* Divider */}
-          <div className="w-px h-5 bg-outline-variant/15 mx-1 hidden md:block" />
-
-          {/* Department filter — hidden on mobile */}
-          <div className="hidden md:flex items-center gap-1.5">
-            <button
-              type="button"
-              onClick={() => setDeptFilter("all")}
-              className={cn(
-                "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                deptFilter === "all"
-                  ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
-              )}
-            >
-              全部门
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setDeptFilter("mine")}
-              className={cn(
-                "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                deptFilter === "mine"
-                  ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
-              )}
-            >
-              <span className={cn("material-symbols-outlined text-[14px]", deptFilter === "mine" ? "text-on-primary" : "text-on-surface/35")}>
-                apartment
-              </span>
-              我的部门
-            </button>
-
+          <div className="flex items-center gap-2">
+            {/* Department filter dropdown */}
             <div ref={deptDropdownRef} className="relative">
               <button
                 type="button"
-                onClick={() => setDeptDropdownOpen((v) => !v)}
+                onClick={() => { setDeptDropdownOpen((v) => !v); setHoveredL1(0) }}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                  deptFilter !== "all" && deptFilter !== "mine"
-                    ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
+                  "flex items-center gap-1 px-3 h-7 rounded-full text-[11px] transition-all duration-200",
+                  deptFilter !== "all"
+                    ? "text-primary font-semibold"
+                    : "text-on-surface/35 hover:text-on-surface/50"
                 )}
               >
-                <span className={cn("material-symbols-outlined text-[14px]", deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary" : "text-on-surface/35")}>
-                  tune
-                </span>
-                {deptFilter !== "all" && deptFilter !== "mine" ? resolvedDept : "其他部门"}
+                {deptFilter !== "all" ? deptFilterLabel : "按部门筛选"}
                 <span className={cn(
                   "material-symbols-outlined text-[12px] transition-transform",
                   deptDropdownOpen && "rotate-180",
-                  deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary/70" : "text-on-surface/30"
+                  deptFilter !== "all" ? "text-primary/70" : "text-on-surface/25"
                 )}>
                   expand_more
                 </span>
               </button>
 
+              {/* TODO: 接入真实部门树数据 */}
               {deptDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1.5 min-w-[160px] bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50 py-1">
-                  {allDepartments.map((dept) => (
+                <div className="absolute top-full right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50 flex">
+                  {/* Left: 一级部门 */}
+                  <div className="w-[130px] border-r border-outline-variant/6 py-1">
                     <button
-                      key={dept}
                       type="button"
-                      onClick={() => {
-                        setDeptFilter(dept)
-                        setDeptDropdownOpen(false)
-                      }}
+                      onClick={() => selectDept("all", "")}
                       className={cn(
-                        "w-full text-left px-4 py-2 text-[12px] transition-colors",
-                        resolvedDept === dept
-                          ? "text-primary font-semibold bg-primary/5"
-                          : "text-on-surface/70 hover:bg-surface-container-low"
+                        "w-full text-left px-4 py-2.5 text-[12px] transition-colors",
+                        deptFilter === "all" ? "text-primary font-semibold bg-primary/5" : "text-on-surface/70 hover:bg-surface-container-low"
                       )}
                     >
-                      {dept}
+                      全部门
                     </button>
-                  ))}
+                    <div className="h-px bg-outline-variant/6 my-0.5" />
+                    <div className="px-3 pt-1.5 pb-0.5">
+                      <span className="text-[10px] font-bold tracking-wider text-on-surface/20">我的部门</span>
+                    </div>
+                    <button
+                      type="button"
+                      onMouseEnter={() => setHoveredL1(0)}
+                      className={cn(
+                        "w-full text-left px-4 py-2.5 text-[12px] transition-colors flex items-center justify-between",
+                        hoveredL1 === 0 ? "bg-primary/5 text-on-surface font-medium" : "text-on-surface/70 hover:bg-surface-container-low"
+                      )}
+                    >
+                      一级部门
+                      <span className="material-symbols-outlined text-[14px] text-on-surface/25">chevron_right</span>
+                    </button>
+                    <div className="h-px bg-outline-variant/6 my-0.5" />
+                    {[1, 2, 3].map((i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onMouseEnter={() => setHoveredL1(i)}
+                        className={cn(
+                          "w-full text-left px-4 py-2.5 text-[12px] transition-colors flex items-center justify-between",
+                          hoveredL1 === i ? "bg-surface-container-low text-on-surface font-medium" : "text-on-surface/70 hover:bg-surface-container-low"
+                        )}
+                      >
+                        一级部门
+                        <span className="material-symbols-outlined text-[14px] text-on-surface/25">chevron_right</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Right: 二级部门 */}
+                  <div className="w-[140px] py-1">
+                    {[1, 2, 3].map((i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className="w-full text-left px-4 py-2.5 text-[12px] text-on-surface/70 hover:bg-surface-container-low transition-colors"
+                      >
+                        二级部门
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
+
+            {/* Sort toggle */}
+            <TogglePills
+              options={[
+                { label: "最新", value: "latest" as SortOrder },
+                { label: "最多顶", value: "most-upvoted" as SortOrder },
+              ]}
+              value={sortOrder}
+              onChange={setSortOrder}
+            />
           </div>
         </div>
 
-        {/* Build grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
-          {sortedBuilds.map((build) => (
-            <BuildCard key={build.id} build={build} />
-          ))}
+        {/* Search box with user suggestions */}
+        <div ref={searchRef} className="relative mb-4">
+          <span className="material-symbols-outlined text-[18px] text-on-surface/30 absolute left-3 top-[18px] -translate-y-1/2 z-10">
+            search
+          </span>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                commitSearch(searchQuery)
+              }
+            }}
+            placeholder="搜索薯名或项目名..."
+            className="w-full h-9 pl-9 pr-3 rounded-xl bg-surface-container-low border border-outline-variant/10 text-[13px] text-on-surface placeholder:text-on-surface/30 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-all"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => { setSearchQuery(""); setCommittedSearch(""); setPage(1) }}
+              className="absolute right-3 top-[18px] -translate-y-1/2 text-on-surface/30 hover:text-on-surface/60 z-10"
+            >
+              <span className="material-symbols-outlined text-[16px]">close</span>
+            </button>
+          )}
+
+          {/* User suggestions dropdown — only show before commit */}
+          {showSuggestions && (
+            <div className="absolute top-full left-0 right-0 mt-1 bg-surface-container-lowest border border-outline-variant/10 rounded-xl shadow-lg overflow-hidden z-50">
+              {matchedUsers.map((u) => (
+                <button
+                  key={u.id}
+                  type="button"
+                  onClick={() => { setSearchQuery(u.name); commitSearch(u.name) }}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-surface-container-low transition-colors"
+                >
+                  {u.avatar ? (
+                    <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover shrink-0" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">
+                      {u.name.charAt(0)}
+                    </div>
+                  )}
+                  <div className="text-left min-w-0">
+                    <p className="text-[13px] font-medium text-on-surface truncate">
+                      {u.name}({u.realName})
+                    </p>
+                    <p className="text-[11px] text-on-surface/35">{u.department}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Build grid with pagination */}
+        {(() => {
+          // Combine all results for pagination: author section first, then collab
+          const allResults = [...sortedAuthorBuilds, ...sortedCollabBuilds]
+          const totalCount = allResults.length
+          const totalPages = Math.max(1, Math.ceil(totalCount / pageSize))
+          const safeP = Math.min(page, totalPages)
+          const start = (safeP - 1) * pageSize
+          const pageItems = allResults.slice(start, start + pageSize)
+
+          // Figure out how many author builds are on this page
+          const authorOnPage = pageItems.filter((b) => sortedAuthorBuilds.includes(b))
+          const collabOnPage = pageItems.filter((b) => sortedCollabBuilds.includes(b))
+
+          return (
+            <div className="min-h-[300px]">
+              {totalCount === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-on-surface/30">
+                  <span className="material-symbols-outlined text-[40px] mb-2">search_off</span>
+                  <p className="text-[14px]">没有找到匹配的作品</p>
+                </div>
+              ) : (
+                <>
+                  {authorOnPage.length > 0 && (
+                    <div>
+                      {collabOnPage.length > 0 && (
+                        <p className="text-[12px] text-on-surface/35 font-medium mb-2">TA 发布的作品</p>
+                      )}
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                        {authorOnPage.map((build) => (
+                          <BuildCard key={build.id} build={build} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {collabOnPage.length > 0 && (
+                    <div className={authorOnPage.length > 0 ? "mt-6" : ""}>
+                      <p className="text-[12px] text-on-surface/35 font-medium mb-2">TA 参与的作品</p>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
+                        {collabOnPage.map((build) => (
+                          <BuildCard key={build.id} build={build} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Pagination */}
+              {totalCount > 0 && (
+                <div className="flex items-center justify-between mt-8 pt-4 border-t border-outline-variant/8">
+                  {/* Page numbers — left/center */}
+                  <div className="flex items-center gap-1">
+                    <button
+                      type="button"
+                      disabled={safeP <= 1}
+                      onClick={() => setPage(safeP - 1)}
+                      className="p-1 rounded-md text-on-surface/40 hover:text-on-surface/70 hover:bg-surface-container-low disabled:opacity-20 disabled:pointer-events-none transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">chevron_left</span>
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                      .filter((p) => p <= 3 || p === totalPages)
+                      .reduce<(number | "…")[]>((acc, p, idx, arr) => {
+                        if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…")
+                        acc.push(p)
+                        return acc
+                      }, [])
+                      .map((item, idx) =>
+                        item === "…" ? (
+                          <span key={`ellipsis-${idx}`} className="px-0.5 text-[12px] text-on-surface/25">…</span>
+                        ) : (
+                          <button
+                            key={item}
+                            type="button"
+                            onClick={() => setPage(item as number)}
+                            className={cn(
+                              "min-w-[28px] h-7 rounded-md text-[12px] font-medium transition-colors",
+                              safeP === item
+                                ? "bg-primary text-on-primary"
+                                : "text-on-surface/50 hover:bg-surface-container-low"
+                            )}
+                          >
+                            {item}
+                          </button>
+                        )
+                      )}
+
+                    <button
+                      type="button"
+                      disabled={safeP >= totalPages}
+                      onClick={() => setPage(safeP + 1)}
+                      className="p-1 rounded-md text-on-surface/40 hover:text-on-surface/70 hover:bg-surface-container-low disabled:opacity-20 disabled:pointer-events-none transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+                    </button>
+                  </div>
+
+                  {/* Right: total + page size selector */}
+                  <div className="flex items-center gap-3 text-[12px] text-on-surface/50">
+                    <span className="text-on-surface/30">共 {totalCount} 个作品</span>
+                    <div className="flex items-center gap-1.5">
+                      <span>每页展示</span>
+                      {[20, 50, 100].map((size) => (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => { setPageSize(size); setPage(1) }}
+                          className={cn(
+                            "min-w-[32px] h-7 rounded-lg text-[12px] font-medium transition-all duration-200 border",
+                            pageSize === size
+                              ? "bg-primary text-on-primary border-primary"
+                              : "text-on-surface/50 border-outline-variant/15 hover:border-outline-variant/30 hover:bg-surface-container-low"
+                          )}
+                        >
+                          {size}
+                        </button>
+                      ))}
+                      <span>个</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })()}
       </section>
+
+      {/* Pick detail modal */}
+      {pickModal && (
+        <PickDetailModal data={pickModal} onClose={() => setPickModal(null)} />
+      )}
     </div>
   )
 }

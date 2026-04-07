@@ -78,13 +78,13 @@ export function MediaUpload({ className, onHasCoverChange, onHasIconChange }: Me
       <div className="grid grid-cols-[1fr_auto_1fr] gap-4">
         {/* Cover */}
         <div>
-          <p className="text-[12px] text-on-surface/50 mb-2">Cover image <span className="text-primary/60">*</span></p>
+          <p className="text-[12px] text-on-surface/50 mb-2">封面图 <span className="text-primary/60">*</span></p>
           {cover ? (
             <div className="relative group h-[140px] rounded-xl overflow-hidden border border-outline-variant/8 bg-surface-container-low">
               <img src={cover.preview} alt="Cover" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                <button type="button" onClick={() => coverRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">Replace</button>
-                <button type="button" onClick={removeCover} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-red-500 hover:bg-white transition-colors">Remove</button>
+                <button type="button" onClick={() => coverRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">替换</button>
+                <button type="button" onClick={removeCover} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-red-500 hover:bg-white transition-colors">删除</button>
               </div>
             </div>
           ) : (
@@ -94,21 +94,21 @@ export function MediaUpload({ className, onHasCoverChange, onHasIconChange }: Me
               className="w-full h-[140px] rounded-xl border border-dashed border-outline-variant/35 flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
             >
               <span className="material-symbols-outlined text-[24px] text-on-surface/35 group-hover:text-primary/60 transition-colors">add_photo_alternate</span>
-              <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">16:9 recommended</span>
+              <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">建议 16:9</span>
             </button>
           )}
-          <p className="mt-1.5 text-[11px] text-on-surface/35">Shown in Gallery</p>
+          <p className="mt-1.5 text-[11px] text-on-surface/35">展示在作品集</p>
         </div>
 
         {/* Icon image */}
         <div className="w-[140px]">
-          <p className="text-[12px] text-on-surface/50 mb-2">Icon image</p>
+          <p className="text-[12px] text-on-surface/50 mb-2">图标</p>
           {icon ? (
             <div className="relative group w-[140px] h-[140px] rounded-xl overflow-hidden border border-outline-variant/8 bg-surface-container-low">
               <img src={icon.preview} alt="Icon" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-                <button type="button" onClick={() => iconRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">Replace</button>
-                <button type="button" onClick={removeIcon} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-red-500 hover:bg-white transition-colors">Remove</button>
+                <button type="button" onClick={() => iconRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">替换</button>
+                <button type="button" onClick={removeIcon} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-red-500 hover:bg-white transition-colors">删除</button>
               </div>
             </div>
           ) : (
@@ -118,15 +118,15 @@ export function MediaUpload({ className, onHasCoverChange, onHasIconChange }: Me
               className="w-[140px] h-[140px] rounded-xl border border-dashed border-outline-variant/35 flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
             >
               <span className="material-symbols-outlined text-[24px] text-on-surface/35 group-hover:text-primary/60 transition-colors">crop_square</span>
-              <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">1:1 square</span>
+              <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">建议 1:1</span>
             </button>
           )}
-          <p className="mt-1.5 text-[11px] text-on-surface/35">Shown in lists & posts</p>
+          <p className="mt-1.5 text-[11px] text-on-surface/35">展示在列表</p>
         </div>
 
         {/* Additional images */}
         <div>
-          <p className="text-[12px] text-on-surface/50 mb-2">Additional images</p>
+          <p className="text-[12px] text-on-surface/50 mb-2">更多图片</p>
           <div className="flex flex-wrap gap-2 min-h-[140px] content-start">
             {gallery.map((f) => (
               <div key={f.id} className="relative group w-[66px] h-[66px] rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/8">
@@ -148,7 +148,7 @@ export function MediaUpload({ className, onHasCoverChange, onHasIconChange }: Me
               <span className="material-symbols-outlined text-[18px] text-on-surface/35 group-hover:text-primary/60 transition-colors">add</span>
             </button>
           </div>
-          <p className="mt-1.5 text-[11px] text-on-surface/35">Shown on detail page</p>
+          <p className="mt-1.5 text-[11px] text-on-surface/35">展示在详情页</p>
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import Link from "next/link"
 import type { User } from "@/types"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser } from "@/hooks/use-store"
-import { useStore } from "@/store"
 import { cn } from "@/lib/utils"
 
 interface UserHoverCardProps {
@@ -28,8 +27,6 @@ export function UserHoverCard({
   children,
 }: UserHoverCardProps) {
   const currentUser = useCurrentUser()
-  const following = useStore((s) => s.followedUserIds.includes(user.id))
-  const toggleFollow = useStore((s) => s.toggleFollow)
   const [open, setOpen] = useState(false)
   const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({})
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -92,49 +89,14 @@ export function UserHoverCard({
 
       {open && (
         <div
-          className="z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg p-4 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150"
+          className="z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg p-5 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150"
           style={popupStyle}
           onMouseEnter={handleEnter}
           onMouseLeave={handleLeave}
         >
-          {/* Header: avatar + name */}
-          <Link href={profileHref} className="flex items-start gap-3 group/profile" onClick={(e) => e.stopPropagation()}>
-            <Avatar src={user.avatar} name={user.name} size="lg" className="shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-semibold text-on-surface leading-tight truncate group-hover/profile:text-primary transition-colors">
-                {displayName}
-              </p>
-              <p className="text-[12px] text-secondary mt-0.5">
-                {user.role}
-              </p>
-            </div>
-          </Link>
-
-          {/* Bio */}
-          {user.bio && (
-            <p className="text-[13px] text-on-surface/70 mt-3 leading-relaxed">
-              {user.bio}
-            </p>
-          )}
-
-          {/* Follow button */}
-          {!isSelf && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                toggleFollow(user.id)
-              }}
-              className={cn(
-                "w-full mt-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all cursor-pointer",
-                following
-                  ? "bg-surface-container text-secondary border border-outline-variant/12 hover:bg-surface-container-low"
-                  : "bg-primary text-on-primary hover:opacity-90"
-              )}
-            >
-              {following ? "Following" : "Follow"}
-            </button>
-          )}
+          <p className="text-[13px] text-on-surface/40 text-center leading-relaxed">
+            与 Hi 统一的个人信息浮窗保持一致
+          </p>
         </div>
       )}
     </div>

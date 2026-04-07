@@ -3,50 +3,30 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { FormTextarea } from "@/components/build-form/form-textarea"
-import { BuildPreview } from "@/components/build-form/build-preview"
+import { MediaUpload } from "@/components/build-form/media-upload"
+import { VisibilitySelector } from "@/components/build-form/visibility-selector"
 import { Avatar } from "@/components/content/avatar"
-import { CategoryTag } from "@/components/content/category-tag"
 import { useStore } from "@/store"
+import { useUsers } from "@/hooks/use-store"
 import { cn } from "@/lib/utils"
-import type { BuildCategory, Visibility } from "@/types"
-
-const categories = [
-  { value: "SKILL", label: "Skill", icon: "psychology" },
-  { value: "DEMO", label: "Demo", icon: "deployed_code" },
-  { value: "OTHER", label: "Other", icon: "category" },
-]
-
-function bumpVersion(current: string, type: "patch" | "minor" | "major"): string {
-  const parts = current.split(".").map(Number)
-  const major = parts[0] || 1
-  const minor = parts[1] || 0
-
-  switch (type) {
-    case "patch":
-      return `${major}.${minor + 1}`
-    case "minor":
-      return `${major + 1}.0`
-    case "major":
-      return `${major + 1}.0`
-    default:
-      return current
-  }
-}
+import type { Visibility } from "@/types"
 
 export function BuildEditClient({ buildId }: { buildId: string }) {
   const router = useRouter()
-  // Read raw store data directly — stable references, no denormalization
   const rawBuild = useStore((s) => s.builds[buildId])
   const currentUserId = useStore((s) => s.currentUserId)
   const currentUser = useStore((s) => s.users[s.currentUserId])
   const updateBuild = useStore((s) => s.updateBuild)
-  // Form state — initialized from build data via lazy initializers (no useEffect needed)
-  const [name, setName] = useState(() => rawBuild?.name ?? "")
+  const users = useUsers()
+
+  // Form state — initialized from build data
+  const [buildName, setBuildName] = useState(() => rawBuild?.name ?? "")
   const [tagline, setTagline] = useState(() => rawBuild?.description ?? "")
-  const [selectedCategory, setSelectedCategory] = useState<BuildCategory | "">(() => rawBuild?.category ?? "")
-  const [pitch, setPitch] = useState(() => rawBuild?.pitch ?? "")
-  const [problem, setProblem] = useState(() => rawBuild?.problem ?? "")
-  const [solution, setSolution] = useState(() => rawBuild?.solution ?? "")
+  const [pitch, setPitch] = useState(() => {
+    // Combine old problem/solution/pitch into single field
+    const parts = [rawBuild?.pitch, rawBuild?.problem, rawBuild?.solution].filter(Boolean)
+    return parts.join("\n\n") || ""
+  })
   const [techTags, setTechTags] = useState<string[]>(() => rawBuild?.techStack ?? [])
   const [tagInput, setTagInput] = useState("")
   const [links, setLinks] = useState(() =>
@@ -54,23 +34,42 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
       ? rawBuild.links.map((l) => ({ title: l.label, url: l.url }))
       : [{ title: "", url: "" }]
   )
-  const [visibility, setVisibility] = useState<Visibility>(() => rawBuild?.visibility ?? "PUBLIC")
+  const [collaborators, setCollaborators] = useState<string[]>(() =>
+    rawBuild?.collaboratorIds ?? []
+  )
+  const [hasCover, setHasCover] = useState(true) // existing build already has cover
+  const [visibility, setVisibility] = useState<string | null>(() => rawBuild?.visibility ?? "PUBLIC")
   const [version, setVersion] = useState(() => rawBuild?.version ?? "1.0")
-  const [versionBump, setVersionBump] = useState<"patch" | "minor" | null>(null)
-  const [lastSaved, setLastSaved] = useState<Date | null>(null)
-  const [showPreview, setShowPreview] = useState(false)
   const isComposingRef = useRef(false)
+  const [showCollabSearch, setShowCollabSearch] = useState(false)
+  const [collabSearch, setCollabSearch] = useState("")
+  const collabRef = useRef<HTMLDivElement>(null)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
+  const [errors, setErrors] = useState<Record<string, boolean>>({})
 
   // Auto-save indicator
   useEffect(() => {
     const timer = setTimeout(() => setLastSaved(new Date()), 1500)
     return () => clearTimeout(timer)
-  }, [name, tagline, selectedCategory, techTags, links, pitch, problem, solution])
+  }, [buildName, tagline, pitch, techTags, links, collaborators, version])
+
+  useEffect(() => {
+    if (!showCollabSearch) return
+    const handleClickOutside = (e: MouseEvent) => {
+      if (collabRef.current && !collabRef.current.contains(e.target as Node)) {
+        setShowCollabSearch(false)
+        setCollabSearch("")
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [showCollabSearch])
 
   if (!rawBuild) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-[14px] text-on-surface/40">Build not found</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <span className="material-symbols-outlined text-[48px] text-primary/15 mb-4">error</span>
+        <p className="text-[14px] text-on-surface/40">未找到该作品</p>
       </div>
     )
   }
@@ -78,8 +77,9 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
   const isOwner = rawBuild.authorId === currentUserId
   if (!isOwner) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-[14px] text-on-surface/40">You don't have permission to edit this build.</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <span className="material-symbols-outlined text-[48px] text-primary/15 mb-4">lock</span>
+        <p className="text-[14px] text-on-surface/40">你没有权限修改此作品</p>
       </div>
     )
   }
@@ -87,6 +87,7 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
   const addTag = () => {
     const trimmed = tagInput.trim()
     if (!trimmed || techTags.includes(trimmed)) return
+    if (techTags.length >= 10) return
     setTechTags([...techTags, trimmed])
     setTagInput("")
   }
@@ -95,26 +96,70 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
     setTechTags(techTags.filter((t) => t !== tag))
   }
 
-  const computedVersion = versionBump ? bumpVersion(rawBuild.version, versionBump) : version
+  const toggleCollaborator = (userId: string) => {
+    setCollaborators((prev) => {
+      if (prev.includes(userId)) {
+        return prev.filter((id) => id !== userId)
+      }
+      if (prev.length >= 10) return prev
+      return [...prev, userId]
+    })
+  }
+
+  const availableCollabs = users.filter(
+    (u) =>
+      u.id !== currentUserId &&
+      (collabSearch === "" ||
+        u.name.includes(collabSearch) ||
+        u.realName.toLowerCase().includes(collabSearch.toLowerCase()))
+  )
+
+  const selectedCollabs = users.filter((u) => collaborators.includes(u.id))
+
+  const hasValidLink = links.some((l) => l.title.trim() && l.url.trim())
+
+  const clearError = (field: string) => {
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev }
+        delete next[field]
+        return next
+      })
+    }
+  }
 
   const handleUpdate = () => {
-    const hasValidLink = links.some((l) => l.title.trim() && l.url.trim())
+    const newErrors: Record<string, boolean> = {}
+    if (!buildName.trim()) newErrors.buildName = true
+    if (!tagline.trim()) newErrors.tagline = true
+    if (!pitch.trim()) newErrors.pitch = true
+    if (!hasValidLink) newErrors.links = true
+
+    setErrors(newErrors)
+
+    if (Object.keys(newErrors).length > 0) {
+      const firstKey = Object.keys(newErrors)[0]
+      const el = document.querySelector(`[data-field="${firstKey}"]`)
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" })
+      }
+      return
+    }
 
     updateBuild(buildId, {
-      name: name.trim(),
+      name: buildName.trim(),
       description: tagline.trim(),
-      category: selectedCategory as BuildCategory,
-      pitch: pitch.trim() || undefined,
-      problem: problem.trim(),
-      solution: solution.trim(),
+      pitch: pitch.trim(),
+      problem: pitch.trim(),
+      solution: "",
       techStack: techTags,
       links: hasValidLink
         ? links
           .filter((l) => l.title.trim() && l.url.trim())
           .map((l) => ({ label: l.title.trim(), url: l.url.trim() }))
         : undefined,
-      visibility,
-      version: computedVersion,
+      visibility: (visibility as Visibility) ?? "PUBLIC",
+      version: version.trim() || rawBuild.version,
     })
 
     router.push(`/builds/${buildId}`)
@@ -129,7 +174,7 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
             desktop_windows
           </span>
           <p className="text-[14px] text-secondary/50">
-            Build editing is available on desktop.
+            修改作品仅支持桌面端。
           </p>
         </div>
       </div>
@@ -145,337 +190,369 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
               className="flex items-center gap-2 text-on-surface/50 hover:text-on-surface transition-colors"
             >
               <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-              <span className="text-[14px] font-headline font-semibold">Edit Build</span>
+              <span className="text-[14px] font-headline font-semibold">修改作品</span>
             </button>
-            <div className="flex items-center gap-4">
-              <span className="text-[12px] text-secondary/40">
-                {lastSaved ? (
-                  <>
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70 mr-1.5 align-middle" />
-                    Saved just now
-                  </>
-                ) : (
-                  "Not saved yet"
-                )}
-              </span>
-              <Avatar
-                src={currentUser.avatar}
-                name={currentUser.name}
-                size="sm"
-              />
-            </div>
+            <span className="text-[12px] text-secondary/40">
+              {lastSaved ? (
+                <>
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70 mr-1.5 align-middle" />
+                  已保存
+                </>
+              ) : (
+                "未保存"
+              )}
+            </span>
           </div>
         </div>
 
         {/* Main form */}
         <div className="max-w-[960px] mx-auto px-10 pt-10 pb-36">
 
-          {/* ===== Version ===== */}
-          <section className="mb-10">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">Version</h2>
-              <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
-            </div>
-
-            <div className="flex items-start gap-8">
-              {/* Current version */}
-              <div className="space-y-1.5">
-                <p className="text-[12px] text-on-surface/45 font-medium">Current</p>
-                <div className="flex items-center gap-2">
-                  <span className="text-[28px] font-headline font-semibold text-on-surface/25 tracking-tight">
-                    v{rawBuild.version}
-                  </span>
-                </div>
-              </div>
-
-              {/* Arrow */}
-              <div className="pt-7">
-                <span className="material-symbols-outlined text-[24px] text-on-surface/20">arrow_forward</span>
-              </div>
-
-              {/* New version */}
-              <div className="space-y-1.5">
-                <p className="text-[12px] text-on-surface/45 font-medium">New</p>
-                <span className="text-[28px] font-headline font-semibold text-primary tracking-tight">
-                  v{computedVersion}
-                </span>
-              </div>
-            </div>
-
-            {/* Bump buttons */}
-            <div className="flex items-center gap-3 mt-5">
-              <button
-                type="button"
-                onClick={() => setVersionBump(versionBump === "patch" ? null : "patch")}
-                className={cn(
-                  "px-4 py-2 rounded-xl border text-[13px] font-headline font-semibold transition-all",
-                  versionBump === "patch"
-                    ? "border-primary/30 bg-primary/[0.06] text-primary"
-                    : "border-outline-variant/15 text-on-surface/45 hover:border-outline-variant/30 hover:text-on-surface/70"
-                )}
-              >
-                Patch
-                <span className="ml-2 text-[11px] font-body font-normal opacity-60">
-                  {bumpVersion(rawBuild.version, "patch")}
-                </span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setVersionBump(versionBump === "minor" ? null : "minor")}
-                className={cn(
-                  "px-4 py-2 rounded-xl border text-[13px] font-headline font-semibold transition-all",
-                  versionBump === "minor"
-                    ? "border-primary/30 bg-primary/[0.06] text-primary"
-                    : "border-outline-variant/15 text-on-surface/45 hover:border-outline-variant/30 hover:text-on-surface/70"
-                )}
-              >
-                Minor
-                <span className="ml-2 text-[11px] font-body font-normal opacity-60">
-                  {bumpVersion(rawBuild.version, "minor")}
-                </span>
-              </button>
-              <div className="h-5 w-px bg-outline-variant/10 mx-1" />
-              <div className="flex items-center gap-2">
-                <span className="text-[12px] text-on-surface/35">or type:</span>
-                <input
-                  type="text"
-                  value={versionBump ? "" : version}
-                  onChange={(e) => {
-                    setVersion(e.target.value)
-                    setVersionBump(null)
-                  }}
-                  placeholder={rawBuild.version}
-                  className="w-[80px] bg-transparent border-b border-outline-variant/12 focus:border-primary/40 focus:ring-0 focus:outline-none py-1 text-[14px] font-headline font-semibold text-on-surface placeholder:text-on-surface/20 text-center transition-colors"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* ===== Hero: Name + Tagline ===== */}
-          <div className="mb-8">
-            <div className="relative">
+          {/* ===== 作品名称 ===== */}
+          <div className="mb-8" data-field="buildName">
+            <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+              作品名称 <span className="text-primary/50">*</span>
+            </label>
+            <div className={cn(
+              "relative rounded-xl bg-surface-container-lowest border p-4 transition-colors focus-within:border-primary/30",
+              errors.buildName ? "border-red-500/60" : "border-outline-variant/10"
+            )}>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value.slice(0, 40))}
-                placeholder="Name your build"
-                className="w-full bg-transparent border-b border-outline-variant/12 focus:border-primary/50 focus:ring-0 focus:outline-none pb-3 text-[36px] font-headline font-semibold placeholder:text-on-surface/18 text-on-surface tracking-tight leading-[1.2] transition-colors"
+                value={buildName}
+                onChange={(e) => { setBuildName(e.target.value.slice(0, 40)); clearError("buildName") }}
+                placeholder="为你的作品命名"
+                className="w-full bg-transparent focus:ring-0 focus:outline-none text-[20px] font-headline font-semibold placeholder:text-on-surface/25 text-on-surface tracking-tight"
               />
-              {name.length > 0 && (
+              {buildName.length > 0 && (
                 <span className={cn(
-                  "absolute right-0 bottom-4 text-[12px]",
-                  name.length >= 40 ? "text-red-400" : "text-on-surface/20"
+                  "absolute right-4 top-1/2 -translate-y-1/2 text-[12px]",
+                  buildName.length >= 40 ? "text-red-400" : "text-on-surface/20"
                 )}>
-                  {name.length}/40
-                </span>
-              )}
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                value={tagline}
-                onChange={(e) => setTagline(e.target.value.slice(0, 80))}
-                placeholder="Write a tagline for your build"
-                className="w-full bg-transparent border-b border-outline-variant/8 focus:border-primary/40 focus:ring-0 focus:outline-none mt-4 pb-3 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface/60 transition-colors"
-              />
-              {tagline.length > 0 && (
-                <span className={cn(
-                  "absolute right-0 bottom-4 text-[12px]",
-                  tagline.length >= 80 ? "text-red-400" : "text-on-surface/20"
-                )}>
-                  {tagline.length}/80
+                  {buildName.length}/40
                 </span>
               )}
             </div>
           </div>
 
-          {/* ===== The Story ===== */}
+          {/* ===== 作品简介 ===== */}
           <section className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">The Story</h2>
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">作品简介</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
             </div>
             <div className="space-y-6">
-              {/* Category */}
-              <div>
+              {/* 一句话介绍 */}
+              <div data-field="tagline">
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Category <span className="text-primary/50">*</span>
+                  一句话介绍 <span className="text-primary/50">*</span>
                 </label>
-                <div className="flex items-center gap-3">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.value}
-                      type="button"
-                      onClick={() => setSelectedCategory(selectedCategory === cat.value ? "" : cat.value as BuildCategory)}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-2.5 rounded-xl border text-left transition-all cursor-pointer select-none active:scale-[0.97]",
-                        selectedCategory === cat.value
-                          ? "border-primary/30 bg-primary/[0.06]"
-                          : "border-outline-variant/30 hover:border-outline-variant/45"
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "material-symbols-outlined text-[18px]",
-                          selectedCategory === cat.value ? "text-primary" : "text-on-surface/70"
-                        )}
-                        style={{ fontVariationSettings: selectedCategory === cat.value ? "'FILL' 1" : "'FILL' 0" }}
-                      >
-                        {cat.icon}
-                      </span>
-                      <span className={cn(
-                        "text-[13px] font-headline font-semibold",
-                        selectedCategory === cat.value ? "text-primary" : "text-on-surface/70"
-                      )}>
-                        {cat.label}
-                      </span>
-                    </button>
-                  ))}
+                <div className={cn(
+                  "relative rounded-xl bg-surface-container-lowest border p-4 transition-colors focus-within:border-primary/30",
+                  errors.tagline ? "border-red-500/60" : "border-outline-variant/10"
+                )}>
+                  <input
+                    type="text"
+                    value={tagline}
+                    onChange={(e) => { setTagline(e.target.value.slice(0, 80)); clearError("tagline") }}
+                    placeholder="一句话介绍你的作品"
+                    className="w-full bg-transparent focus:ring-0 focus:outline-none text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                  />
+                  {tagline.length > 0 && (
+                    <span className={cn(
+                      "absolute right-4 top-1/2 -translate-y-1/2 text-[12px]",
+                      tagline.length >= 80 ? "text-red-400" : "text-on-surface/20"
+                    )}>
+                      {tagline.length}/80
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* Story fields */}
-              <FormTextarea
-                label="The Pitch"
-                placeholder="Introduce your build"
-                isRequired
-                maxLength={800}
-                defaultValue={pitch}
-                onChange={(html) => setPitch(html.replace(/<[^>]*>/g, "").trim())}
-              />
-              <FormTextarea
-                label="The Problem"
-                placeholder="What problem does this solve?"
-                isRequired
-                maxLength={800}
-                defaultValue={problem}
-                onChange={(html) => setProblem(html.replace(/<[^>]*>/g, "").trim())}
-              />
-              <FormTextarea
-                label="The Solution"
-                placeholder="How does it work?"
-                isRequired
-                maxLength={800}
-                defaultValue={solution}
-                onChange={(html) => setSolution(html.replace(/<[^>]*>/g, "").trim())}
-              />
+              {/* 项目介绍 */}
+              <div data-field="pitch">
+                <FormTextarea
+                  label="项目介绍"
+                  placeholder="介绍你的作品——它是什么、解决了什么问题、如何实现的"
+                  isRequired
+                  maxLength={2000}
+                  defaultValue={pitch}
+                  onChange={(html) => { setPitch(html.replace(/<[^>]*>/g, "").trim()); clearError("pitch") }}
+                  error={errors.pitch}
+                />
+              </div>
 
-              {/* Keywords */}
+              {/* 关键词 */}
               <div>
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Keywords
+                  关键词
                 </label>
-                <div className="flex flex-wrap gap-2 items-center py-2 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
-                  {techTags.map((tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/12 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
-                    >
-                      {tag}
-                      <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">close</span>
-                    </button>
-                  ))}
-                  <input
-                    value={tagInput}
-                    onCompositionStart={() => { isComposingRef.current = true }}
-                    onCompositionEnd={(e) => {
-                      isComposingRef.current = false
-                      const val = (e.target as HTMLInputElement).value
-                      if (val.endsWith(",") || val.endsWith("\uff0c")) {
-                        const trimmed = val.slice(0, -1).trim()
-                        if (trimmed && !techTags.includes(trimmed)) {
-                          setTechTags((prev) => [...prev, trimmed])
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 focus-within:border-primary/30 transition-colors">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {techTags.map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/12 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
+                      >
+                        {tag}
+                        <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">close</span>
+                      </button>
+                    ))}
+                    <input
+                      value={tagInput}
+                      onCompositionStart={() => { isComposingRef.current = true }}
+                      onCompositionEnd={(e) => {
+                        isComposingRef.current = false
+                        const val = (e.target as HTMLInputElement).value
+                        if (val.endsWith(",") || val.endsWith("，")) {
+                          const trimmed = val.slice(0, -1).trim()
+                          if (trimmed && !techTags.includes(trimmed) && techTags.length < 10) {
+                            setTechTags((prev) => [...prev, trimmed])
+                          }
+                          setTagInput("")
                         }
-                        setTagInput("")
-                      }
-                    }}
-                    onChange={(e) => {
-                      const val = e.target.value
-                      if (!isComposingRef.current && (val.endsWith(",") || val.endsWith("\uff0c"))) {
-                        const trimmed = val.slice(0, -1).trim()
-                        if (trimmed && !techTags.includes(trimmed)) {
-                          setTechTags((prev) => [...prev, trimmed])
+                      }}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        if (!isComposingRef.current && (val.endsWith(",") || val.endsWith("，"))) {
+                          const trimmed = val.slice(0, -1).trim()
+                          if (trimmed && !techTags.includes(trimmed) && techTags.length < 10) {
+                            setTechTags((prev) => [...prev, trimmed])
+                          }
+                          setTagInput("")
+                        } else {
+                          setTagInput(val)
                         }
-                        setTagInput("")
-                      } else {
-                        setTagInput(val)
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !isComposingRef.current) {
-                        e.preventDefault()
-                        addTag()
-                      } else if (e.key === "Backspace" && tagInput === "" && techTags.length > 0) {
-                        removeTag(techTags[techTags.length - 1])
-                      }
-                    }}
-                    placeholder={techTags.length === 0 ? "e.g. Python, Claude API" : "Add more..."}
-                    className="flex-1 min-w-[120px] bg-transparent focus:ring-0 focus:outline-none h-[30px] text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
-                  />
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !isComposingRef.current) {
+                          e.preventDefault()
+                          addTag()
+                        } else if (e.key === "Backspace" && tagInput === "" && techTags.length > 0) {
+                          removeTag(techTags[techTags.length - 1])
+                        }
+                      }}
+                      placeholder={techTags.length >= 10 ? "已达上限" : techTags.length === 0 ? "如：组织穿透、日常数据报表、财务分析" : "继续添加..."}
+                      className="flex-1 min-w-[120px] bg-transparent focus:ring-0 focus:outline-none h-[30px] text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                    />
+                  </div>
+                  <p className="mt-2 text-[12px] text-on-surface/25">
+                    回车添加 · 退格删除 · 最多10个
+                  </p>
                 </div>
-                <p className="mt-1.5 text-[12px] text-on-surface/25">
-                  Press Enter to add · Backspace to remove
-                </p>
               </div>
             </div>
           </section>
 
-          {/* ===== Links ===== */}
+          {/* ===== 作品展示 ===== */}
           <section className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">Links</h2>
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">作品展示</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
             </div>
-            <div className="space-y-3">
-              {links.map((link, i) => (
-                <div key={i} className="flex items-center gap-3">
-                  <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
-                    <input
-                      value={link.title}
-                      onChange={(e) => {
-                        const next = [...links]
-                        next[i] = { ...next[i], title: e.target.value }
-                        setLinks(next)
-                      }}
-                      placeholder="Title"
-                      className="w-[140px] shrink-0 bg-transparent focus:ring-0 focus:outline-none py-2.5 text-[14px] font-body font-medium placeholder:text-on-surface/30 text-on-surface"
-                    />
-                    <div className="w-px h-4 bg-outline-variant/15" />
-                    <input
-                      value={link.url}
-                      onChange={(e) => {
-                        const next = [...links]
-                        next[i] = { ...next[i], url: e.target.value }
-                        setLinks(next)
-                      }}
-                      placeholder="https://"
-                      className="flex-1 bg-transparent focus:ring-0 focus:outline-none py-2.5 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
-                    />
-                  </div>
-                  {links.length > 1 && (
+            <div className="space-y-6">
+              {/* 作品链接 */}
+              <div data-field="links">
+                <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+                  作品链接 <span className="text-primary/50">*</span>
+                </label>
+                {errors.links && (
+                  <p className="text-[12px] text-red-500 mb-2">至少需要一个链接（标题和地址）</p>
+                )}
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 space-y-3">
+                  {links.map((link, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/8 focus-within:border-primary/30 transition-colors">
+                        <input
+                          value={link.title}
+                          onChange={(e) => {
+                            const next = [...links]
+                            next[i] = { ...next[i], title: e.target.value }
+                            setLinks(next)
+                            clearError("links")
+                          }}
+                          placeholder="标题"
+                          className="w-[140px] shrink-0 bg-transparent focus:ring-0 focus:outline-none py-2.5 text-[14px] font-body font-medium placeholder:text-on-surface/30 text-on-surface"
+                        />
+                        <div className="w-px h-4 bg-outline-variant/15" />
+                        <input
+                          value={link.url}
+                          onChange={(e) => {
+                            const next = [...links]
+                            next[i] = { ...next[i], url: e.target.value }
+                            setLinks(next)
+                            clearError("links")
+                          }}
+                          placeholder="https://"
+                          className="flex-1 bg-transparent focus:ring-0 focus:outline-none py-2.5 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                        />
+                      </div>
+                      {links.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setLinks(links.filter((_, j) => j !== i))}
+                          className="text-on-surface/20 hover:text-on-surface/50 transition-colors p-1"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {links.length < 10 && (
                     <button
                       type="button"
-                      onClick={() => setLinks(links.filter((_, j) => j !== i))}
-                      className="text-on-surface/20 hover:text-on-surface/50 transition-colors p-1"
+                      onClick={() => setLinks([...links, { title: "", url: "" }])}
+                      className="flex items-center gap-1.5 text-[13px] font-medium text-primary/50 hover:text-primary/80 transition-colors mt-1"
                     >
-                      <span className="material-symbols-outlined text-[18px]">close</span>
+                      <span className="material-symbols-outlined text-[16px]">add</span>
+                      添加链接
                     </button>
                   )}
+                  {links.length >= 10 && (
+                    <p className="text-[12px] text-on-surface/25 mt-1">最多10个链接</p>
+                  )}
                 </div>
-              ))}
-              <button
-                type="button"
-                onClick={() => setLinks([...links, { title: "", url: "" }])}
-                className="flex items-center gap-1.5 text-[13px] font-medium text-primary/50 hover:text-primary/80 transition-colors mt-1"
-              >
-                <span className="material-symbols-outlined text-[16px]">add</span>
-                Add another link
-              </button>
+              </div>
+
+              {/* 图片/视频 */}
+              <div data-field="media">
+                <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+                  图片/视频
+                </label>
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <MediaUpload onHasCoverChange={(has) => setHasCover(has)} />
+                  <p className="mt-3 text-[12px] text-on-surface/25">
+                    重新上传将替换现有素材 · 最多10个
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* ===== 其他设置 ===== */}
+          <section className="mb-8">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">其他设置</h2>
+              <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
+            </div>
+            <div className="space-y-6">
+              {/* 合作者 */}
+              <div>
+                <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+                  合作者
+                </label>
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    {selectedCollabs.map((user) => (
+                      <button
+                        key={user.id}
+                        type="button"
+                        onClick={() => toggleCollaborator(user.id)}
+                        className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/12 hover:border-primary/30 hover:bg-primary/[0.04] active:scale-[0.96] transition-all"
+                      >
+                        <Avatar src={user.avatar} name={user.name} size="xs" />
+                        <span className="text-[13px] font-medium text-on-surface/65">
+                          {user.name}({user.realName})
+                        </span>
+                        <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">
+                          close
+                        </span>
+                      </button>
+                    ))}
+                    <div className="relative" ref={collabRef}>
+                      {collaborators.length < 10 ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowCollabSearch(!showCollabSearch)}
+                          className={cn(
+                            "flex items-center gap-2 px-4 py-1.5 rounded-full border border-dashed transition-all text-[13px] font-medium cursor-pointer",
+                            showCollabSearch
+                              ? "border-primary/30 text-primary bg-primary/[0.03]"
+                              : "border-outline-variant/15 text-on-surface/35 hover:border-primary/25 hover:text-primary/60"
+                          )}
+                        >
+                          <span className="material-symbols-outlined text-[17px]">person_add</span>
+                          添加成员
+                        </button>
+                      ) : (
+                        <span className="text-[12px] text-on-surface/25">最多10位合作者</span>
+                      )}
+
+                      {showCollabSearch && collaborators.length < 10 && (
+                        <div className="absolute top-full left-0 mt-2 w-[280px] bg-surface-container-lowest rounded-2xl border border-outline-variant/8 shadow-xl z-30 overflow-hidden">
+                          <div className="p-3.5 border-b border-outline-variant/6">
+                            <input
+                              autoFocus
+                              value={collabSearch}
+                              onChange={(e) => setCollabSearch(e.target.value)}
+                              placeholder="搜索成员..."
+                              className="w-full bg-surface-container-low rounded-xl px-3.5 py-2.5 text-[14px] placeholder:text-secondary/35 focus:outline-none focus:ring-1 focus:ring-primary/20"
+                            />
+                          </div>
+                          <div className="max-h-[240px] overflow-y-auto py-1.5">
+                            {availableCollabs.map((user) => {
+                              const isSelected = collaborators.includes(user.id)
+                              return (
+                                <button
+                                  key={user.id}
+                                  type="button"
+                                  onClick={() => toggleCollaborator(user.id)}
+                                  className={cn(
+                                    "flex items-center gap-3 w-full px-4 py-2.5 hover:bg-surface-container transition-colors text-left",
+                                    isSelected && "bg-primary/[0.04]"
+                                  )}
+                                >
+                                  <Avatar src={user.avatar} name={user.name} size="sm" />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-[14px] font-medium text-on-surface truncate">
+                                      {user.name}({user.realName})
+                                    </p>
+                                    <p className="text-[12px] text-secondary/45">{user.role}</p>
+                                  </div>
+                                  {isSelected && (
+                                    <span className="material-symbols-outlined text-[18px] text-primary">check</span>
+                                  )}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 作品版本 */}
+              <div>
+                <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+                  作品版本
+                </label>
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 focus-within:border-primary/30 transition-colors">
+                  <input
+                    type="text"
+                    value={version}
+                    onChange={(e) => setVersion(e.target.value)}
+                    placeholder={rawBuild.version}
+                    className="w-[120px] bg-transparent focus:ring-0 focus:outline-none text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                  />
+                  <p className="mt-2 text-[12px] text-on-surface/25">
+                    当前版本 v{rawBuild.version}，修改后将更新为新版本号
+                  </p>
+                </div>
+              </div>
+
+              {/* 可见范围 */}
+              <div data-field="visibility">
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <VisibilitySelector onChange={(v) => setVisibility(v)} />
+                </div>
+              </div>
             </div>
           </section>
         </div>
@@ -486,54 +563,20 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
             <button
               type="button"
               onClick={() => router.push(`/builds/${buildId}`)}
-              className="text-[14px] text-on-surface/35 hover:text-on-surface/60 transition-colors font-medium"
+              className="text-[14px] font-headline font-semibold text-on-surface/40 hover:text-on-surface/60 transition-colors"
             >
-              Cancel
+              取消
             </button>
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 mr-4">
-                <CategoryTag category={rawBuild.category} />
-                <span className="material-symbols-outlined text-[14px] text-on-surface/20">arrow_forward</span>
-                {selectedCategory && <CategoryTag category={selectedCategory as BuildCategory} />}
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowPreview(true)}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
-              >
-                <span className="material-symbols-outlined text-[16px]">visibility</span>
-                Preview
-              </button>
-              <button
-                type="button"
-                onClick={handleUpdate}
-                className="px-6 py-2 rounded-xl text-[14px] font-headline font-semibold bg-primary text-on-primary hover:opacity-90 transition-all"
-              >
-                Update to v{computedVersion}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleUpdate}
+              className="px-6 py-2 rounded-xl text-[14px] font-headline font-semibold bg-primary text-on-primary hover:opacity-90 transition-all"
+            >
+              更新
+            </button>
           </div>
         </div>
       </div>
-
-      {/* Preview modal */}
-      {showPreview && (
-        <BuildPreview
-          name={name}
-          tagline={tagline}
-          category={selectedCategory as any}
-          pitch={pitch}
-          problem={problem}
-          solution={solution}
-          techTags={techTags}
-          links={links.map((l) => ({ title: l.title, url: l.url }))}
-          coverImage={rawBuild.coverImage}
-          iconImage={rawBuild.iconImage}
-          author={{ ...currentUser, id: currentUserId } as any}
-          version={computedVersion}
-          onClose={() => setShowPreview(false)}
-        />
-      )}
     </>
   )
 }

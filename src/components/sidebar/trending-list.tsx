@@ -2,7 +2,6 @@
 
 import { useTrendingBuilds } from "@/hooks/use-store"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
-import { CategoryTag } from "@/components/content/category-tag"
 import Link from "next/link"
 
 export function TrendingList() {
@@ -12,7 +11,7 @@ export function TrendingList() {
     <div className="bg-surface-container-lowest rounded-xl border border-surface-container/50 shadow-sm overflow-hidden">
       <div className="px-5 pt-4 pb-3">
         <h4 className="text-base font-headline font-semibold tracking-tight text-on-surface">
-          Trending Builds This Week
+          本周最热作品
         </h4>
       </div>
       <div>
@@ -26,10 +25,9 @@ export function TrendingList() {
               {build.name}
             </p>
             <div className="flex items-center gap-3 mt-1.5">
-              <CategoryTag category={build.category} />
               <div className="flex items-center gap-1 text-secondary">
                 <UpvoteIcon size={10} className="text-primary/50" />
-                <span className="text-[11px]">+{build.weeklyUpvotes} this week</span>
+                <span className="text-[11px]">+{build.weeklyUpvotes} 本周</span>
               </div>
             </div>
           </Link>

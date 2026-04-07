@@ -56,7 +56,7 @@ export function MobileHeader() {
             autoFocus
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search posts, people, builds..."
+            placeholder="搜索帖子、用户、作品..."
             className="flex-1 bg-surface-container-low rounded-full px-4 py-2 text-[14px] placeholder:text-secondary/40 focus:outline-none focus:ring-1 focus:ring-primary/20"
             onKeyDown={(e) => {
               if (e.key === "Escape") {

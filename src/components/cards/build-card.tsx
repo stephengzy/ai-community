@@ -2,7 +2,6 @@ import Link from "next/link"
 import type { Build } from "@/types"
 import { Avatar } from "@/components/content/avatar"
 import { UserHoverCard } from "@/components/content/user-hover-card"
-import { CategoryTag } from "@/components/content/category-tag"
 import { UpvoteButton } from "@/components/interactions/upvote-button"
 import { cn } from "@/lib/utils"
 
@@ -36,16 +35,6 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
 
       {/* Content */}
       <div className="flex flex-col flex-1 px-2.5 pt-2 pb-2.5 md:px-4 md:pt-3 md:pb-3.5 gap-1 md:gap-1.5">
-        {/* Category + badge */}
-        <div className="flex items-center justify-between">
-          <CategoryTag category={build.category} />
-          {badge && (
-            <span className="text-[9px] md:text-[10px] text-secondary/50 font-medium">
-              {badge}
-            </span>
-          )}
-        </div>
-
         {/* Title */}
         <h3 className="text-[13px] md:text-[15px] font-semibold font-headline leading-snug group-hover:text-primary transition-colors line-clamp-2">
           {build.name}

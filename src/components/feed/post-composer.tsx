@@ -3,8 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser, useUsers, useBuildsByUser } from "@/hooks/use-store"
-import { categoryIcons, TOPICS } from "@/data/constants"
-import { CategoryTag } from "@/components/content/category-tag"
 import type { User, Build, Visibility } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -39,10 +37,9 @@ export function PostComposer() {
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null)
   const [visibility, setVisibility] = useState<Visibility>("PUBLIC")
   const [showVisibilityMenu, setShowVisibilityMenu] = useState(false)
-  const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([])
-  const [showTopicPicker, setShowTopicPicker] = useState(false)
-  const topicPickerRef = useRef<HTMLDivElement>(null)
+  const [images, setImages] = useState<string[]>([])
   const visibilityRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
   const mentionDropdownRef = useRef<HTMLDivElement>(null)
@@ -72,8 +69,11 @@ export function PostComposer() {
     : myBuilds
 
   // Handle textarea input change with @ detection
+  const MAX_LENGTH = 300
+
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
+    if (value.length > MAX_LENGTH) return
     setContent(value)
 
     const cursorPos = e.target.selectionStart
@@ -161,11 +161,39 @@ export function PostComposer() {
     }
   }
 
+  // Handle image file selection
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files) return
+    const remaining = 10 - images.length
+    const newImages = Array.from(files)
+      .slice(0, remaining)
+      .map((file) => URL.createObjectURL(file))
+    setImages((prev) => [...prev, ...newImages])
+    // Reset input so the same file can be re-selected
+    e.target.value = ""
+  }
+
+  // Remove an uploaded image preview
+  const removeImage = (index: number) => {
+    setImages((prev) => {
+      const removed = prev[index]
+      if (removed) URL.revokeObjectURL(removed)
+      return prev.filter((_, i) => i !== index)
+    })
+  }
+
+  // Visibility is locked when attached build is DEPARTMENT-only
+  const visibilityLocked = selectedBuild?.visibility === "DEPARTMENT"
+
   // Select a build to attach
   const selectBuild = (build: Build) => {
     setSelectedBuild(build)
     setShowBuildPicker(false)
     setBuildQuery("")
+    if (build.visibility === "DEPARTMENT") {
+      setVisibility("DEPARTMENT")
+    }
   }
 
   // Close dropdowns when clicking outside
@@ -189,13 +217,6 @@ export function PostComposer() {
         !visibilityRef.current.contains(e.target as Node)
       ) {
         setShowVisibilityMenu(false)
-      }
-      if (
-        topicPickerRef.current &&
-        !topicPickerRef.current.contains(e.target as Node) &&
-        !(e.target as HTMLElement).closest("[data-topic-trigger]")
-      ) {
-        setShowTopicPicker(false)
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
@@ -239,7 +260,7 @@ export function PostComposer() {
             )}
             <textarea
               ref={textareaRef}
-              placeholder="What did you build?"
+              placeholder="分享你的想法..."
               value={content}
               onChange={handleContentChange}
               onKeyDown={handleKeyDown}
@@ -284,37 +305,12 @@ export function PostComposer() {
             )}
           </div>
 
-          {/* Selected topics */}
-          {selectedTopicIds.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-1 mb-1">
-              {selectedTopicIds.map((id) => {
-                const topic = TOPICS.find((t) => t.id === id)
-                if (!topic) return null
-                return (
-                  <span key={id} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/8 text-primary text-[11px] font-medium">
-                    {topic.emoji && <span>{topic.emoji}</span>}
-                    {topic.name}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedTopicIds((prev) => prev.filter((tid) => tid !== id))}
-                      className="ml-0.5 hover:text-primary/60 cursor-pointer"
-                    >
-                      <span className="material-symbols-outlined text-[12px]">close</span>
-                    </button>
-                  </span>
-                )
-              })}
-            </div>
-          )}
-
           {/* Attached Build - compact preview matching BuildBar style */}
           {selectedBuild && (
             <div className="relative mt-1 mb-1 flex items-center gap-3 rounded-xl py-3 px-3.5 bg-surface-container-low/50 border border-outline-variant/8">
               {/* Icon */}
-              <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0", selectedBuild.category === "DEMO" ? "bg-demo/8" : "bg-primary/6")}>
-                <span className={cn("material-symbols-outlined text-[20px]", selectedBuild.category === "DEMO" ? "text-demo" : "text-primary")}>
-                  {categoryIcons[selectedBuild.category] ?? "category"}
-                </span>
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-primary/6">
+                <span className="material-symbols-outlined text-[20px] text-primary">deployed_code</span>
               </div>
               {/* Content */}
               <div className="flex-1 min-w-0">
@@ -324,9 +320,6 @@ export function PostComposer() {
                 <p className="text-[12px] text-secondary mt-0.5 truncate">
                   {selectedBuild.description}
                 </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <CategoryTag category={selectedBuild.category} size="xs" />
-                </div>
               </div>
               {/* Close button */}
               <button
@@ -341,14 +334,33 @@ export function PostComposer() {
             </div>
           )}
 
+          {/* Image previews */}
+          {images.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-1 mb-1">
+              {images.map((src, i) => (
+                <div key={i} className="relative group w-16 h-16 rounded-lg overflow-hidden border border-outline-variant/12">
+                  <img src={src} alt={`upload-${i + 1}`} className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(i)}
+                    className="absolute top-0.5 right-0.5 w-5 h-5 flex items-center justify-center rounded-full bg-surface-container/80 text-on-surface opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[13px]">close</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Bottom toolbar */}
           <div className="flex items-center justify-between pt-2 mt-1 border-t border-surface-container-low">
             <div className="flex items-center gap-0.5">
               {/* Icon buttons - uniform size */}
               <button
                 type="button"
+                onClick={() => fileInputRef.current?.click()}
                 className="w-8 h-8 flex items-center justify-center text-secondary hover:text-primary rounded-full hover:bg-surface-container transition-colors cursor-pointer"
-                title="Add image"
+                title="添加图片"
               >
                 <span
                   className="material-symbols-outlined text-[19px]"
@@ -370,55 +382,6 @@ export function PostComposer() {
                   alternate_email
                 </span>
               </button>
-
-              {/* Topic picker */}
-              <div className="relative">
-                <button
-                  type="button"
-                  data-topic-trigger
-                  onClick={() => setShowTopicPicker(!showTopicPicker)}
-                  className={cn(
-                    "w-8 h-8 flex items-center justify-center rounded-full transition-colors cursor-pointer",
-                    selectedTopicIds.length > 0
-                      ? "text-primary bg-primary/8"
-                      : "text-secondary hover:text-primary hover:bg-surface-container"
-                  )}
-                  title="Add topic"
-                >
-                  <span className="material-symbols-outlined text-[19px]" style={iconStyle}>
-                    tag
-                  </span>
-                </button>
-                {showTopicPicker && (
-                  <div ref={topicPickerRef} className="absolute left-0 bottom-full z-50 mb-1.5 w-[240px] bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg py-3 px-3">
-                    <p className="text-[11px] text-secondary/50 px-1 mb-2">Select Topic</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {TOPICS.map((topic) => (
-                        <button
-                          key={topic.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedTopicIds((prev) =>
-                              prev.includes(topic.id)
-                                ? prev.filter((id) => id !== topic.id)
-                                : [...prev, topic.id]
-                            )
-                          }}
-                          className={cn(
-                            "px-2.5 py-1 rounded-full text-[11px] font-medium transition-all border cursor-pointer",
-                            selectedTopicIds.includes(topic.id)
-                              ? "bg-primary text-on-primary border-primary"
-                              : "bg-transparent text-on-surface/50 border-outline-variant/12 hover:border-primary/30"
-                          )}
-                        >
-                          {topic.emoji && <span className="mr-0.5">{topic.emoji}</span>}
-                          {topic.name}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
 
               {/* Divider */}
               <div className="w-px h-4 bg-outline-variant/15 mx-1.5" />
@@ -442,7 +405,7 @@ export function PostComposer() {
                   >
                     deployed_code
                   </span>
-                  My Builds
+                  挂载作品
                 </button>
 
                 {/* Build Picker Dropdown */}
@@ -458,7 +421,7 @@ export function PostComposer() {
                         </span>
                         <input
                           type="text"
-                          placeholder="Search my builds..."
+                          placeholder="搜索我的作品..."
                           value={buildQuery}
                           onChange={(e) => setBuildQuery(e.target.value)}
                           className="flex-1 bg-transparent border-none text-[13px] focus:ring-0 focus:outline-none placeholder:text-outline-variant"
@@ -469,7 +432,7 @@ export function PostComposer() {
                     <div className="max-h-[220px] overflow-y-auto px-1.5 pb-1.5">
                       {filteredBuilds.length === 0 ? (
                         <p className="text-[12px] text-secondary text-center py-4">
-                          No builds found
+                          未找到相关作品
                         </p>
                       ) : (
                         filteredBuilds.map((build) => (
@@ -484,16 +447,13 @@ export function PostComposer() {
                                 : "hover:bg-surface-container-low"
                             )}
                           >
-                            <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", build.category === "DEMO" ? "bg-demo/8" : "bg-primary/6")}>
-                              <span className={cn("material-symbols-outlined text-[15px]", build.category === "DEMO" ? "text-demo" : "text-primary")}>
-                                {categoryIcons[build.category] ?? "category"}
-                              </span>
+                            <div className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 bg-primary/6">
+                              <span className="material-symbols-outlined text-[15px] text-primary">deployed_code</span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-[13px] font-medium text-on-surface truncate">
                                 {build.name}
                               </p>
-                              <CategoryTag category={build.category} size="xs" />
                             </div>
                             <span className="text-[11px] text-secondary shrink-0">
                               ↑{build.upvotes}
@@ -508,17 +468,29 @@ export function PostComposer() {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Character count */}
+              {content.length > 0 && (
+                <span className={cn(
+                  "text-[12px] font-medium tabular-nums",
+                  content.length >= MAX_LENGTH ? "text-error" : content.length >= MAX_LENGTH * 0.8 ? "text-primary/70" : "text-secondary/40"
+                )}>
+                  {content.length}/{MAX_LENGTH}
+                </span>
+              )}
               {/* Visibility Selector */}
               <div className="relative" ref={visibilityRef}>
                 <button
                   type="button"
-                  onClick={() => setShowVisibilityMenu(!showVisibilityMenu)}
+                  onClick={() => { if (!visibilityLocked) setShowVisibilityMenu(!showVisibilityMenu) }}
                   className={cn(
-                    "h-8 flex items-center gap-1 pl-2 pr-2.5 rounded-full text-[12px] font-medium transition-all cursor-pointer border",
-                    showVisibilityMenu
-                      ? "bg-primary/8 text-primary border-primary/20"
-                      : "bg-surface-container-lowest text-secondary border-outline-variant/12 hover:border-primary/30 hover:text-primary"
+                    "h-8 flex items-center gap-1 pl-2 pr-2.5 rounded-full text-[12px] font-medium transition-all border",
+                    visibilityLocked
+                      ? "bg-tertiary/8 text-tertiary border-tertiary/20 cursor-default"
+                      : showVisibilityMenu
+                        ? "bg-primary/8 text-primary border-primary/20 cursor-pointer"
+                        : "bg-surface-container-lowest text-secondary border-outline-variant/12 hover:border-primary/30 hover:text-primary cursor-pointer"
                   )}
+                  title={visibilityLocked ? "权限跟随挂载作品" : undefined}
                 >
                   <span
                     className="material-symbols-outlined text-[15px]"
@@ -526,11 +498,15 @@ export function PostComposer() {
                   >
                     {visibility === "PUBLIC" ? "public" : "lock"}
                   </span>
-                  <span>{visibility === "PUBLIC" ? "Public" : "Dept"}</span>
-                  <span className="material-symbols-outlined text-[14px] -mr-0.5" style={iconStyle}>expand_more</span>
+                  <span>{visibility === "PUBLIC" ? "全公司" : "仅部门"}</span>
+                  {visibilityLocked ? (
+                    <span className="material-symbols-outlined text-[13px] -mr-0.5 opacity-70" style={{ fontVariationSettings: "'FILL' 1, 'wght' 300" }}>link</span>
+                  ) : (
+                    <span className="material-symbols-outlined text-[14px] -mr-0.5" style={iconStyle}>expand_more</span>
+                  )}
                 </button>
 
-                {showVisibilityMenu && (
+                {showVisibilityMenu && !visibilityLocked && (
                   <div className="absolute right-0 top-full z-50 mt-1.5 w-[220px] bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg overflow-hidden py-1.5 px-1.5">
                     <button
                       type="button"
@@ -542,8 +518,8 @@ export function PostComposer() {
                     >
                       <span className={cn("material-symbols-outlined text-[18px]", visibility === "PUBLIC" ? "text-primary" : "text-on-surface/40")}>public</span>
                       <div className="flex-1">
-                        <p className={cn("text-[13px] font-medium", visibility === "PUBLIC" ? "text-primary" : "text-on-surface")}>Public</p>
-                        <p className="text-[11px] text-on-surface/30">Visible to everyone</p>
+                        <p className={cn("text-[13px] font-medium", visibility === "PUBLIC" ? "text-primary" : "text-on-surface")}>全公司</p>
+                        <p className="text-[11px] text-on-surface/30">所有人可见</p>
                       </div>
                       {visibility === "PUBLIC" && <span className="material-symbols-outlined text-[14px] text-primary">check</span>}
                     </button>
@@ -557,32 +533,36 @@ export function PostComposer() {
                     >
                       <span className={cn("material-symbols-outlined text-[18px]", visibility === "DEPARTMENT" ? "text-primary" : "text-on-surface/40")} style={{ fontVariationSettings: "'FILL' 1" }}>lock</span>
                       <div className="flex-1">
-                        <p className={cn("text-[13px] font-medium", visibility === "DEPARTMENT" ? "text-primary" : "text-on-surface")}>Dept only</p>
-                        <p className="text-[11px] text-on-surface/30">Your department only</p>
+                        <p className={cn("text-[13px] font-medium", visibility === "DEPARTMENT" ? "text-primary" : "text-on-surface")}>仅部门</p>
+                        <p className="text-[11px] text-on-surface/30">仅本部门可见</p>
                       </div>
                       {visibility === "DEPARTMENT" && <span className="material-symbols-outlined text-[14px] text-primary">check</span>}
                     </button>
                   </div>
+                )}
+                {visibilityLocked && (
+                  <p className="absolute right-0 top-full mt-1 text-[11px] text-tertiary/70 whitespace-nowrap">权限跟随挂载作品</p>
                 )}
               </div>
 
               {/* Post Button */}
               <button
                 type="button"
-                disabled={content.trim().length === 0 && !selectedBuild}
+                disabled={content.trim().length === 0 && !selectedBuild && images.length === 0}
                 className={cn(
                   "bg-primary text-on-primary rounded-lg px-5 py-1.5 text-[13px] font-headline font-semibold tracking-tight transition-all cursor-pointer",
-                  content.trim().length === 0 && !selectedBuild
+                  content.trim().length === 0 && !selectedBuild && images.length === 0
                     ? "opacity-40 cursor-not-allowed"
                     : "hover:opacity-90 active:scale-[0.97]"
                 )}
               >
-                Post
+                发帖
               </button>
             </div>
           </div>
         </div>
       </div>
+      <input type="file" ref={fileInputRef} accept="image/*" multiple className="hidden" onChange={handleImageSelect} />
     </div>
   )
 }

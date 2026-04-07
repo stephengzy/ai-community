@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils"
 
-const tabs = ["All", "Comments", "Upvotes"] as const
+const tabs = ["全部", "评论和@", "点赞和顶"] as const
 
 interface NotificationTabsProps {
   activeTab: string

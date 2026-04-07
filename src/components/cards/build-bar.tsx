@@ -3,7 +3,6 @@
 import { useState } from "react"
 import Link from "next/link"
 import type { Build } from "@/types"
-import { CategoryTag } from "@/components/content/category-tag"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
 import { cn } from "@/lib/utils"
 
@@ -48,9 +47,6 @@ export function BuildBar({ build, className }: BuildBarProps) {
         <p className="text-[13px] text-secondary mt-0.5 truncate">
           {build.description}
         </p>
-        <div className="flex items-center gap-2 mt-1.5">
-          <CategoryTag category={build.category} size="xs" />
-        </div>
       </div>
 
       {/* Upvote */}

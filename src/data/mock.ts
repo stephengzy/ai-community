@@ -8,6 +8,7 @@ export const users: User[] = [
     realName: "高震宇",
     avatar: "/images/avatars/恒宇.png",
     department: "战略",
+    subDepartment: "社区战略组",
     role: "社区战略组",
     level: "IC",
   },
@@ -120,7 +121,7 @@ export const builds: Build[] = [
     name: "简历智能筛选",
     description:
       "基于语义理解的简历与JD智能匹配工具，初筛效率提升70%，技术岗筛选准确率92%。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/resume-screener/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=resume-screener&backgroundColor=f5e6d3",
     screenshots: [
@@ -140,6 +141,7 @@ export const builds: Build[] = [
     collaborators: [users[0]],
     upvotes: 143,
     weeklyUpvotes: 28,
+    monthlyUpvotes: 70,
     downloads: 62,
     visibility: "PUBLIC",
     links: [
@@ -156,7 +158,7 @@ export const builds: Build[] = [
     name: "代码审查助手",
     description:
       "自动检查代码风格和常见逻辑问题，每周为团队节省12小时Review时间。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/code-review/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=code-review&backgroundColor=d4e8e0",
     screenshots: [
@@ -176,6 +178,7 @@ export const builds: Build[] = [
     collaborators: [users[1]],
     upvotes: 128,
     weeklyUpvotes: 19,
+    monthlyUpvotes: 48,
     downloads: 55,
     visibility: "PUBLIC",
     links: [
@@ -191,7 +194,7 @@ export const builds: Build[] = [
     name: "笔记灵感生成",
     description:
       "基于站内热点趋势和用户兴趣，AI生成多条笔记创作灵感和文案框架，帮助创作者告别'空白页焦虑'。",
-    category: "DEMO",
+
     coverImage: "https://picsum.photos/seed/note-inspire/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=note-inspire&backgroundColor=e8dff5",
     screenshots: [
@@ -211,11 +214,12 @@ export const builds: Build[] = [
     collaborators: [users[3]],
     upvotes: 185,
     weeklyUpvotes: 42,
+    monthlyUpvotes: 105,
     downloads: 78,
     links: [
       { label: "Live Demo", url: "https://note-inspire.internal.co" },
     ],
-    topicIds: ["t5"],
+
     visibility: "PUBLIC",
     version: "1.0",
     createdAt: "2026-03-25T11:00:00Z",
@@ -227,7 +231,7 @@ export const builds: Build[] = [
     name: "投研速读",
     description:
       "自动汇总研报、新闻和公告，提取关键观点和信号，让投资团队的信息消化效率提升5倍。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/invest-digest/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=invest-digest&backgroundColor=dce8f5",
     screenshots: ["https://picsum.photos/seed/invest-digest-ui/1200/675"],
@@ -240,6 +244,7 @@ export const builds: Build[] = [
     collaborators: [],
     upvotes: 71,
     weeklyUpvotes: 9,
+    monthlyUpvotes: 22,
     downloads: 31,
     visibility: "PUBLIC",
     version: "2.0",
@@ -252,7 +257,7 @@ export const builds: Build[] = [
     name: "评论区智能助手",
     description:
       "帮助创作者高效管理评论互动，AI辅助生成回复、识别高价值评论，粉丝互动率提升60%。",
-    category: "DEMO",
+
     coverImage: "https://picsum.photos/seed/comment-assistant/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=comment-bot&backgroundColor=f5e0d3",
     screenshots: ["https://picsum.photos/seed/comment-assist-ui/1200/675"],
@@ -269,6 +274,7 @@ export const builds: Build[] = [
     collaborators: [users[0]],
     upvotes: 112,
     weeklyUpvotes: 16,
+    monthlyUpvotes: 40,
     downloads: 47,
     links: [
       { label: "Live Demo", url: "https://comment-assist.internal.co" },
@@ -285,7 +291,7 @@ export const builds: Build[] = [
     name: "周报自动生成",
     description:
       "汇总飞书日程、项目管理工具和代码仓库的活动记录，自动生成结构化周报。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/weekly-report/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=weekly-report&backgroundColor=e0e8d4",
     screenshots: ["https://picsum.photos/seed/weekly-report-auto/1200/675"],
@@ -298,6 +304,7 @@ export const builds: Build[] = [
     collaborators: [users[0]],
     upvotes: 83,
     weeklyUpvotes: 11,
+    monthlyUpvotes: 28,
     downloads: 39,
     visibility: "PUBLIC",
     version: "1.3",
@@ -310,7 +317,7 @@ export const builds: Build[] = [
     name: "搜索意图理解",
     description:
       "用AI理解用户搜索背后的真实意图，优化结果排序，搜索满意度提升18%。",
-    category: "DEMO",
+
     coverImage: "https://picsum.photos/seed/search-intent/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=search-intent&backgroundColor=f5ecd3",
     screenshots: [
@@ -330,8 +337,9 @@ export const builds: Build[] = [
     collaborators: [users[0], users[3]],
     upvotes: 167,
     weeklyUpvotes: 35,
+    monthlyUpvotes: 85,
     downloads: 73,
-    topicIds: ["t5"],
+
     visibility: "PUBLIC",
     version: "1.0",
     createdAt: "2026-03-28T09:00:00Z",
@@ -343,7 +351,7 @@ export const builds: Build[] = [
     name: "竞品舆情监控",
     description:
       "自动追踪竞品产品动态、用户口碑和行业趋势，每日推送摘要到飞书群。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/competitive-intel/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=competitive-intel&backgroundColor=d3e4f5",
     screenshots: ["https://picsum.photos/seed/competitive-dashboard/1200/675"],
@@ -356,6 +364,7 @@ export const builds: Build[] = [
     collaborators: [users[6]],
     upvotes: 58,
     weeklyUpvotes: 7,
+    monthlyUpvotes: 18,
     downloads: 24,
     visibility: "DEPARTMENT",
     department: "战略",
@@ -369,7 +378,7 @@ export const builds: Build[] = [
     name: "会议纪要助手",
     description:
       "接入飞书会议，自动转录并提取决策事项和Action Item，按参会人分发待办。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/meeting-notes/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=meeting-notes&backgroundColor=f0d4e8",
     screenshots: ["https://picsum.photos/seed/meeting-summary/1200/675"],
@@ -382,6 +391,7 @@ export const builds: Build[] = [
     collaborators: [users[2]],
     upvotes: 96,
     weeklyUpvotes: 14,
+    monthlyUpvotes: 35,
     downloads: 44,
     links: [
       { label: "Live Demo", url: "https://meeting-notes.internal.co" },
@@ -397,7 +407,7 @@ export const builds: Build[] = [
     name: "Talent Flow Map",
     description:
       "一眼看清硅谷头部公司过去两年人才流入流出情况的可视化工具。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/org-snowball/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=talent-flow&backgroundColor=d3f5e8",
     screenshots: ["https://picsum.photos/seed/talent-flow-viz/1200/675", "https://picsum.photos/seed/sankey-chart/1200/675"],
@@ -414,6 +424,7 @@ export const builds: Build[] = [
     collaborators: [users[0], users[1]],
     upvotes: 342,
     weeklyUpvotes: 89,
+    monthlyUpvotes: 220,
     downloads: 127,
     links: [
       { label: "Live Demo", url: "https://talent-flow.internal.co" },
@@ -429,7 +440,7 @@ export const builds: Build[] = [
         author: users[7],
         content:
           "这个工具对增长团队也很有价值，能不能加一个按行业维度筛选的功能？比如只看AI/SaaS公司的人才流动。",
-        isSponsor: false,
+  
         likes: 15,
         replies: [
           {
@@ -437,7 +448,7 @@ export const builds: Build[] = [
             author: users[6],
             replyTo: users[7],
             content: "好建议！行业标签目前在数据里有，下个版本加上筛选器。",
-            isSponsor: false,
+      
             likes: 5,
             createdAt: "2026-04-02T11:30:00Z",
           },
@@ -448,14 +459,14 @@ export const builds: Build[] = [
         id: "bc2",
         author: users[0],
         content: "Sankey图的交互体验非常流畅，hover时能看到具体的人数变化，这个细节做得很好。",
-        isSponsor: false,
+  
         likes: 12,
         replies: [
           {
             id: "bc2r1",
             author: users[6],
             content: "谢谢恒宇！hover的tooltip花了不少时间调，能被注意到很开心。",
-            isSponsor: false,
+      
             likes: 3,
             createdAt: "2026-04-02T15:00:00Z",
           },
@@ -466,14 +477,14 @@ export const builds: Build[] = [
         id: "bc3",
         author: users[2],
         content: "能不能加个导出PDF的功能？我想直接把图表放进投资报告里。",
-        isSponsor: false,
+  
         likes: 9,
         replies: [
           {
             id: "bc3r1",
             author: users[6],
             content: "好建议！已经加到下个迭代的backlog了。",
-            isSponsor: false,
+      
             likes: 2,
             createdAt: "2026-04-03T10:00:00Z",
           },
@@ -482,7 +493,7 @@ export const builds: Build[] = [
             author: users[1],
             replyTo: users[2],
             content: "我也需要这个功能，+1",
-            isSponsor: false,
+      
             likes: 4,
             createdAt: "2026-04-03T10:30:00Z",
           },
@@ -493,14 +504,14 @@ export const builds: Build[] = [
         id: "bc4",
         author: users[3],
         content: "数据更新频率是多少？能做到实时吗？",
-        isSponsor: false,
+  
         likes: 7,
         replies: [
           {
             id: "bc4r1",
             author: users[6],
             content: "目前是每周更新一次，实时的话API成本太高了，但可以做到每日更新。",
-            isSponsor: false,
+      
             likes: 5,
             createdAt: "2026-04-03T14:30:00Z",
           },
@@ -511,7 +522,7 @@ export const builds: Build[] = [
         id: "bc5",
         author: users[8],
         content: "UI设计很漂亮，配色和动画都很舒服。请问前端是用什么框架做的？",
-        isSponsor: false,
+  
         likes: 6,
         createdAt: "2026-04-03T16:00:00Z",
       },
@@ -519,14 +530,14 @@ export const builds: Build[] = [
         id: "bc6",
         author: users[4],
         content: "建议加一个alert功能，当某个公司出现异常人才流出时自动通知相关团队。",
-        isSponsor: false,
+  
         likes: 14,
         replies: [
           {
             id: "bc6r1",
             author: users[3],
             content: "这个feature request +1，对投资决策非常关键。",
-            isSponsor: false,
+      
             likes: 5,
             createdAt: "2026-04-04T10:00:00Z",
           },
@@ -535,7 +546,7 @@ export const builds: Build[] = [
             author: users[6],
             replyTo: users[4],
             content: "已经在backlog里了，预计下周可以上线。",
-            isSponsor: false,
+      
             likes: 3,
             createdAt: "2026-04-04T10:30:00Z",
           },
@@ -549,7 +560,7 @@ export const builds: Build[] = [
     name: "人群理解到素材生成",
     description:
       "通过小红书高爆内容分析与人群理解，自动生成投放素材，CPA降低30%，七日留存提升5%。",
-    category: "SKILL",
+
     coverImage: "https://picsum.photos/seed/crowd-creative/800/450",
     iconImage: "https://api.dicebear.com/9.x/shapes/svg?seed=crowd-creative&backgroundColor=f5f0d3",
     screenshots: ["https://picsum.photos/seed/crowd-insights/1200/675", "https://picsum.photos/seed/ad-material-gen/1200/675"],
@@ -562,10 +573,11 @@ export const builds: Build[] = [
     good:
       "输入目标人群标签和投放平台，系统自动分析对标内容并生成多套素材方案，支持A/B测试直接下发。",
     techStack: ["Claude API", "Python", "小红书API", "Stable Diffusion", "React"],
-    author: users[7],
+    author: users[6],
     collaborators: [users[0], users[3]],
     upvotes: 289,
     weeklyUpvotes: 67,
+    monthlyUpvotes: 170,
     downloads: 95,
     links: [
       { label: "Live Demo", url: "https://crowd-creative.internal.co" },
@@ -587,14 +599,14 @@ const comments: Record<string, Comment[]> = {
       author: users[5],
       content:
         "这个工具解决了HR效率的核心痛点，建议在全公司范围推广。",
-      isSponsor: false,
+
       likes: 14,
       replies: [
         {
           id: "c1r1",
           author: users[2],
           content: "同意，可以先从技术岗试点，验证效果后再扩展到其他岗位。",
-          isSponsor: false,
+    
           likes: 4,
           createdAt: "2026-03-13T09:30:00Z",
         },
@@ -605,14 +617,14 @@ const comments: Record<string, Comment[]> = {
       id: "c2",
       author: users[0],
       content: "语义匹配的准确率不错，有没有考虑加上候选人能力画像的可视化？比如做个雷达图。",
-      isSponsor: false,
+
       likes: 6,
       replies: [
         {
           id: "c2r1",
           author: users[8],
           content: "好主意！下个版本会加上候选人能力雷达图，方便面试官快速了解候选人。",
-          isSponsor: false,
+    
           likes: 3,
           createdAt: "2026-03-13T10:30:00Z",
         },
@@ -625,14 +637,14 @@ const comments: Record<string, Comment[]> = {
       id: "c3",
       author: users[7],
       content: "试用了一下，检查效果不错。能不能支持自定义规则？我们团队有些特殊的代码规范。",
-      isSponsor: false,
+
       likes: 5,
       replies: [
         {
           id: "c3r1",
           author: users[0],
           content: "可以的，在配置文件里加custom rules就行。文档在README里，有问题随时问我。",
-          isSponsor: false,
+    
           likes: 2,
           createdAt: "2026-03-06T11:00:00Z",
         },
@@ -645,7 +657,7 @@ const comments: Record<string, Comment[]> = {
       id: "c5",
       author: users[10],
       content: "从社区生态角度看，这个功能对新创作者的留存帮助会很大。建议在创作引导流程里加入这个入口。",
-      isSponsor: false,
+
       likes: 12,
       createdAt: "2026-03-26T10:00:00Z",
     },
@@ -653,7 +665,7 @@ const comments: Record<string, Comment[]> = {
       id: "c4",
       author: users[2],
       content: "试了一下美妆方向的，生成的灵感和近期热门笔记的方向很接近，感觉能切中用户需求。",
-      isSponsor: false,
+
       likes: 9,
       createdAt: "2026-03-26T11:00:00Z",
     },
@@ -663,14 +675,14 @@ const comments: Record<string, Comment[]> = {
       id: "c6",
       author: users[3],
       content: "太需要了！能不能也支持腾讯会议？有些跨部门的会议不在飞书上。",
-      isSponsor: false,
+
       likes: 6,
       replies: [
         {
           id: "c6r1",
           author: users[4],
           content: "正在对接中，预计下周可以上线腾讯会议的支持。",
-          isSponsor: false,
+    
           likes: 3,
           createdAt: "2026-03-16T15:00:00Z",
         },
@@ -684,71 +696,24 @@ const comments: Record<string, Comment[]> = {
       author: users[5],
       content:
         "投研效率工具对我们的决策速度提升非常关键，继续迭代。",
-      isSponsor: false,
+
       likes: 12,
       createdAt: "2026-03-01T09:00:00Z",
     },
   ],
   p6: [
     {
-      id: "c8",
-      author: users[5],
-      content:
-        "我支持这个产品Idea GTM。如果早一年知道这个，我们就可以直接投资Anthropic了。@文生(伍翔宇) 这个项目支持继续开发，Token不限量",
-      isSponsor: true,
-      sponsorAmount: 10000,
-      likes: 28,
-      replies: [
-        {
-          id: "c8r1",
-          author: users[9],
-          content: "收到",
-          isSponsor: false,
-          likes: 3,
-          createdAt: "2026-04-02T11:00:00Z",
-        },
-        {
-          id: "c8r2",
-          author: users[6],
-          replyTo: users[5],
-          content: "感谢曼巴支持！接下来会加上国内版本的数据。",
-          isSponsor: false,
-          likes: 5,
-          createdAt: "2026-04-02T11:30:00Z",
-        },
-        {
-          id: "c8r3",
-          author: users[0],
-          replyTo: users[6],
-          content: "从投资角度来看，这个工具的价值非常大。我们战略团队也可以直接用。",
-          isSponsor: false,
-          likes: 4,
-          createdAt: "2026-04-02T12:00:00Z",
-        },
-        {
-          id: "c8r4",
-          author: users[1],
-          replyTo: users[5],
-          content: "建议加一个按职能筛选的功能，比如只看Research岗位的流动。",
-          isSponsor: false,
-          likes: 6,
-          createdAt: "2026-04-02T13:00:00Z",
-        },
-      ],
-      createdAt: "2026-04-02T10:30:00Z",
-    },
-    {
       id: "c10",
       author: users[0],
       content: "数据来源是公开的LinkedIn数据吗？准确度怎么样？",
-      isSponsor: false,
+
       likes: 7,
       replies: [
         {
           id: "c10r1",
           author: users[6],
           content: "主要是LinkedIn + 公开新闻，准确率大约85%左右。对于大公司的核心岗位变动基本都能追踪到。",
-          isSponsor: false,
+    
           likes: 4,
           createdAt: "2026-04-02T14:30:00Z",
         },
@@ -757,7 +722,7 @@ const comments: Record<string, Comment[]> = {
           author: users[0],
           replyTo: users[6],
           content: "85%已经不错了，比我们现在手动查的效率高太多。",
-          isSponsor: false,
+    
           likes: 2,
           createdAt: "2026-04-02T15:00:00Z",
         },
@@ -768,14 +733,14 @@ const comments: Record<string, Comment[]> = {
       id: "c11",
       author: users[2],
       content: "Anthropic人才稳定性这个发现很有意思，能不能做一个月度的变化趋势？",
-      isSponsor: false,
+
       likes: 9,
       replies: [
         {
           id: "c11r1",
           author: users[6],
           content: "好建议，下个版本会加上时间序列的view。",
-          isSponsor: false,
+    
           likes: 3,
           createdAt: "2026-04-02T16:00:00Z",
         },
@@ -786,14 +751,14 @@ const comments: Record<string, Comment[]> = {
       id: "c12",
       author: users[7],
       content: "这个可视化做得很漂亮，D3.js用得很熟练。Sankey图是手写的还是用的库？",
-      isSponsor: false,
+
       likes: 5,
       replies: [
         {
           id: "c12r1",
           author: users[6],
           content: "Sankey部分用的d3-sankey，但做了大量自定义，特别是交互hover的部分。",
-          isSponsor: false,
+    
           likes: 2,
           createdAt: "2026-04-03T09:30:00Z",
         },
@@ -802,7 +767,7 @@ const comments: Record<string, Comment[]> = {
           author: users[4],
           replyTo: users[6],
           content: "能不能开源这个可视化组件？其他项目也可以复用。",
-          isSponsor: false,
+    
           likes: 7,
           createdAt: "2026-04-03T10:00:00Z",
         },
@@ -811,7 +776,7 @@ const comments: Record<string, Comment[]> = {
           author: users[6],
           replyTo: users[4],
           content: "可以考虑，先把代码整理一下。",
-          isSponsor: false,
+    
           likes: 1,
           createdAt: "2026-04-03T10:30:00Z",
         },
@@ -822,14 +787,14 @@ const comments: Record<string, Comment[]> = {
       id: "c13",
       author: users[3],
       content: "国内版本的数据源怎么解决？LinkedIn在国内覆盖率不高。",
-      isSponsor: false,
+
       likes: 11,
       replies: [
         {
           id: "c13r1",
           author: users[6],
           content: "国内打算结合脉脉、Boss直聘和公开新闻做交叉验证。",
-          isSponsor: false,
+    
           likes: 8,
           createdAt: "2026-04-03T11:30:00Z",
         },
@@ -840,7 +805,7 @@ const comments: Record<string, Comment[]> = {
       id: "c14",
       author: users[8],
       content: "可以给HR团队也开个权限吗？我们在做竞对人才mapping，这个工具太好用了。",
-      isSponsor: false,
+
       likes: 6,
       createdAt: "2026-04-03T14:00:00Z",
     },
@@ -848,14 +813,14 @@ const comments: Record<string, Comment[]> = {
       id: "c15",
       author: users[4],
       content: "建议加一个alert功能，当某个公司出现异常的人才流出时自动通知。",
-      isSponsor: false,
+
       likes: 14,
       replies: [
         {
           id: "c15r1",
           author: users[3],
           content: "这个feature request +1，对于投资决策非常关键。",
-          isSponsor: false,
+    
           likes: 5,
           createdAt: "2026-04-03T16:00:00Z",
         },
@@ -864,7 +829,7 @@ const comments: Record<string, Comment[]> = {
           author: users[6],
           replyTo: users[4],
           content: "已经在backlog里了，预计下周可以上线。",
-          isSponsor: false,
+    
           likes: 3,
           createdAt: "2026-04-03T16:30:00Z",
         },
@@ -875,33 +840,12 @@ const comments: Record<string, Comment[]> = {
       id: "c16",
       author: users[10],
       content: "从增长角度看，如果能追踪到人才流向的细分领域，对我们判断市场趋势也很有帮助。",
-      isSponsor: false,
+
       likes: 4,
       createdAt: "2026-04-04T09:00:00Z",
     },
   ],
-  p7: [
-    {
-      id: "c9",
-      author: users[5],
-      content:
-        "无论从拉新效率、还是财务ROI，或是组织敏捷度上来说，都因为这个项目可以提升不少。我Sponsor这个项目继续开发，希望可以看到更多UG相关的成果",
-      isSponsor: true,
-      sponsorAmount: 20000,
-      likes: 22,
-      replies: [],
-      createdAt: "2026-04-01T15:30:00Z",
-    },
-    {
-      id: "c9r1",
-      author: users[10],
-      content: "同意曼巴。我也Sponsor这个项目",
-      isSponsor: true,
-      sponsorAmount: 10000,
-      likes: 8,
-      createdAt: "2026-04-01T16:00:00Z",
-    },
-  ],
+  p7: [],
 }
 
 // ===== Posts =====
@@ -938,7 +882,7 @@ export const posts: Post[] = [
     likes: 38,
     comments: comments.p3,
     visibility: "PUBLIC",
-    topicIds: ["t5"],
+
     createdAt: "2026-03-26T10:30:00Z",
   },
   {
@@ -978,7 +922,7 @@ export const posts: Post[] = [
   },
   {
     id: "p7",
-    author: users[7],
+    author: users[6],
     content:
       "通过小红书站内的高爆内容分析、搜索词分析、以及人群理解相关分析和数据，自动生成相关人群的投放素材。和运营实验发现投放CPA降低30%，七日留存提升5%。",
     linkedBuild: builds[10],
@@ -997,8 +941,8 @@ export const trendingBuilds = builds
 
 // ===== Top Builders (sorted by weekly upvotes received) =====
 export const topBuilders = [
-  { user: users[7], weeklyUpvotes: 160, builds: 4 },
-  { user: users[6], weeklyUpvotes: 89, builds: 1 },
+  { user: users[6], weeklyUpvotes: 156, builds: 2 },
+  { user: users[7], weeklyUpvotes: 93, builds: 3 },
   { user: users[8], weeklyUpvotes: 28, builds: 1 },
   { user: users[0], weeklyUpvotes: 19, builds: 1 },
   { user: users[4], weeklyUpvotes: 14, builds: 1 },
@@ -1011,57 +955,30 @@ export const editorsPicks = [
     title: "商业化精选",
     description: "直接驱动业务增长和商业变现的优秀作品",
     emoji: "💰",
-    builds: [builds[9], builds[10], builds[4]], // Org Snowball, 人群理解, 评论区智能助手
+    builds: [builds[9], builds[10], builds[4], builds[0], builds[2], builds[7], builds[5]],
   },
   {
     id: "ep2",
     title: "产品创新",
     description: "探索小红书产品新可能的功能Demo",
     emoji: "⭐",
-    builds: [builds[2], builds[6], builds[4]], // 笔记灵感, 搜索意图, 评论区智能助手
+    builds: [builds[2], builds[6], builds[4], builds[1], builds[8], builds[3], builds[10]],
   },
   {
     id: "ep3",
     title: "新人必看",
     description: "入职第一周就该知道的效率神器",
     emoji: "🚀",
-    builds: [builds[5], builds[8], builds[1]], // 周报自动生成, 会议纪要, 代码审查
+    builds: [builds[5], builds[8], builds[1], builds[0], builds[3], builds[9], builds[6]],
   },
   {
     id: "ep4",
     title: "数据驱动",
     description: "用数据说话，让决策更科学",
     emoji: "📊",
-    builds: [builds[3], builds[7], builds[10]], // 投研速读, 竞品舆情, 人群理解
+    builds: [builds[3], builds[7], builds[10], builds[2], builds[5], builds[0], builds[9]],
   },
 ]
-
-// ===== Navigation Items =====
-export const desktopNavItems = [
-  { label: "Posts", href: "/", icon: "home" },
-  { label: "Builds Gallery", href: "/gallery", icon: "grid_view" },
-  { label: "Notifications", href: "/notifications", icon: "notifications" },
-]
-
-export const desktopNavMeItems = [
-  { label: "My Builds", href: "/profile", icon: "construction" },
-  { label: "My Upvotes", href: "/profile", icon: "arrow_upward" },
-]
-
-export const mobileNavItems = [
-  { label: "Posts", href: "/", icon: "home" },
-  { label: "Gallery", href: "/gallery", icon: "grid_view" },
-  { label: "Profile", href: "/profile", icon: "person" },
-]
-
-// ===== Category Labels =====
-export const categoryLabels: Record<string, string> = {
-  SKILL: "Skill",
-  WORKFLOW: "Workflow",
-  DATA_PRODUCT: "Data Product",
-  TOOL: "Tool",
-  OTHER: "Other",
-}
 
 // ===== Current User (logged in) =====
 export const currentUser = users[0]
@@ -1119,7 +1036,7 @@ export const notifications: Notification[] = [
   {
     id: "n6",
     type: "collaborator",
-    actor: users[7],
+    actor: users[6],
     targetType: "build",
     targetName: "人群理解到素材生成",
     isRead: true,
@@ -1142,16 +1059,6 @@ export const notifications: Notification[] = [
     targetName: "代码审查助手",
     isRead: true,
     createdAt: "2026-04-05T09:00:00Z",
-  },
-  {
-    id: "n9",
-    type: "sponsor",
-    actor: users[5],
-    targetType: "post",
-    targetName: "做了一个代码审查助手，自动检查代码风格违规...",
-    contentPreview: "Sponsored 15,000 tokens",
-    isRead: true,
-    createdAt: "2026-04-04T18:00:00Z",
   },
   {
     id: "n10",

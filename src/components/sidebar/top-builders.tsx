@@ -12,7 +12,7 @@ export function TopBuilders() {
     <div className="bg-surface-container-lowest rounded-xl border border-surface-container/50 shadow-sm overflow-hidden">
       <div className="px-5 pt-4 pb-3">
         <h4 className="text-base font-headline font-semibold tracking-tight text-on-surface">
-          Trending Builders This Week
+          本周最热Builder
         </h4>
       </div>
       <div>
@@ -27,7 +27,7 @@ export function TopBuilders() {
             <div className="flex-1 min-w-0">
               <UserHoverCard user={entry.user} showAvatar={false} nameClassName="text-[13px] font-semibold text-on-surface leading-snug cursor-pointer hover:underline" />
               <div className="flex items-center gap-3 mt-0.5 text-[11px] text-secondary">
-                <span>{entry.builds} builds</span>
+                <span>{entry.builds} 个作品</span>
                 <span className="flex items-center gap-1">
                   <UpvoteIcon size={10} className="text-primary/50" />
                   +{entry.weeklyUpvotes}

@@ -8,13 +8,11 @@ import { ImageLightbox } from "@/components/content/image-lightbox"
 import { BuildBar } from "@/components/cards/build-bar"
 import { LikeButton } from "@/components/interactions/like-button"
 import { ShareButton } from "@/components/interactions/share-button"
-import { SponsorButton } from "@/components/interactions/sponsor-button"
 import { CommentInput } from "@/components/interactions/comment-input"
 import { useCurrentUser, useUsers } from "@/hooks/use-store"
-import { TOPIC_MAP } from "@/data/constants"
 import { cn } from "@/lib/utils"
 
-const PREVIEW_NON_SPONSOR = 1
+const PREVIEW_COMMENTS = 1
 const PREVIEW_REPLIES = 1
 
 // Single source of truth for comment font size — change here to resize all comments
@@ -82,7 +80,7 @@ export function PostCard({ post, className }: PostCardProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const timeAgo = getTimeAgo(post.createdAt)
 
-  // Sync comments when store changes (e.g., sponsor comment added via store action)
+  // Sync comments when store changes
   // Use a stable key (comment IDs) to avoid infinite loops from new array references
   const commentIdKey = post.comments.map((c) => c.id).join(",")
   useEffect(() => {
@@ -135,7 +133,6 @@ export function PostCard({ post, className }: PostCardProps) {
       id: `new-${Date.now()}`,
       author: currentUser,
       content: commentText.trim(),
-      isSponsor: false,
       likes: 0,
       replyTo: replyToComment?.author,
       createdAt: new Date().toISOString(),
@@ -195,17 +192,15 @@ export function PostCard({ post, className }: PostCardProps) {
   // Which thread is being replied to? Used to position the input inline
   const replyThreadId = replyingTo ? findTopLevelParent(replyingTo) : null
 
-  // Sort comments by likes (highest first) for preview; expanded shows all in sorted order
-  const sortedComments = [...comments].sort((a, b) => b.likes - a.likes)
+  // Sort top-level comments by likes desc; when likes are equal, earlier time first
+  const sortedComments = [...comments].sort((a, b) => {
+    if (b.likes !== a.likes) return b.likes - a.likes
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  })
 
-  // Always show all sponsor comments; if none, show top-liked non-sponsor comment
   const visibleComments = expanded
     ? sortedComments
-    : (() => {
-        const sponsors = sortedComments.filter((c) => c.isSponsor)
-        if (sponsors.length > 0) return sponsors
-        return sortedComments.slice(0, PREVIEW_NON_SPONSOR)
-      })()
+    : sortedComments.slice(0, PREVIEW_COMMENTS)
   const hiddenCount = comments.length - visibleComments.length
 
   // Render the comment input
@@ -221,7 +216,6 @@ export function PostCard({ post, className }: PostCardProps) {
           id: `new-${Date.now()}`,
           author: currentUser,
           content: text,
-          isSponsor: false,
           likes: 0,
           replyTo: replyToComment?.author,
           createdAt: new Date().toISOString(),
@@ -259,22 +253,8 @@ export function PostCard({ post, className }: PostCardProps) {
         <UserHoverCard user={post.author} avatarSize="sm" nameClassName="text-[14px] tracking-tight" />
         <span className="text-[12px] text-secondary">{timeAgo}</span>
         <span className="text-[11px] text-secondary/40">
-          {post.visibility === "DEPARTMENT" ? "Dept only" : "Public"}
+          {post.visibility === "DEPARTMENT" ? "仅部门可见" : "全公司可见"}
         </span>
-        {post.topicIds && post.topicIds.length > 0 && (
-          <>
-            <span className="text-[11px] text-secondary/20">·</span>
-            {post.topicIds.map((tid) => {
-              const topic = TOPIC_MAP[tid]
-              if (!topic) return null
-              return (
-                <span key={tid} className="text-[11px] text-primary/50 font-medium">
-                  {topic.emoji} {topic.name}
-                </span>
-              )
-            })}
-          </>
-        )}
       </div>
 
       {/* Content */}
@@ -294,7 +274,7 @@ export function PostCard({ post, className }: PostCardProps) {
             onClick={() => setShowMore(true)}
             className="text-primary font-medium text-[14px] mt-0.5 cursor-pointer hover:underline"
           >
-            Read More
+            展开
           </button>
         )}
         {showMore && (
@@ -303,7 +283,7 @@ export function PostCard({ post, className }: PostCardProps) {
             onClick={() => setShowMore(false)}
             className="text-primary font-medium text-[14px] mt-0.5 cursor-pointer hover:underline"
           >
-            Show less
+            收起
           </button>
         )}
       </div>
@@ -348,7 +328,6 @@ export function PostCard({ post, className }: PostCardProps) {
           <span className="text-[13px]">{totalComments}</span>
         </button>
         <ShareButton />
-        {post.linkedBuild && <SponsorButton postId={post.id} />}
       </div>
 
       {/* Comments Section */}
@@ -380,7 +359,7 @@ export function PostCard({ post, className }: PostCardProps) {
               onClick={() => setExpanded(true)}
               className="text-[13px] text-secondary hover:text-primary font-medium mt-1 transition-colors"
             >
-              View all {totalComments} comments →
+              查看全部 {totalComments} 条评论 →
             </button>
           )}
           {expanded && comments.length > 1 && (
@@ -389,7 +368,7 @@ export function PostCard({ post, className }: PostCardProps) {
               onClick={() => setExpanded(false)}
               className="text-[13px] text-secondary hover:text-primary font-medium mt-1 transition-colors"
             >
-              Collapse comments
+              收起评论
             </button>
           )}
         </div>
@@ -415,7 +394,10 @@ function CommentThread({
   onToggleReplies: () => void
   inputSlot: React.ReactNode
 }) {
-  const replies = comment.replies ?? []
+  // Sort replies by createdAt ascending (earliest first)
+  const replies = [...(comment.replies ?? [])].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  )
   const hasMoreReplies = replies.length > PREVIEW_REPLIES
   const visibleReplies = repliesExpanded ? replies : replies.slice(0, PREVIEW_REPLIES)
   const hiddenReplyCount = replies.length - PREVIEW_REPLIES
@@ -444,7 +426,7 @@ function CommentThread({
               onClick={onToggleReplies}
               className="text-[12px] text-secondary hover:text-primary font-medium py-1 pl-1 transition-colors"
             >
-              View {hiddenReplyCount} more {hiddenReplyCount === 1 ? "reply" : "replies"}
+              查看另外 {hiddenReplyCount} 条回复
             </button>
           )}
           {repliesExpanded && hasMoreReplies && (
@@ -453,7 +435,7 @@ function CommentThread({
               onClick={onToggleReplies}
               className="text-[12px] text-secondary hover:text-primary font-medium py-1 pl-1 transition-colors"
             >
-              Hide replies
+              收起回复
             </button>
           )}
           {inputSlot}
@@ -482,16 +464,8 @@ function CommentItem({
     setLikeCount(liked ? likeCount - 1 : likeCount + 1)
   }
 
-  const formatTokens = (amount: number) => {
-    if (amount >= 1000) return `${(amount / 1000).toFixed(amount % 1000 === 0 ? 0 : 1)}k`
-    return String(amount)
-  }
-
   return (
-    <div className={cn(
-      "flex items-start gap-2 py-2 group/comment",
-      comment.isSponsor && "border-l-2 border-l-primary/50 pl-3 -ml-0.5 bg-primary/[0.03] rounded-r-lg py-2.5 pr-3"
-    )}>
+    <div className="flex items-start gap-2 py-2 group/comment">
       <UserHoverCard user={comment.author} avatarSize="sm" showAvatar={true} className="shrink-0">
         <Avatar
           src={comment.author.avatar}
@@ -514,7 +488,7 @@ function CommentItem({
                 onClick={onReply}
                 className="hover:text-primary transition-colors"
               >
-                Reply
+                回复
               </button>
             )}
             {isOwnComment && onDelete && (
@@ -523,14 +497,8 @@ function CommentItem({
                 onClick={onDelete}
                 className="hover:text-error transition-colors opacity-0 group-hover/comment:opacity-100"
               >
-                Delete
+                删除
               </button>
-            )}
-            {comment.isSponsor && comment.sponsorAmount && (
-              <span className="inline-flex items-center gap-1 text-primary/80">
-                <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>toll</span>
-                <span className="font-semibold">Sponsored {formatTokens(comment.sponsorAmount)} tokens</span>
-              </span>
             )}
           </div>
           <button
@@ -612,7 +580,7 @@ function ReplyItem({
                 onClick={onReply}
                 className="hover:text-primary transition-colors"
               >
-                Reply
+                回复
               </button>
             )}
             {isOwnComment && onDelete && (
@@ -621,7 +589,7 @@ function ReplyItem({
                 onClick={onDelete}
                 className="hover:text-error transition-colors opacity-0 group-hover/comment:opacity-100"
               >
-                Delete
+                删除
               </button>
             )}
           </div>
@@ -659,8 +627,8 @@ function getTimeAgo(dateString: string): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
   const diffDays = Math.floor(diffHours / 24)
 
-  if (diffDays > 30) return `${Math.floor(diffDays / 30)}m ago`
-  if (diffDays > 0) return `${diffDays}d ago`
-  if (diffHours > 0) return `${diffHours}h ago`
-  return "just now"
+  if (diffDays > 30) return `${Math.floor(diffDays / 30)}个月前`
+  if (diffDays > 0) return `${diffDays}天前`
+  if (diffHours > 0) return `${diffHours}小时前`
+  return "刚刚"
 }

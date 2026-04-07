@@ -42,6 +42,7 @@ export const useStore = create<Store>()(
           version: "1.0",
           upvotes: 0,
           weeklyUpvotes: 0,
+          monthlyUpvotes: 0,
           downloads: 0,
           createdAt: now,
           updatedAt: now,
@@ -87,7 +88,6 @@ export const useStore = create<Store>()(
           likes: 0,
           commentIds: [],
           visibility: data.visibility,
-          topicIds: data.topicIds,
           createdAt: new Date().toISOString(),
         }
       })
@@ -138,7 +138,6 @@ export const useStore = create<Store>()(
           postId,
           authorId: s.currentUserId,
           content,
-          isSponsor: false,
           likes: 0,
           replyIds: [],
           createdAt: new Date().toISOString(),
@@ -159,7 +158,6 @@ export const useStore = create<Store>()(
           postId: parent.postId,
           authorId: s.currentUserId,
           content,
-          isSponsor: false,
           likes: 0,
           replyToUserId: parent.authorId,
           parentId: parentCommentId,
@@ -225,28 +223,6 @@ export const useStore = create<Store>()(
           comment.likes += 1
         }
       }),
-
-    addSponsorComment: (postId, content, amount) => {
-      const id = genId("c")
-      set((s) => {
-        const post = s.posts[postId]
-        if (!post) return
-        const comment: NComment = {
-          id,
-          postId,
-          authorId: s.currentUserId,
-          content,
-          isSponsor: true,
-          sponsorAmount: amount,
-          likes: 0,
-          replyIds: [],
-          createdAt: new Date().toISOString(),
-        }
-        s.comments[id] = comment
-        post.commentIds.push(id)
-      })
-      return id
-    },
 
     // ── Notifications ────────────────────────────────────
 

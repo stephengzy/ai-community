@@ -5,16 +5,10 @@ import { FormInput } from "@/components/build-form/form-input"
 import { FormTextarea } from "@/components/build-form/form-textarea"
 import { MediaUpload } from "@/components/build-form/media-upload"
 import { VisibilitySelector } from "@/components/build-form/visibility-selector"
-import { BuildPreview } from "@/components/build-form/build-preview"
+// BuildPreview removed
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser, useUsers } from "@/hooks/use-store"
 import { cn } from "@/lib/utils"
-
-const categories = [
-  { value: "SKILL", label: "Skill", icon: "psychology", desc: "Your hard-earned expertise, distilled into a reusable AI capability." },
-  { value: "DEMO", label: "Demo", icon: "deployed_code", desc: "From idea to working product — built on or inspired by rednote." },
-  { value: "OTHER", label: "Other", icon: "category", desc: "Everything else worth sharing." },
-]
 
 export default function BuildSubmissionPage() {
   const currentUser = useCurrentUser()
@@ -23,27 +17,24 @@ export default function BuildSubmissionPage() {
   const [tagline, setTagline] = useState("")
   const [techTags, setTechTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("")
   const [links, setLinks] = useState([{ title: "", url: "" }])
   const [collaborators, setCollaborators] = useState<string[]>([])
   const [pitch, setPitch] = useState("")
-  const [problem, setProblem] = useState("")
-  const [solution, setSolution] = useState("")
   const [hasCover, setHasCover] = useState(false)
   const [visibility, setVisibility] = useState<string | null>(null)
+  const [version, setVersion] = useState("1.0")
   const isComposingRef = useRef(false)
   const [showCollabSearch, setShowCollabSearch] = useState(false)
   const [collabSearch, setCollabSearch] = useState("")
   const collabRef = useRef<HTMLDivElement>(null)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [errors, setErrors] = useState<Record<string, boolean>>({})
-  const [showPreview, setShowPreview] = useState(false)
 
   // Simulate auto-save on any form change
   useEffect(() => {
     const timer = setTimeout(() => setLastSaved(new Date()), 1500)
     return () => clearTimeout(timer)
-  }, [buildName, tagline, selectedCategory, techTags, links, collaborators])
+  }, [buildName, tagline, pitch, techTags, links, collaborators])
 
   useEffect(() => {
     if (!showCollabSearch) return
@@ -64,6 +55,7 @@ export default function BuildSubmissionPage() {
       // Duplicate: keep the text, don't clear
       return
     }
+    if (techTags.length >= 10) return
     setTechTags([...techTags, trimmed])
     setTagInput("")
   }
@@ -73,11 +65,13 @@ export default function BuildSubmissionPage() {
   }
 
   const toggleCollaborator = (userId: string) => {
-    setCollaborators((prev) =>
-      prev.includes(userId)
-        ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
-    )
+    setCollaborators((prev) => {
+      if (prev.includes(userId)) {
+        return prev.filter((id) => id !== userId)
+      }
+      if (prev.length >= 10) return prev
+      return [...prev, userId]
+    })
   }
 
   const availableCollabs = users.filter(
@@ -96,10 +90,7 @@ export default function BuildSubmissionPage() {
     const newErrors: Record<string, boolean> = {}
     if (!buildName.trim()) newErrors.buildName = true
     if (!tagline.trim()) newErrors.tagline = true
-    if (!selectedCategory) newErrors.category = true
     if (!pitch.trim()) newErrors.pitch = true
-    if (!problem.trim()) newErrors.problem = true
-    if (!solution.trim()) newErrors.solution = true
     if (!hasValidLink) newErrors.links = true
     if (!hasCover) newErrors.media = true
     if (!visibility) newErrors.visibility = true
@@ -139,7 +130,7 @@ export default function BuildSubmissionPage() {
             desktop_windows
           </span>
           <p className="text-[14px] text-secondary/50">
-            Build submission is available on desktop.
+            上传作品仅支持桌面端。
           </p>
         </div>
       </div>
@@ -155,222 +146,158 @@ export default function BuildSubmissionPage() {
               className="flex items-center gap-2 text-on-surface/50 hover:text-on-surface transition-colors"
             >
               <span className="material-symbols-outlined text-[20px]">arrow_back</span>
-              <span className="text-[14px] font-headline font-semibold">New Build</span>
+              <span className="text-[14px] font-headline font-semibold">上传作品</span>
             </button>
-            <div className="flex items-center gap-4">
-              <span className="text-[12px] text-secondary/40">
-                {lastSaved ? (
-                  <>
-                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70 mr-1.5 align-middle" />
-                    Saved just now
-                  </>
-                ) : (
-                  "Not saved yet"
-                )}
-              </span>
-              <Avatar
-                src={currentUser.avatar}
-                name={currentUser.name}
-                size="sm"
-              />
-            </div>
+            <span className="text-[12px] text-secondary/40">
+              {lastSaved ? (
+                <>
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-green-400/70 mr-1.5 align-middle" />
+                  已保存
+                </>
+              ) : (
+                "未保存"
+              )}
+            </span>
           </div>
         </div>
 
         {/* Main form */}
         <div className="max-w-[960px] mx-auto px-10 pt-10 pb-36">
 
-          {/* ===== Hero: Name + Tagline ===== */}
+          {/* ===== Hero: Name ===== */}
           <div className="mb-8" data-field="buildName">
-            <div className="relative">
+            <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+              作品名称 <span className="text-primary/50">*</span>
+            </label>
+            <div className={cn(
+              "relative rounded-xl bg-surface-container-lowest border p-4 transition-colors focus-within:border-primary/30",
+              errors.buildName ? "border-red-500/60" : "border-outline-variant/10"
+            )}>
               <input
                 type="text"
                 value={buildName}
                 onChange={(e) => { setBuildName(e.target.value.slice(0, 40)); clearError("buildName") }}
-                placeholder="Name your build"
-                className={cn(
-                  "w-full bg-transparent border-b focus:border-primary/50 focus:ring-0 focus:outline-none pb-3 text-[36px] font-headline font-semibold placeholder:text-on-surface/18 text-on-surface tracking-tight leading-[1.2] transition-colors",
-                  errors.buildName ? "border-red-500/60" : "border-outline-variant/12"
-                )}
+                placeholder="为你的作品命名"
+                className="w-full bg-transparent focus:ring-0 focus:outline-none text-[20px] font-headline font-semibold placeholder:text-on-surface/25 text-on-surface tracking-tight"
               />
               {buildName.length > 0 && (
                 <span className={cn(
-                  "absolute right-0 bottom-4 text-[12px]",
+                  "absolute right-4 top-1/2 -translate-y-1/2 text-[12px]",
                   buildName.length >= 40 ? "text-red-400" : "text-on-surface/20"
                 )}>
                   {buildName.length}/40
                 </span>
               )}
             </div>
-            <div className="relative" data-field="tagline">
-              <input
-                type="text"
-                value={tagline}
-                onChange={(e) => { setTagline(e.target.value.slice(0, 80)); clearError("tagline") }}
-                placeholder="Write a tagline for your build"
-                className={cn(
-                  "w-full bg-transparent border-b focus:border-primary/40 focus:ring-0 focus:outline-none mt-4 pb-3 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface/60 transition-colors",
-                  errors.tagline ? "border-red-500/60" : "border-outline-variant/8"
-                )}
-              />
-              {tagline.length > 0 && (
-                <span className={cn(
-                  "absolute right-0 bottom-4 text-[12px]",
-                  tagline.length >= 80 ? "text-red-400" : "text-on-surface/20"
-                )}>
-                  {tagline.length}/80
-                </span>
-              )}
-            </div>
           </div>
 
-          {/* ===== The Story ===== */}
+          {/* ===== 作品简介 ===== */}
           <section className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">The Story</h2>
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">作品简介</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
             </div>
             <div className="space-y-6">
-              {/* Category */}
-              <div data-field="category">
+              {/* Tagline */}
+              <div data-field="tagline">
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Category <span className="text-primary/50">*</span>
+                  一句话介绍 <span className="text-primary/50">*</span>
                 </label>
-                {errors.category && (
-                  <p className="text-[12px] text-red-500 mb-2">Please select a category</p>
-                )}
-                <div className="grid grid-cols-3 gap-3">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat.value}
-                      type="button"
-                      onClick={() => { setSelectedCategory(selectedCategory === cat.value ? "" : cat.value); clearError("category") }}
-                      className={cn(
-                        "flex flex-col items-start gap-2 px-5 py-4 rounded-xl border text-left transition-all duration-150 cursor-pointer select-none active:scale-[0.97]",
-                        selectedCategory === cat.value
-                          ? "border-primary/30 bg-primary/[0.06] shadow-sm"
-                          : "border-outline-variant/30 hover:border-outline-variant/45 hover:bg-surface-container-low/50"
-                      )}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "material-symbols-outlined text-[20px]",
-                            selectedCategory === cat.value ? "text-primary" : "text-on-surface/70"
-                          )}
-                          style={{ fontVariationSettings: selectedCategory === cat.value ? "'FILL' 1" : "'FILL' 0" }}
-                        >
-                          {cat.icon}
-                        </span>
-                        <span className={cn(
-                          "text-[14px] font-headline font-semibold",
-                          selectedCategory === cat.value ? "text-primary" : "text-on-surface/70"
-                        )}>
-                          {cat.label}
-                        </span>
-                      </div>
-                      <p className={cn(
-                        "text-[12px] leading-relaxed",
-                        selectedCategory === cat.value ? "text-primary/60" : "text-on-surface/55"
-                      )}>
-                        {cat.desc}
-                      </p>
-                    </button>
-                  ))}
+                <div className={cn(
+                  "relative rounded-xl bg-surface-container-lowest border p-4 transition-colors focus-within:border-primary/30",
+                  errors.tagline ? "border-red-500/60" : "border-outline-variant/10"
+                )}>
+                  <input
+                    type="text"
+                    value={tagline}
+                    onChange={(e) => { setTagline(e.target.value.slice(0, 80)); clearError("tagline") }}
+                    placeholder="一句话介绍你的作品"
+                    className="w-full bg-transparent focus:ring-0 focus:outline-none text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                  />
+                  {tagline.length > 0 && (
+                    <span className={cn(
+                      "absolute right-4 top-1/2 -translate-y-1/2 text-[12px]",
+                      tagline.length >= 80 ? "text-red-400" : "text-on-surface/20"
+                    )}>
+                      {tagline.length}/80
+                    </span>
+                  )}
                 </div>
               </div>
 
-              {/* Story */}
+              {/* 项目介绍 */}
               <div data-field="pitch">
                 <FormTextarea
-                  label="The Pitch"
-                  placeholder="Introduce your build — what it is and why it matters"
+                  label="项目介绍"
+                  placeholder="介绍你的作品——它是什么、解决了什么问题、如何实现的"
                   isRequired
-                  maxLength={800}
+                  maxLength={2000}
                   onChange={(html) => { setPitch(html.replace(/<[^>]*>/g, "").trim()); clearError("pitch") }}
                   error={errors.pitch}
-                />
-              </div>
-              <div data-field="problem">
-                <FormTextarea
-                  label="The Problem"
-                  placeholder="What problem does this solve? Why does it matter?"
-                  isRequired
-                  maxLength={800}
-                  onChange={(html) => { setProblem(html.replace(/<[^>]*>/g, "").trim()); clearError("problem") }}
-                  error={errors.problem}
-                />
-              </div>
-              <div data-field="solution">
-                <FormTextarea
-                  label="The Solution"
-                  placeholder="How does it work? Describe the technical approach."
-                  isRequired
-                  maxLength={800}
-                  onChange={(html) => { setSolution(html.replace(/<[^>]*>/g, "").trim()); clearError("solution") }}
-                  error={errors.solution}
                 />
               </div>
 
               {/* Keywords */}
               <div>
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Keywords
+                  关键词
                 </label>
-                <div className="flex flex-wrap gap-2 items-center py-2 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
-                  {techTags.map((tag) => (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => removeTag(tag)}
-                      className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/12 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
-                    >
-                      {tag}
-                      <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">close</span>
-                    </button>
-                  ))}
-                  <input
-                    value={tagInput}
-                    onCompositionStart={() => { isComposingRef.current = true }}
-                    onCompositionEnd={(e) => {
-                      isComposingRef.current = false
-                      const val = (e.target as HTMLInputElement).value
-                      if (val.endsWith(",") || val.endsWith("，")) {
-                        const trimmed = val.slice(0, -1).trim()
-                        if (trimmed && !techTags.includes(trimmed)) {
-                          setTechTags((prev) => [...prev, trimmed])
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 focus-within:border-primary/30 transition-colors">
+                  <div className="flex flex-wrap gap-2 items-center">
+                    {techTags.map((tag) => (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => removeTag(tag)}
+                        className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/12 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
+                      >
+                        {tag}
+                        <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">close</span>
+                      </button>
+                    ))}
+                    <input
+                      value={tagInput}
+                      onCompositionStart={() => { isComposingRef.current = true }}
+                      onCompositionEnd={(e) => {
+                        isComposingRef.current = false
+                        const val = (e.target as HTMLInputElement).value
+                        if (val.endsWith(",") || val.endsWith("，")) {
+                          const trimmed = val.slice(0, -1).trim()
+                          if (trimmed && !techTags.includes(trimmed) && techTags.length < 10) {
+                            setTechTags((prev) => [...prev, trimmed])
+                          }
+                          setTagInput("")
                         }
-                        setTagInput("")
-                      }
-                    }}
-                    onChange={(e) => {
-                      const val = e.target.value
-                      if (!isComposingRef.current && (val.endsWith(",") || val.endsWith("，"))) {
-                        const trimmed = val.slice(0, -1).trim()
-                        if (trimmed && !techTags.includes(trimmed)) {
-                          setTechTags((prev) => [...prev, trimmed])
+                      }}
+                      onChange={(e) => {
+                        const val = e.target.value
+                        if (!isComposingRef.current && (val.endsWith(",") || val.endsWith("，"))) {
+                          const trimmed = val.slice(0, -1).trim()
+                          if (trimmed && !techTags.includes(trimmed) && techTags.length < 10) {
+                            setTechTags((prev) => [...prev, trimmed])
+                          }
+                          setTagInput("")
+                        } else {
+                          setTagInput(val)
                         }
-                        setTagInput("")
-                      } else {
-                        setTagInput(val)
-                      }
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !isComposingRef.current) {
-                        e.preventDefault()
-                        addTag()
-                      } else if (e.key === "Backspace" && tagInput === "" && techTags.length > 0) {
-                        removeTag(techTags[techTags.length - 1])
-                      }
-                    }}
-                    placeholder={techTags.length === 0 ? "e.g. 组织穿透、日常数据报表、财务分析" : "Add more..."}
-                    className="flex-1 min-w-[120px] bg-transparent focus:ring-0 focus:outline-none h-[30px] text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
-                  />
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !isComposingRef.current) {
+                          e.preventDefault()
+                          addTag()
+                        } else if (e.key === "Backspace" && tagInput === "" && techTags.length > 0) {
+                          removeTag(techTags[techTags.length - 1])
+                        }
+                      }}
+                      placeholder={techTags.length >= 10 ? "已达上限" : techTags.length === 0 ? "如：组织穿透、日常数据报表、财务分析" : "继续添加..."}
+                      className="flex-1 min-w-[120px] bg-transparent focus:ring-0 focus:outline-none h-[30px] text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                    />
+                  </div>
+                  <p className="mt-2 text-[12px] text-on-surface/25">
+                    回车添加 · 退格删除 · 最多10个
+                  </p>
                 </div>
-                <p className="mt-1.5 text-[12px] text-on-surface/25">
-                  Press Enter to add · Backspace to remove
-                </p>
               </div>
             </div>
           </section>
@@ -380,22 +307,22 @@ export default function BuildSubmissionPage() {
           <section className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">The Goods</h2>
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">作品展示</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
             </div>
             <div className="space-y-6">
               {/* Links */}
               <div data-field="links">
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Show Us Your Goods <span className="text-primary/50">*</span>
+                  作品链接 <span className="text-primary/50">*</span>
                 </label>
                 {errors.links && (
-                  <p className="text-[12px] text-red-500 mb-2">At least one link with title and URL is required</p>
+                  <p className="text-[12px] text-red-500 mb-2">至少需要一个链接（标题和地址）</p>
                 )}
-                <div className="space-y-3">
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 space-y-3">
                   {links.map((link, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
+                      <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/8 focus-within:border-primary/30 transition-colors">
                         <input
                           value={link.title}
                           onChange={(e) => {
@@ -404,7 +331,7 @@ export default function BuildSubmissionPage() {
                             setLinks(next)
                             clearError("links")
                           }}
-                          placeholder="Title"
+                          placeholder="标题"
                           className="w-[140px] shrink-0 bg-transparent focus:ring-0 focus:outline-none py-2.5 text-[14px] font-body font-medium placeholder:text-on-surface/30 text-on-surface"
                         />
                         <div className="w-px h-4 bg-outline-variant/15" />
@@ -431,26 +358,34 @@ export default function BuildSubmissionPage() {
                       )}
                     </div>
                   ))}
-                  <button
-                    type="button"
-                    onClick={() => setLinks([...links, { title: "", url: "" }])}
-                    className="flex items-center gap-1.5 text-[13px] font-medium text-primary/50 hover:text-primary/80 transition-colors mt-1"
-                  >
-                    <span className="material-symbols-outlined text-[16px]">add</span>
-                    Add another link
-                  </button>
+                  {links.length < 10 && (
+                    <button
+                      type="button"
+                      onClick={() => setLinks([...links, { title: "", url: "" }])}
+                      className="flex items-center gap-1.5 text-[13px] font-medium text-primary/50 hover:text-primary/80 transition-colors mt-1"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">add</span>
+                      添加链接
+                    </button>
+                  )}
+                  {links.length >= 10 && (
+                    <p className="text-[12px] text-on-surface/25 mt-1">最多10个链接</p>
+                  )}
                 </div>
               </div>
 
               {/* Media */}
               <div data-field="media">
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Media <span className="text-primary/50">*</span>
+                  图片/视频 <span className="text-primary/50">*</span>
                 </label>
                 {errors.media && (
-                  <p className="text-[12px] text-red-500 mb-2">A cover image is required</p>
+                  <p className="text-[12px] text-red-500 mb-2">需要上传封面图</p>
                 )}
-                <MediaUpload onHasCoverChange={(has) => { setHasCover(has); if (has) clearError("media") }} />
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <MediaUpload onHasCoverChange={(has) => { setHasCover(has); if (has) clearError("media") }} />
+                  <p className="mt-3 text-[12px] text-on-surface/25">最多10个</p>
+                </div>
               </div>
             </div>
           </section>
@@ -460,94 +395,121 @@ export default function BuildSubmissionPage() {
           <section className="mb-8">
             <div className="flex items-center gap-4 mb-6">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent to-outline-variant/20" />
-              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">The Setup</h2>
+              <h2 className="text-[13px] font-headline font-semibold uppercase tracking-[0.18em] text-primary/50 shrink-0 px-3">其他设置</h2>
               <div className="flex-1 h-px bg-gradient-to-r from-outline-variant/20 to-transparent" />
             </div>
             <div className="space-y-6">
               {/* Collaborators */}
               <div>
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
-                  Collaborators
+                  合作者
                 </label>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  {selectedCollabs.map((user) => (
-                    <button
-                      key={user.id}
-                      type="button"
-                      onClick={() => toggleCollaborator(user.id)}
-                      className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/12 hover:border-primary/30 hover:bg-primary/[0.04] active:scale-[0.96] transition-all"
-                    >
-                      <Avatar src={user.avatar} name={user.name} size="xs" />
-                      <span className="text-[13px] font-medium text-on-surface/65">
-                        {user.name}({user.realName})
-                      </span>
-                      <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">
-                        close
-                      </span>
-                    </button>
-                  ))}
-                  <div className="relative" ref={collabRef}>
-                    <button
-                      type="button"
-                      onClick={() => setShowCollabSearch(!showCollabSearch)}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-1.5 rounded-full border border-dashed transition-all text-[13px] font-medium cursor-pointer",
-                        showCollabSearch
-                          ? "border-primary/30 text-primary bg-primary/[0.03]"
-                          : "border-outline-variant/15 text-on-surface/35 hover:border-primary/25 hover:text-primary/60"
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    {selectedCollabs.map((user) => (
+                      <button
+                        key={user.id}
+                        type="button"
+                        onClick={() => toggleCollaborator(user.id)}
+                        className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/12 hover:border-primary/30 hover:bg-primary/[0.04] active:scale-[0.96] transition-all"
+                      >
+                        <Avatar src={user.avatar} name={user.name} size="xs" />
+                        <span className="text-[13px] font-medium text-on-surface/65">
+                          {user.name}({user.realName})
+                        </span>
+                        <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">
+                          close
+                        </span>
+                      </button>
+                    ))}
+                    <div className="relative" ref={collabRef}>
+                      {collaborators.length < 10 ? (
+                        <button
+                          type="button"
+                          onClick={() => setShowCollabSearch(!showCollabSearch)}
+                          className={cn(
+                            "flex items-center gap-2 px-4 py-1.5 rounded-full border border-dashed transition-all text-[13px] font-medium cursor-pointer",
+                            showCollabSearch
+                              ? "border-primary/30 text-primary bg-primary/[0.03]"
+                              : "border-outline-variant/15 text-on-surface/35 hover:border-primary/25 hover:text-primary/60"
+                          )}
+                        >
+                          <span className="material-symbols-outlined text-[17px]">person_add</span>
+                          添加成员
+                        </button>
+                      ) : (
+                        <span className="text-[12px] text-on-surface/25">最多10位合作者</span>
                       )}
-                    >
-                      <span className="material-symbols-outlined text-[17px]">person_add</span>
-                      Add people
-                    </button>
 
-                    {showCollabSearch && (
-                      <div className="absolute top-full left-0 mt-2 w-[280px] bg-surface-container-lowest rounded-2xl border border-outline-variant/8 shadow-xl z-30 overflow-hidden">
-                        <div className="p-3.5 border-b border-outline-variant/6">
-                          <input
-                            autoFocus
-                            value={collabSearch}
-                            onChange={(e) => setCollabSearch(e.target.value)}
-                            placeholder="Search people..."
-                            className="w-full bg-surface-container-low rounded-xl px-3.5 py-2.5 text-[14px] placeholder:text-secondary/35 focus:outline-none focus:ring-1 focus:ring-primary/20"
-                          />
+                      {showCollabSearch && collaborators.length < 10 && (
+                        <div className="absolute top-full left-0 mt-2 w-[280px] bg-surface-container-lowest rounded-2xl border border-outline-variant/8 shadow-xl z-30 overflow-hidden">
+                          <div className="p-3.5 border-b border-outline-variant/6">
+                            <input
+                              autoFocus
+                              value={collabSearch}
+                              onChange={(e) => setCollabSearch(e.target.value)}
+                              placeholder="搜索成员..."
+                              className="w-full bg-surface-container-low rounded-xl px-3.5 py-2.5 text-[14px] placeholder:text-secondary/35 focus:outline-none focus:ring-1 focus:ring-primary/20"
+                            />
+                          </div>
+                          <div className="max-h-[240px] overflow-y-auto py-1.5">
+                            {availableCollabs.map((user) => {
+                              const isSelected = collaborators.includes(user.id)
+                              return (
+                                <button
+                                  key={user.id}
+                                  type="button"
+                                  onClick={() => toggleCollaborator(user.id)}
+                                  className={cn(
+                                    "flex items-center gap-3 w-full px-4 py-2.5 hover:bg-surface-container transition-colors text-left",
+                                    isSelected && "bg-primary/[0.04]"
+                                  )}
+                                >
+                                  <Avatar src={user.avatar} name={user.name} size="sm" />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-[14px] font-medium text-on-surface truncate">
+                                      {user.name}({user.realName})
+                                    </p>
+                                    <p className="text-[12px] text-secondary/45">{user.role}</p>
+                                  </div>
+                                  {isSelected && (
+                                    <span className="material-symbols-outlined text-[18px] text-primary">check</span>
+                                  )}
+                                </button>
+                              )
+                            })}
+                          </div>
                         </div>
-                        <div className="max-h-[240px] overflow-y-auto py-1.5">
-                          {availableCollabs.map((user) => {
-                            const isSelected = collaborators.includes(user.id)
-                            return (
-                              <button
-                                key={user.id}
-                                type="button"
-                                onClick={() => toggleCollaborator(user.id)}
-                                className={cn(
-                                  "flex items-center gap-3 w-full px-4 py-2.5 hover:bg-surface-container transition-colors text-left",
-                                  isSelected && "bg-primary/[0.04]"
-                                )}
-                              >
-                                <Avatar src={user.avatar} name={user.name} size="sm" />
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-[14px] font-medium text-on-surface truncate">
-                                    {user.name}({user.realName})
-                                  </p>
-                                  <p className="text-[12px] text-secondary/45">{user.role}</p>
-                                </div>
-                                {isSelected && (
-                                  <span className="material-symbols-outlined text-[18px] text-primary">check</span>
-                                )}
-                              </button>
-                            )
-                          })}
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              {/* Version */}
+              <div>
+                <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
+                  作品版本
+                </label>
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4 focus-within:border-primary/30 transition-colors">
+                  <input
+                    type="text"
+                    value={version}
+                    onChange={(e) => setVersion(e.target.value)}
+                    placeholder="1.0"
+                    className="w-[120px] bg-transparent focus:ring-0 focus:outline-none text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
+                  />
+                  <p className="mt-2 text-[12px] text-on-surface/25">
+                    首次发布默认为 1.0，后续更新时可修改版本号
+                  </p>
                 </div>
               </div>
 
               {/* Visibility */}
               <div data-field="visibility">
-                <VisibilitySelector onChange={(v) => { setVisibility(v); if (v) clearError("visibility") }} error={errors.visibility} />
+                <div className="rounded-xl bg-surface-container-lowest border border-outline-variant/10 p-4">
+                  <VisibilitySelector onChange={(v) => { setVisibility(v); if (v) clearError("visibility") }} error={errors.visibility} />
+                </div>
               </div>
             </div>
           </section>
@@ -558,53 +520,29 @@ export default function BuildSubmissionPage() {
           <div className="max-w-[960px] mx-auto flex items-center justify-between px-10 py-3.5">
             <button
               type="button"
-              className="text-[14px] font-headline font-semibold text-on-surface/35 hover:text-on-surface/60 transition-colors"
+              className="text-[14px] font-headline font-semibold text-red-400/60 hover:text-red-500 transition-colors"
             >
-              Discard
+              删除草稿
             </button>
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => setShowPreview(true)}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
-              >
-                <span className="material-symbols-outlined text-[16px]">visibility</span>
-                Preview
-              </button>
-              <button
-                type="button"
                 className="px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
               >
-                Save Draft
+                存草稿
               </button>
               <button
                 type="button"
                 onClick={handlePublish}
                 className="px-6 py-2 rounded-xl text-[14px] font-headline font-semibold bg-primary text-on-primary hover:opacity-90 transition-all"
               >
-                Publish
+                发布
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Preview modal */}
-      {showPreview && (
-        <BuildPreview
-          name={buildName}
-          tagline={tagline}
-          category={selectedCategory as any}
-          pitch={pitch}
-          problem={problem}
-          solution={solution}
-          techTags={techTags}
-          links={links.map((l) => ({ title: l.title, url: l.url }))}
-          author={currentUser}
-          version="1.0"
-          onClose={() => setShowPreview(false)}
-        />
-      )}
     </>
   )
 }
