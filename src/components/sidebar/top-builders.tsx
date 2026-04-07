@@ -9,7 +9,7 @@ export function TopBuilders() {
   const topBuilders = useTopBuilders(5)
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden">
+    <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/6 overflow-hidden">
       <div className="px-5 pt-4 pb-3">
         <h4 className="text-base font-headline font-semibold tracking-tight text-on-surface">
           Trending Builders This Week
@@ -19,7 +19,7 @@ export function TopBuilders() {
         {topBuilders.map((entry) => (
           <div
             key={entry.user.id}
-            className="flex items-center gap-3 px-5 py-3 border-t border-outline-variant/8"
+            className="flex items-center gap-3 px-5 py-3 border-t border-outline-variant/5"
           >
             <UserHoverCard user={entry.user} avatarSize="md" showAvatar={true} className="shrink-0">
               <Avatar src={entry.user.avatar} name={entry.user.name} size="md" className="cursor-pointer" />
@@ -29,7 +29,7 @@ export function TopBuilders() {
               <div className="flex items-center gap-3 mt-0.5 text-[11px] text-secondary">
                 <span>{entry.builds} builds</span>
                 <span className="flex items-center gap-1">
-                  <UpvoteIcon size={10} className="text-primary/50" filled />
+                  <UpvoteIcon size={10} className="text-primary/50" />
                   +{entry.weeklyUpvotes}
                 </span>
               </div>

@@ -145,7 +145,7 @@ export default function BuildSubmissionPage() {
       {/* Desktop: full form */}
       <div className="hidden md:block min-h-screen">
         {/* Top bar */}
-        <div className="sticky top-0 z-20 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/8">
+        <div className="sticky top-0 z-20 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/5">
           <div className="max-w-[960px] mx-auto flex items-center justify-between px-10 py-3.5">
             <button
               type="button"
@@ -188,7 +188,7 @@ export default function BuildSubmissionPage() {
                 placeholder="Name your build"
                 className={cn(
                   "w-full bg-transparent border-b focus:border-primary/50 focus:ring-0 focus:outline-none pb-3 text-[36px] font-headline font-semibold placeholder:text-on-surface/18 text-on-surface tracking-tight leading-[1.2] transition-colors",
-                  errors.buildName ? "border-red-500/60" : "border-outline-variant/20"
+                  errors.buildName ? "border-red-500/60" : "border-outline-variant/12"
                 )}
               />
               {buildName.length > 0 && (
@@ -208,7 +208,7 @@ export default function BuildSubmissionPage() {
                 placeholder="Write a tagline for your build"
                 className={cn(
                   "w-full bg-transparent border-b focus:border-primary/40 focus:ring-0 focus:outline-none mt-4 pb-3 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface/60 transition-colors",
-                  errors.tagline ? "border-red-500/60" : "border-outline-variant/15"
+                  errors.tagline ? "border-red-500/60" : "border-outline-variant/8"
                 )}
               />
               {tagline.length > 0 && (
@@ -248,7 +248,7 @@ export default function BuildSubmissionPage() {
                         "flex flex-col items-start gap-2 px-5 py-4 rounded-xl border text-left transition-all duration-150 cursor-pointer select-none active:scale-[0.97]",
                         selectedCategory === cat.value
                           ? "border-primary/30 bg-primary/[0.06] shadow-sm"
-                          : "border-outline-variant/45 hover:border-outline-variant/60 hover:bg-surface-container-low/50"
+                          : "border-outline-variant/30 hover:border-outline-variant/45 hover:bg-surface-container-low/50"
                       )}
                     >
                       <div className="flex items-center gap-2">
@@ -316,13 +316,13 @@ export default function BuildSubmissionPage() {
                 <label className="block text-[18px] font-headline font-semibold text-on-surface mb-3">
                   Keywords
                 </label>
-                <div className="flex flex-wrap gap-2 items-center py-2 border-b border-outline-variant/20 focus-within:border-primary/40 transition-colors">
+                <div className="flex flex-wrap gap-2 items-center py-2 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
                   {techTags.map((tag) => (
                     <button
                       key={tag}
                       type="button"
                       onClick={() => removeTag(tag)}
-                      className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/20 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
+                      className="group inline-flex items-center gap-2 px-3.5 h-[30px] rounded-full border border-outline-variant/12 text-[13px] font-medium text-on-surface/60 hover:border-primary/30 hover:text-primary/70 hover:bg-primary/[0.04] active:scale-[0.96] transition-all cursor-pointer"
                     >
                       {tag}
                       <span className="material-symbols-outlined text-[13px] text-on-surface/20 group-hover:text-primary/50 transition-colors">close</span>
@@ -393,7 +393,7 @@ export default function BuildSubmissionPage() {
                 <div className="space-y-3">
                   {links.map((link, i) => (
                     <div key={i} className="flex items-center gap-3">
-                      <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/20 focus-within:border-primary/40 transition-colors">
+                      <div className="flex-1 flex items-center gap-3 border-b border-outline-variant/12 focus-within:border-primary/40 transition-colors">
                         <input
                           value={link.title}
                           onChange={(e) => {
@@ -473,7 +473,7 @@ export default function BuildSubmissionPage() {
                       key={user.id}
                       type="button"
                       onClick={() => toggleCollaborator(user.id)}
-                      className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/20 hover:border-primary/30 hover:bg-primary/[0.04] active:scale-[0.96] transition-all"
+                      className="group flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/12 hover:border-primary/30 hover:bg-primary/[0.04] active:scale-[0.96] transition-all"
                     >
                       <Avatar src={user.avatar} name={user.name} size="xs" />
                       <span className="text-[13px] font-medium text-on-surface/65">
@@ -492,7 +492,7 @@ export default function BuildSubmissionPage() {
                         "flex items-center gap-2 px-4 py-1.5 rounded-full border border-dashed transition-all text-[13px] font-medium cursor-pointer",
                         showCollabSearch
                           ? "border-primary/30 text-primary bg-primary/[0.03]"
-                          : "border-outline-variant/25 text-on-surface/35 hover:border-primary/25 hover:text-primary/60"
+                          : "border-outline-variant/15 text-on-surface/35 hover:border-primary/25 hover:text-primary/60"
                       )}
                     >
                       <span className="material-symbols-outlined text-[17px]">person_add</span>
@@ -500,8 +500,8 @@ export default function BuildSubmissionPage() {
                     </button>
 
                     {showCollabSearch && (
-                      <div className="absolute top-full left-0 mt-2 w-[280px] bg-surface-container-lowest rounded-2xl border border-outline-variant/15 shadow-xl z-30 overflow-hidden">
-                        <div className="p-3.5 border-b border-outline-variant/10">
+                      <div className="absolute top-full left-0 mt-2 w-[280px] bg-surface-container-lowest rounded-2xl border border-outline-variant/8 shadow-xl z-30 overflow-hidden">
+                        <div className="p-3.5 border-b border-outline-variant/6">
                           <input
                             autoFocus
                             value={collabSearch}
@@ -552,7 +552,7 @@ export default function BuildSubmissionPage() {
         </div>
 
         {/* Fixed footer */}
-        <div className="sticky bottom-0 z-20 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/8">
+        <div className="sticky bottom-0 z-20 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/5">
           <div className="max-w-[960px] mx-auto flex items-center justify-between px-10 py-3.5">
             <button
               type="button"
@@ -563,7 +563,7 @@ export default function BuildSubmissionPage() {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                className="px-5 py-2 rounded-xl border border-outline-variant/25 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
+                className="px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
               >
                 Save Draft
               </button>

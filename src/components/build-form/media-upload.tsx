@@ -62,7 +62,7 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
         <div>
           <p className="text-[12px] text-on-surface/50 mb-2">Cover image <span className="text-primary/60">*</span></p>
           {cover ? (
-            <div className="relative group h-[140px] rounded-xl overflow-hidden border border-outline-variant/15 bg-surface-container-low">
+            <div className="relative group h-[140px] rounded-xl overflow-hidden border border-outline-variant/8 bg-surface-container-low">
               <img src={cover.preview} alt="Cover" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                 <button type="button" onClick={() => coverRef.current?.click()} className="px-3 py-1.5 rounded-lg bg-white/90 text-[12px] font-medium text-on-surface hover:bg-white transition-colors">Replace</button>
@@ -73,7 +73,7 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
             <button
               type="button"
               onClick={() => coverRef.current?.click()}
-              className="w-full h-[140px] rounded-xl border border-dashed border-outline-variant/50 flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
+              className="w-full h-[140px] rounded-xl border border-dashed border-outline-variant/35 flex flex-col items-center justify-center gap-2 hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
             >
               <span className="material-symbols-outlined text-[24px] text-on-surface/35 group-hover:text-primary/60 transition-colors">add_photo_alternate</span>
               <span className="text-[12px] text-on-surface/40 group-hover:text-on-surface/60 transition-colors">16:9 recommended</span>
@@ -87,7 +87,7 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
           <p className="text-[12px] text-on-surface/50 mb-2">Additional images</p>
           <div className="flex flex-wrap gap-2 min-h-[140px] content-start">
             {gallery.map((f) => (
-              <div key={f.id} className="relative group w-[66px] h-[66px] rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/15">
+              <div key={f.id} className="relative group w-[66px] h-[66px] rounded-lg overflow-hidden bg-surface-container-low border border-outline-variant/8">
                 <img src={f.preview} alt="" className="w-full h-full object-cover" />
                 <button
                   type="button"
@@ -101,7 +101,7 @@ export function MediaUpload({ className, onHasCoverChange }: MediaUploadProps) {
             <button
               type="button"
               onClick={() => galleryRef.current?.click()}
-              className="w-[66px] h-[66px] rounded-lg border border-dashed border-outline-variant/50 flex items-center justify-center hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
+              className="w-[66px] h-[66px] rounded-lg border border-dashed border-outline-variant/35 flex items-center justify-center hover:border-primary/40 hover:bg-primary/[0.03] transition-all cursor-pointer group"
             >
               <span className="material-symbols-outlined text-[18px] text-on-surface/35 group-hover:text-primary/60 transition-colors">add</span>
             </button>

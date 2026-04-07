@@ -113,12 +113,12 @@ export function SearchBox() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setFocused(true)}
           placeholder="Search posts, people, builds"
-          className="w-full pl-9 pr-3 py-2.5 text-[14px] bg-surface-container-lowest border border-outline-variant/15 rounded-lg text-on-surface placeholder:text-secondary/40 placeholder:font-headline placeholder:text-[14px] placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+          className="w-full pl-9 pr-3 py-2.5 text-[14px] bg-surface-container-lowest border border-outline-variant/8 rounded-lg text-on-surface placeholder:text-secondary/40 placeholder:font-headline placeholder:text-[14px] placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
         />
       </div>
 
       {showDropdown && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/15 rounded-xl shadow-lg overflow-hidden z-50">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50">
           {results.length === 0 ? (
             <div className="px-4 py-6 text-center text-[13px] text-secondary">
               未找到相关结果

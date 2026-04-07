@@ -58,7 +58,7 @@ export function VisibilitySelector({
                 "flex flex-col items-start gap-2 px-5 py-4 rounded-xl border text-left transition-all duration-150 cursor-pointer select-none active:scale-[0.97]",
                 isSelected
                   ? "border-primary/30 bg-primary/[0.06] shadow-sm"
-                  : "border-outline-variant/45 hover:border-outline-variant/60 hover:bg-surface-container-low/50"
+                  : "border-outline-variant/30 hover:border-outline-variant/45 hover:bg-surface-container-low/50"
               )}
             >
               <div className="flex items-center gap-2">

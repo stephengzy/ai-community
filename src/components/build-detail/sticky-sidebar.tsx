@@ -24,7 +24,6 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
   const [upvoted, setUpvoted] = useState(false)
   const [following, setFollowing] = useState(false)
   const displayUpvotes = build.upvotes + (upvoted ? 1 : 0)
-
   return (
     <div className={cn("sticky top-8 space-y-4", className)}>
 
@@ -35,21 +34,21 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
         className={cn(
           "w-full flex items-center gap-4 p-5 rounded-2xl transition-all cursor-pointer group",
           upvoted
-            ? "bg-primary/[0.08] border border-primary/20"
+            ? "bg-surface-container-low border border-outline-variant/8"
             : "bg-surface-container-low border border-transparent hover:border-primary/15 hover:bg-primary/[0.03]"
         )}
       >
         <div className={cn(
           "w-12 h-12 rounded-xl flex items-center justify-center transition-all",
           upvoted
-            ? "bg-primary/15"
+            ? "bg-surface-container"
             : "bg-surface-container group-hover:bg-primary/10"
         )}>
           <UpvoteIcon
             size={22}
             className={cn(
               "transition-colors",
-              upvoted ? "text-primary" : "text-on-surface/30 group-hover:text-primary/60"
+              upvoted ? "text-primary" : "text-on-surface/60 group-hover:text-primary/60"
             )}
             filled={upvoted}
           />
@@ -89,7 +88,7 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
           className={cn(
             "w-full py-2.5 rounded-xl text-[14px] font-headline font-semibold transition-all",
             following
-              ? "border border-outline-variant/25 text-on-surface/45 hover:text-on-surface/70"
+              ? "border border-outline-variant/15 text-on-surface/45 hover:text-on-surface/70"
               : "bg-primary text-on-primary hover:opacity-90"
           )}
         >
@@ -98,7 +97,7 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
 
         {/* Collaborators */}
         {build.collaborators.length > 0 && (
-          <div className="pt-3 border-t border-outline-variant/10">
+          <div className="pt-3 border-t border-outline-variant/6">
             <p className="text-[12px] text-on-surface/30 mb-2.5">Collaborators</p>
             <div className="space-y-2">
               {build.collaborators.map((user) => (
@@ -122,7 +121,7 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
             href={build.demoUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-outline-variant/15 hover:border-primary/25 hover:bg-primary/[0.03] transition-all group"
+            className="flex items-center gap-2.5 px-4 py-3 rounded-xl border border-outline-variant/8 hover:border-primary/25 hover:bg-primary/[0.03] transition-all group"
           >
             <span className="material-symbols-outlined text-[18px] text-on-surface/30 group-hover:text-primary/60 transition-colors">open_in_new</span>
             <div className="flex-1 min-w-0">
@@ -158,13 +157,13 @@ export function StickySidebar({ build, className }: StickySidebarProps) {
         </div>
 
         {build.techStack.length > 0 && (
-          <div className="pt-2 border-t border-outline-variant/8">
+          <div className="pt-2 border-t border-outline-variant/5">
             <p className="text-[12px] text-on-surface/35 mb-2">Keywords</p>
             <div className="flex flex-wrap gap-1.5">
               {build.techStack.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2.5 py-1 rounded-full border border-outline-variant/15 text-[11px] text-on-surface/40"
+                  className="inline-flex items-center px-2.5 py-1 rounded-full border border-outline-variant/8 text-[11px] text-on-surface/40"
                 >
                   {tag}
                 </span>

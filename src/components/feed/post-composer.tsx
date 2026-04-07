@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser, useUsers, useBuildsByUser } from "@/hooks/use-store"
-import { categoryLabels } from "@/data/constants"
+import { categoryIcons } from "@/data/constants"
+import { CategoryTag } from "@/components/content/category-tag"
 import type { User, Build } from "@/types"
 import { cn } from "@/lib/utils"
 
@@ -235,7 +236,7 @@ export function PostComposer() {
             {showMentionDropdown && filteredUsers.length > 0 && (
               <div
                 ref={mentionDropdownRef}
-                className="absolute left-0 right-0 top-full z-50 mt-1 bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-lg max-h-[200px] overflow-y-auto"
+                className="absolute left-0 right-0 top-full z-50 mt-1 bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg max-h-[200px] overflow-y-auto"
               >
                 {filteredUsers.slice(0, 6).map((user, i) => (
                   <button
@@ -266,11 +267,11 @@ export function PostComposer() {
 
           {/* Attached Build - compact preview matching BuildBar style */}
           {selectedBuild && (
-            <div className="relative mt-1 mb-1 flex items-center gap-3 rounded-xl py-3 px-3.5 bg-surface-container-low/50 border border-outline-variant/15">
+            <div className="relative mt-1 mb-1 flex items-center gap-3 rounded-xl py-3 px-3.5 bg-surface-container-low/50 border border-outline-variant/8">
               {/* Icon */}
-              <div className="w-10 h-10 bg-primary/6 rounded-lg flex items-center justify-center shrink-0">
-                <span className="material-symbols-outlined text-[20px] text-primary">
-                  deployed_code
+              <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0", selectedBuild.category === "DEMO" ? "bg-demo/8" : "bg-primary/6")}>
+                <span className={cn("material-symbols-outlined text-[20px]", selectedBuild.category === "DEMO" ? "text-demo" : "text-primary")}>
+                  {categoryIcons[selectedBuild.category] ?? "category"}
                 </span>
               </div>
               {/* Content */}
@@ -282,9 +283,7 @@ export function PostComposer() {
                   {selectedBuild.description}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] font-medium text-primary bg-primary/8 px-1.5 py-0.5 rounded">
-                    {categoryLabels[selectedBuild.category] ?? selectedBuild.category}
-                  </span>
+                  <CategoryTag category={selectedBuild.category} size="xs" />
                   <span className="flex items-center gap-1 text-[11px] text-secondary">
                     <span className="material-symbols-outlined text-[12px]">download</span>
                     {selectedBuild.downloads}
@@ -347,7 +346,7 @@ export function PostComposer() {
                     "h-8 flex items-center gap-1.5 pl-2 pr-3 rounded-full text-[12px] font-medium transition-all cursor-pointer border",
                     showBuildPicker || selectedBuild
                       ? "bg-primary/8 text-primary border-primary/20"
-                      : "bg-surface-container-lowest text-secondary border-outline-variant/20 hover:border-primary/30 hover:text-primary"
+                      : "bg-surface-container-lowest text-secondary border-outline-variant/12 hover:border-primary/30 hover:text-primary"
                   )}
                 >
                   <span
@@ -363,7 +362,7 @@ export function PostComposer() {
                 {showBuildPicker && (
                   <div
                     ref={buildPickerRef}
-                    className="absolute left-0 top-full z-50 mt-1.5 w-[280px] bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-lg overflow-hidden"
+                    className="absolute left-0 top-full z-50 mt-1.5 w-[280px] bg-surface-container-lowest rounded-xl border border-outline-variant/12 shadow-lg overflow-hidden"
                   >
                     <div className="px-3 pt-3 pb-2">
                       <div className="flex items-center gap-2 bg-surface-container-low rounded-lg px-2.5 py-1.5">
@@ -398,19 +397,16 @@ export function PostComposer() {
                                 : "hover:bg-surface-container-low"
                             )}
                           >
-                            <div className="w-8 h-8 bg-primary/6 rounded-md flex items-center justify-center shrink-0">
-                              <span className="material-symbols-outlined text-[15px] text-primary">
-                                deployed_code
+                            <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", build.category === "DEMO" ? "bg-demo/8" : "bg-primary/6")}>
+                              <span className={cn("material-symbols-outlined text-[15px]", build.category === "DEMO" ? "text-demo" : "text-primary")}>
+                                {categoryIcons[build.category] ?? "category"}
                               </span>
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-[13px] font-medium text-on-surface truncate">
                                 {build.name}
                               </p>
-                              <span className="text-[10px] font-medium text-primary">
-                                {categoryLabels[build.category] ??
-                                  build.category}
-                              </span>
+                              <CategoryTag category={build.category} size="xs" />
                             </div>
                             <span className="text-[11px] text-secondary shrink-0">
                               ↑{build.upvotes}

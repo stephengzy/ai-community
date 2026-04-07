@@ -144,10 +144,10 @@ export function FormTextarea({
       </div>
       <div className={cn(
         "bg-surface-container-lowest rounded-2xl border overflow-hidden",
-        error ? "border-red-500/60" : "border-outline-variant/10"
+        error ? "border-red-500/60" : "border-outline-variant/6"
       )}>
         {/* Toolbar */}
-        <div className="flex items-center gap-1 px-3 py-1.5 border-b border-outline-variant/8">
+        <div className="flex items-center gap-1 px-3 py-1.5 border-b border-outline-variant/5">
           <button
             type="button"
             title="Heading"

@@ -50,7 +50,7 @@ export function NotificationItem({ notification, onClick }: NotificationItemProp
       type="button"
       onClick={onClick}
       className={cn(
-        "w-full flex items-start gap-3 px-4 lg:px-5 py-3.5 text-left transition-colors hover:bg-surface-container-low/50 border-b border-outline-variant/10",
+        "w-full flex items-start gap-3 px-4 lg:px-5 py-3.5 text-left transition-colors hover:bg-surface-container-low/50 border-b border-outline-variant/6",
         !notification.isRead && "bg-primary/[0.03]"
       )}
     >

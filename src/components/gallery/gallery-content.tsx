@@ -23,7 +23,7 @@ const CATEGORIES: {
 }[] = [
   { key: "all", label: "全部", desc: "", icon: "apps", value: null },
   { key: "skill", label: "Skill", desc: "技能提效", icon: "psychology", value: "SKILL" },
-  { key: "demo", label: "Demo", desc: "产品演示", icon: "play_circle", value: "DEMO" },
+  { key: "demo", label: "Demo", desc: "产品演示", icon: "deployed_code", value: "DEMO" },
   { key: "other", label: "其他", desc: "更多探索", icon: "explore", value: "OTHER" },
 ]
 
@@ -73,7 +73,7 @@ function ScrollArrow({
       type="button"
       onClick={onClick}
       className={cn(
-        "hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/15 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100",
+        "hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/8 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100",
         direction === "left" ? "left-3" : "right-3"
       )}
     >
@@ -252,11 +252,11 @@ export function GalleryContent({ builds }: GalleryContentProps) {
   }, [filteredBuilds, sortOrder])
 
   const trendingBuilds = useMemo(() => {
-    return filteredBuilds
+    return builds
       .slice()
       .sort((a, b) => b.upvotes - a.upvotes)
       .slice(0, 10)
-  }, [filteredBuilds])
+  }, [builds])
 
   const scrollContainer = (ref: React.RefObject<HTMLDivElement | null>, direction: "left" | "right") => {
     if (!ref.current) return
@@ -271,13 +271,12 @@ export function GalleryContent({ builds }: GalleryContentProps) {
   return (
     <div className="w-full">
       {/* ══════════════════════════════════════════════
-          Search + Filter header
+          Page header + Big search
           ══════════════════════════════════════════════ */}
-      <div className={cn(SECTION_PX, "pt-5 md:pt-7 pb-4")}>
-        {/* Search bar */}
-        <div ref={searchContainerRef} className="relative max-w-2xl">
+      <div className={cn(SECTION_PX, "pt-5 md:pt-6 pb-4")}>
+        <div ref={searchContainerRef} className="relative">
           <div className="relative">
-            <span className="material-symbols-outlined text-[18px] text-secondary absolute left-3 top-1/2 -translate-y-1/2">
+            <span className="material-symbols-outlined text-[20px] text-secondary/50 absolute left-4 top-1/2 -translate-y-1/2">
               search
             </span>
             <input
@@ -285,14 +284,14 @@ export function GalleryContent({ builds }: GalleryContentProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setSearchFocused(true)}
-              placeholder="Search posts, people, builds"
-              className="w-full pl-9 pr-3 py-2.5 text-[14px] bg-surface-container-lowest border border-outline-variant/15 rounded-lg text-on-surface placeholder:text-secondary/40 placeholder:font-headline placeholder:text-[14px] placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+              placeholder="Search posts, people, builds..."
+              className="w-full pl-11 pr-4 py-3 text-[15px] bg-surface-container-lowest border border-outline-variant/8 rounded-xl text-on-surface placeholder:text-secondary/35 placeholder:font-headline placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
             />
           </div>
 
           {/* Search dropdown */}
           {showSearchDropdown && (
-            <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/15 rounded-xl shadow-lg overflow-hidden z-50">
+            <div className="absolute top-full left-0 right-0 mt-1.5 bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50">
               {searchResults.length === 0 ? (
                 <div className="px-4 py-6 text-center text-[13px] text-secondary">
                   未找到相关结果
@@ -334,131 +333,12 @@ export function GalleryContent({ builds }: GalleryContentProps) {
             </div>
           )}
         </div>
-
-        {/* Category tabs + department filter */}
-        <div className="mt-3 md:mt-4 flex items-center gap-2 overflow-x-auto hide-scrollbar md:flex-wrap">
-          {CATEGORIES.map((cat) => {
-            const isActive = activeCategory === cat.key
-            return (
-              <button
-                key={cat.key}
-                type="button"
-                onClick={() => setActiveCategory(cat.key)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
-                  isActive
-                    ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/15 hover:text-on-surface/80 hover:border-outline-variant/30 hover:bg-surface-container-low"
-                )}
-              >
-                <span className={cn("material-symbols-outlined text-[14px]", isActive ? "text-on-primary" : "text-on-surface/35")}>
-                  {cat.icon}
-                </span>
-                <span>{cat.label}</span>
-                {cat.desc && (
-                  <span className={cn(
-                    "text-[10px] font-normal",
-                    isActive ? "text-on-primary/70" : "text-on-surface/30"
-                  )}>
-                    {cat.desc}
-                  </span>
-                )}
-              </button>
-            )
-          })}
-
-          {/* Divider */}
-          <div className="w-px h-5 bg-outline-variant/15 mx-1 hidden md:block" />
-
-          {/* Department filter — hidden on mobile */}
-          <div className="hidden md:flex items-center gap-1.5">
-            {/* All departments */}
-            <button
-              type="button"
-              onClick={() => setDeptFilter("all")}
-              className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                deptFilter === "all"
-                  ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/15 hover:text-on-surface/80 hover:border-outline-variant/30 hover:bg-surface-container-low"
-              )}
-            >
-              全部门
-            </button>
-
-            {/* My department — quick filter */}
-            <button
-              type="button"
-              onClick={() => setDeptFilter("mine")}
-              className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                deptFilter === "mine"
-                  ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/15 hover:text-on-surface/80 hover:border-outline-variant/30 hover:bg-surface-container-low"
-              )}
-            >
-              <span className={cn("material-symbols-outlined text-[14px]", deptFilter === "mine" ? "text-on-primary" : "text-on-surface/35")}>
-                apartment
-              </span>
-              我的部门
-            </button>
-
-            {/* Other departments — dropdown selector */}
-            <div ref={deptDropdownRef} className="relative">
-              <button
-                type="button"
-                onClick={() => setDeptDropdownOpen((v) => !v)}
-                className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
-                  deptFilter !== "all" && deptFilter !== "mine"
-                    ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/15 hover:text-on-surface/80 hover:border-outline-variant/30 hover:bg-surface-container-low"
-                )}
-              >
-                <span className={cn("material-symbols-outlined text-[14px]", deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary" : "text-on-surface/35")}>
-                  tune
-                </span>
-                {deptFilter !== "all" && deptFilter !== "mine" ? resolvedDept : "其他部门"}
-                <span className={cn(
-                  "material-symbols-outlined text-[12px] transition-transform",
-                  deptDropdownOpen && "rotate-180",
-                  deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary/70" : "text-on-surface/30"
-                )}>
-                  expand_more
-                </span>
-              </button>
-
-              {deptDropdownOpen && (
-                <div className="absolute top-full left-0 mt-1.5 min-w-[160px] bg-surface-container-lowest border border-outline-variant/15 rounded-xl shadow-lg overflow-hidden z-50 py-1">
-                  {allDepartments.map((dept) => (
-                    <button
-                      key={dept}
-                      type="button"
-                      onClick={() => {
-                        setDeptFilter(dept)
-                        setDeptDropdownOpen(false)
-                      }}
-                      className={cn(
-                        "w-full text-left px-4 py-2 text-[12px] transition-colors",
-                        resolvedDept === dept
-                          ? "text-primary font-semibold bg-primary/5"
-                          : "text-on-surface/70 hover:bg-surface-container-low"
-                      )}
-                    >
-                      {dept}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* ══════════════════════════════════════════════
           Trending This Week / Month
           ══════════════════════════════════════════════ */}
-      <section className="pt-4 pb-5">
+      <section className="pt-2 pb-5">
         <div className={cn(SECTION_PX, "flex items-center justify-between mb-3 md:mb-4")}>
           <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
             Trending {timePeriod === "week" ? "This Week" : "This Month"}
@@ -498,7 +378,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
       {/* ══════════════════════════════════════════════
           Editor's Pick — clean numbered list
           ══════════════════════════════════════════════ */}
-      <section className="pt-5 pb-5 border-t border-outline-variant/8">
+      <section className="pt-5 pb-5 border-t border-outline-variant/5">
         <h2 className={cn(SECTION_PX, "text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface mb-3 md:mb-4")}>
           Editor&apos;s Pick
         </h2>
@@ -515,7 +395,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
             {editorsPicks.map((pick) => (
               <div
                 key={pick.id}
-                className="w-[260px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden"
+                className="w-[260px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-outline-variant/6 overflow-hidden"
               >
                 {/* Collection header */}
                 <div className="px-5 pt-5 pb-3">
@@ -560,8 +440,8 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                       </div>
 
                       {/* Upvote count — fixed width for alignment */}
-                      <div className="flex items-center gap-0.5 text-on-surface/30 shrink-0 w-12 justify-end">
-                        <UpvoteIcon size={12} filled />
+                      <div className="flex items-center gap-0.5 text-on-surface/25 shrink-0 w-12 justify-end">
+                        <UpvoteIcon size={11} />
                         <span className="text-[11px] font-bold tabular-nums">{build.upvotes}</span>
                       </div>
                     </Link>
@@ -578,12 +458,13 @@ export function GalleryContent({ builds }: GalleryContentProps) {
       </section>
 
       {/* ══════════════════════════════════════════════
-          All Builds grid
+          All Builds — search, filters, sort, grid
           ══════════════════════════════════════════════ */}
-      <section className={cn(SECTION_PX, "pt-5 pb-12 border-t border-outline-variant/8")}>
+      <section className={cn(SECTION_PX, "pt-5 pb-12 border-t border-outline-variant/5")}>
+        {/* Section title + sort */}
         <div className="flex items-center justify-between mb-4 md:mb-5">
           <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
-            {sortOrder === "latest" ? "Latest Builds" : "Most Upvoted"}
+            All Builds
           </h2>
           <TogglePills
             options={[
@@ -595,6 +476,123 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           />
         </div>
 
+        {/* Category + department filters */}
+        <div className="flex items-center gap-2 overflow-x-auto hide-scrollbar md:overflow-visible md:flex-wrap mb-5">
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.key
+            return (
+              <button
+                key={cat.key}
+                type="button"
+                onClick={() => setActiveCategory(cat.key)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
+                  isActive
+                    ? "bg-primary text-on-primary border-primary shadow-sm"
+                    : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                )}
+              >
+                <span className={cn("material-symbols-outlined text-[14px]", isActive ? "text-on-primary" : "text-on-surface/35")}>
+                  {cat.icon}
+                </span>
+                <span>{cat.label}</span>
+                {cat.desc && (
+                  <span className={cn(
+                    "text-[10px] font-normal",
+                    isActive ? "text-on-primary/70" : "text-on-surface/30"
+                  )}>
+                    {cat.desc}
+                  </span>
+                )}
+              </button>
+            )
+          })}
+
+          {/* Divider */}
+          <div className="w-px h-5 bg-outline-variant/15 mx-1 hidden md:block" />
+
+          {/* Department filter — hidden on mobile */}
+          <div className="hidden md:flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => setDeptFilter("all")}
+              className={cn(
+                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                deptFilter === "all"
+                  ? "bg-primary text-on-primary border-primary shadow-sm"
+                  : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+              )}
+            >
+              全部门
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDeptFilter("mine")}
+              className={cn(
+                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                deptFilter === "mine"
+                  ? "bg-primary text-on-primary border-primary shadow-sm"
+                  : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+              )}
+            >
+              <span className={cn("material-symbols-outlined text-[14px]", deptFilter === "mine" ? "text-on-primary" : "text-on-surface/35")}>
+                apartment
+              </span>
+              我的部门
+            </button>
+
+            <div ref={deptDropdownRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setDeptDropdownOpen((v) => !v)}
+                className={cn(
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                  deptFilter !== "all" && deptFilter !== "mine"
+                    ? "bg-primary text-on-primary border-primary shadow-sm"
+                    : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                )}
+              >
+                <span className={cn("material-symbols-outlined text-[14px]", deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary" : "text-on-surface/35")}>
+                  tune
+                </span>
+                {deptFilter !== "all" && deptFilter !== "mine" ? resolvedDept : "其他部门"}
+                <span className={cn(
+                  "material-symbols-outlined text-[12px] transition-transform",
+                  deptDropdownOpen && "rotate-180",
+                  deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary/70" : "text-on-surface/30"
+                )}>
+                  expand_more
+                </span>
+              </button>
+
+              {deptDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1.5 min-w-[160px] bg-surface-container-lowest border border-outline-variant/8 rounded-xl shadow-lg overflow-hidden z-50 py-1">
+                  {allDepartments.map((dept) => (
+                    <button
+                      key={dept}
+                      type="button"
+                      onClick={() => {
+                        setDeptFilter(dept)
+                        setDeptDropdownOpen(false)
+                      }}
+                      className={cn(
+                        "w-full text-left px-4 py-2 text-[12px] transition-colors",
+                        resolvedDept === dept
+                          ? "text-primary font-semibold bg-primary/5"
+                          : "text-on-surface/70 hover:bg-surface-container-low"
+                      )}
+                    >
+                      {dept}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Build grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
           {sortedBuilds.map((build) => (
             <BuildCard key={build.id} build={build} />

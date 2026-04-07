@@ -17,7 +17,7 @@ export function AppShell({ children, rightSidebar }: AppShellProps) {
         <div className="flex flex-1">
           <main className="flex-1 min-w-0 pb-20 lg:pb-0">{children}</main>
           {rightSidebar && (
-            <aside className="hidden xl:block w-80 p-6 space-y-6 h-screen sticky top-0 overflow-y-auto hide-scrollbar border-l border-outline-variant/10">
+            <aside className="hidden xl:block w-80 p-6 space-y-6 h-screen sticky top-0 overflow-y-auto hide-scrollbar border-l border-outline-variant/6">
               {rightSidebar}
             </aside>
           )}

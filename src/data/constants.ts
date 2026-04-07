@@ -7,10 +7,16 @@ export const categoryLabels: Record<string, string> = {
   OTHER: "Other",
 }
 
+export const categoryIcons: Record<string, string> = {
+  SKILL: "psychology",
+  DEMO: "deployed_code",
+  OTHER: "category",
+}
+
 export const categoryDescriptions: Record<string, string> = {
-  SKILL: "Your hard-earned expertise, distilled into a reusable AI capability.",
-  DEMO: "From idea to working product — built on or inspired by REDnote.",
-  OTHER: "Everything else worth sharing.",
+  SKILL: "工作提效的workflow、技术和工具",
+  DEMO: "小红书产品功能的原型演示",
+  OTHER: "其他值得分享的作品",
 }
 
 // ===== Navigation Items =====

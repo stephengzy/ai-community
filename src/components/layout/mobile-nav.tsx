@@ -9,7 +9,7 @@ export function MobileNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface/90 backdrop-blur-md border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(26,28,28,0.06)]">
+    <nav className="lg:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface/90 backdrop-blur-md border-t border-outline-variant/12 shadow-[0_-4px_20px_rgba(26,28,28,0.06)]">
       {mobileNavItems.map((item) => {
         const isActive =
           item.href === "/"

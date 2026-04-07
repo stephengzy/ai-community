@@ -149,7 +149,7 @@ function ProfileContent() {
       </div>
 
       {/* ===== Tabs ===== */}
-      <div className="mt-8 border-b border-outline-variant/15">
+      <div className="mt-8 border-b border-outline-variant/8">
         <div className="flex gap-8">
           {tabs.map((tab) => (
             <button

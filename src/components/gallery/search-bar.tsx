@@ -29,7 +29,7 @@ export function SearchBar({
           setQuery(e.target.value)
           onSearch?.(e.target.value)
         }}
-        className="w-full pl-9 pr-3 py-2.5 text-[14px] bg-surface-container-lowest border border-outline-variant/15 rounded-lg text-on-surface placeholder:text-secondary/40 placeholder:font-headline placeholder:text-[14px] placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+        className="w-full pl-9 pr-3 py-2.5 text-[14px] bg-surface-container-lowest border border-outline-variant/8 rounded-lg text-on-surface placeholder:text-secondary/40 placeholder:font-headline placeholder:text-[14px] placeholder:tracking-tight focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
       />
     </div>
   )

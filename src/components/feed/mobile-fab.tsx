@@ -54,7 +54,7 @@ export function MobileFab() {
           {/* Sheet */}
           <div className="lg:hidden fixed inset-x-0 bottom-0 z-50 bg-surface-container-lowest rounded-t-2xl shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[85vh] flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/10">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-outline-variant/6">
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -99,7 +99,7 @@ export function MobileFab() {
             </div>
 
             {/* Toolbar */}
-            <div className="px-4 py-3 border-t border-outline-variant/10 flex items-center gap-3 pb-safe">
+            <div className="px-4 py-3 border-t border-outline-variant/6 flex items-center gap-3 pb-safe">
               <button
                 type="button"
                 className="p-2 text-secondary/40 hover:text-primary transition-colors rounded-lg"
@@ -114,7 +114,7 @@ export function MobileFab() {
               </button>
               <button
                 type="button"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-secondary/40 hover:text-primary border border-outline-variant/15 rounded-full transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-secondary/40 hover:text-primary border border-outline-variant/8 rounded-full transition-colors"
               >
                 <span className="material-symbols-outlined text-[16px]">inventory_2</span>
                 <span className="text-[12px] font-medium">My Builds</span>

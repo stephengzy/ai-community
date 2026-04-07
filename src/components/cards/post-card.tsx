@@ -15,6 +15,9 @@ import { cn } from "@/lib/utils"
 const PREVIEW_COMMENTS = 2
 const PREVIEW_REPLIES = 1
 
+// Single source of truth for comment font size — change here to resize all comments
+const COMMENT_TEXT_SIZE = "text-[14px]"
+
 interface PostCardProps {
   post: Post
   className?: string
@@ -56,7 +59,7 @@ function MentionTag({ user }: { user: User }) {
       user={user}
       avatarSize="xs"
       showAvatar={false}
-      nameClassName="text-primary font-medium cursor-pointer hover:underline"
+      nameClassName="text-primary font-medium cursor-pointer hover:underline text-[inherit]"
       namePrefix="@"
     />
   )
@@ -227,7 +230,7 @@ export function PostCard({ post, className }: PostCardProps) {
   return (
     <article
       className={cn(
-        "bg-surface-container-lowest rounded-xl border border-outline-variant/10 px-5 py-4",
+        "bg-surface-container-lowest rounded-xl border border-outline-variant/6 px-5 py-4",
         className
       )}
     >
@@ -312,7 +315,7 @@ export function PostCard({ post, className }: PostCardProps) {
 
       {/* Comments Section */}
       {(comments.length > 0 || showInput) && (
-        <div className="border-t border-outline-variant/10 pt-2 mt-2">
+        <div className="border-t border-outline-variant/6 pt-2 mt-2">
           {/* Top-level comment input — appears at the top */}
           {showInput && !replyingTo && renderInput()}
 
@@ -387,7 +390,7 @@ function CommentThread({
         onDelete={() => onDelete(comment.id)}
       />
       {(replies.length > 0 || inputSlot) && (
-        <div className="pl-9 mt-0.5 border-l-2 border-outline-variant/10 ml-3.5">
+        <div className="pl-9 mt-0.5 border-l-2 border-outline-variant/6 ml-3.5">
           {visibleReplies.map((reply) => (
             <ReplyItem
               key={reply.id}
@@ -448,7 +451,7 @@ function CommentItem({
 
   return (
     <div className={cn(
-      "flex items-start gap-2.5 py-2 group/comment",
+      "flex items-start gap-2 py-2 group/comment",
       comment.isSponsor && "border-l-2 border-l-primary/50 pl-3 -ml-0.5 bg-primary/[0.03] rounded-r-lg py-2.5 pr-3"
     )}>
       <UserHoverCard user={comment.author} avatarSize="sm" showAvatar={true} className="shrink-0">
@@ -460,8 +463,8 @@ function CommentItem({
         />
       </UserHoverCard>
       <div className="flex-1 min-w-0">
-        <div className="text-[15px] text-on-surface leading-[1.6]">
-          <UserHoverCard user={comment.author} showAvatar={false} nameClassName="font-semibold text-on-surface text-[15px] cursor-pointer hover:underline" />
+        <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
+          <UserHoverCard user={comment.author} showAvatar={false} nameClassName={cn("font-semibold text-on-surface cursor-pointer hover:underline", COMMENT_TEXT_SIZE)} />
           <span className="ml-1.5"><MentionText text={comment.content} /></span>
         </div>
         <div className="flex items-center flex-wrap gap-y-1 justify-between mt-0.5">
@@ -543,22 +546,22 @@ function ReplyItem({
 
   return (
     <div className="flex items-start gap-2 py-1.5 group/comment">
-      <UserHoverCard user={comment.author} avatarSize="xs" showAvatar={true} className="shrink-0">
+      <UserHoverCard user={comment.author} avatarSize="sm" showAvatar={true} className="shrink-0">
         <Avatar
           src={comment.author.avatar}
           name={comment.author.name}
-          size="xs"
+          size="sm"
           className="mt-0.5 cursor-pointer"
         />
       </UserHoverCard>
       <div className="flex-1 min-w-0">
-        <div className="text-[14px] text-on-surface leading-[1.6]">
-          <UserHoverCard user={comment.author} showAvatar={false} nameClassName="font-semibold text-[14px] cursor-pointer hover:underline" />
+        <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
+          <UserHoverCard user={comment.author} showAvatar={false} nameClassName={cn("font-semibold cursor-pointer hover:underline", COMMENT_TEXT_SIZE)} />
           {replyToUser && (
-            <span className="text-secondary/50 font-normal mx-1 text-[13px]">回复</span>
+            <span className={cn("text-secondary/50 font-normal mx-1", COMMENT_TEXT_SIZE)}>回复</span>
           )}
           {replyToUser && (
-            <UserHoverCard user={replyToUser} showAvatar={false} nameClassName="font-semibold text-[14px] cursor-pointer hover:underline" />
+            <UserHoverCard user={replyToUser} showAvatar={false} nameClassName={cn("font-semibold cursor-pointer hover:underline", COMMENT_TEXT_SIZE)} />
           )}
           <span className="ml-1.5"><MentionText text={comment.content} /></span>
         </div>

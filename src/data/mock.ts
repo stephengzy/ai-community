@@ -539,9 +539,8 @@ const comments: Record<string, Comment[]> = {
       id: "c1",
       author: users[5],
       content:
-        "这个工具解决了HR效率的核心痛点。我支持在全公司范围推广，Token额度不限。",
-      isSponsor: true,
-      sponsorAmount: 12000,
+        "这个工具解决了HR效率的核心痛点，建议在全公司范围推广。",
+      isSponsor: false,
       likes: 14,
       replies: [
         {
@@ -637,9 +636,8 @@ const comments: Record<string, Comment[]> = {
       id: "c7",
       author: users[5],
       content:
-        "投研效率工具对我们的决策速度提升非常关键。Sponsor这个项目继续迭代，Token不限量。",
-      isSponsor: true,
-      sponsorAmount: 8000,
+        "投研效率工具对我们的决策速度提升非常关键，继续迭代。",
+      isSponsor: false,
       likes: 12,
       createdAt: "2026-03-01T09:00:00Z",
     },
@@ -849,7 +847,7 @@ const comments: Record<string, Comment[]> = {
     },
     {
       id: "c9r1",
-      author: users[9],
+      author: users[10],
       content: "同意曼巴。我也Sponsor这个项目",
       isSponsor: true,
       sponsorAmount: 10000,

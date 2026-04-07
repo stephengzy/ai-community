@@ -82,7 +82,7 @@ export function UserHoverCard({
       {open && (
         <div
           className={cn(
-            "absolute left-0 z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/15 shadow-lg p-4 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150",
+            "absolute left-0 z-50 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg p-4 w-[260px] animate-in fade-in-0 zoom-in-95 duration-150",
             openAbove ? "bottom-full mb-2" : "top-full mt-2"
           )}
           onMouseEnter={handleEnter}
@@ -119,7 +119,7 @@ export function UserHoverCard({
               className={cn(
                 "w-full mt-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all cursor-pointer",
                 following
-                  ? "bg-surface-container text-secondary border border-outline-variant/20 hover:bg-surface-container-low"
+                  ? "bg-surface-container text-secondary border border-outline-variant/12 hover:bg-surface-container-low"
                   : "bg-primary text-on-primary hover:opacity-90"
               )}
             >

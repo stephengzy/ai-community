@@ -25,7 +25,7 @@ export function FormInput({
         )}
       </div>
       <input
-        className="w-full bg-transparent border-b border-outline-variant/20 focus:border-primary/50 focus:ring-0 focus:outline-none py-3 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface transition-colors"
+        className="w-full bg-transparent border-b border-outline-variant/12 focus:border-primary/50 focus:ring-0 focus:outline-none py-3 text-[14px] font-body placeholder:text-on-surface/30 text-on-surface transition-colors"
         {...props}
       />
     </div>

@@ -17,7 +17,7 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
     <Link
       href={`/builds/${build.id}`}
       className={cn(
-        "group flex flex-col bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/20 h-full",
+        "group flex flex-col bg-surface-container-lowest border border-outline-variant/6 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/12 h-full",
         className
       )}
     >

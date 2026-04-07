@@ -12,7 +12,7 @@ interface NotificationTabsProps {
 
 export function NotificationTabs({ activeTab, onTabChange, className }: NotificationTabsProps) {
   return (
-    <div className={cn("flex border-b border-outline-variant/10", className)}>
+    <div className={cn("flex border-b border-outline-variant/6", className)}>
       {tabs.map((tab) => (
         <button
           key={tab}

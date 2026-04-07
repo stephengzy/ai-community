@@ -24,7 +24,7 @@ export function FeedContent({ posts, composer }: FeedContentProps) {
 
   return (
     <>
-      <div className="lg:sticky lg:top-0 z-30 lg:bg-surface/90 lg:backdrop-blur-md -mx-4 px-4 lg:-mx-6 lg:px-6 xl:-mx-10 xl:px-10 py-3 mb-4 lg:border-b lg:border-outline-variant/10">
+      <div className="lg:sticky lg:top-0 z-30 lg:bg-surface/90 lg:backdrop-blur-md -mx-4 px-4 lg:-mx-6 lg:px-6 xl:-mx-10 xl:px-10 py-3 mb-4 lg:border-b lg:border-outline-variant/6">
         <FeedTabs onTabChange={setActiveTab} />
       </div>
       {composer && <div className="mb-4">{composer}</div>}

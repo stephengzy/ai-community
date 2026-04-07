@@ -9,13 +9,17 @@ interface CategoryTagProps {
 }
 
 export function CategoryTag({ category, size = "sm", className }: CategoryTagProps) {
+  const isDemo = category === "DEMO"
   return (
     <span
       className={cn(
-        "inline-block font-bold rounded uppercase text-primary border border-primary/20 bg-primary/10 shrink-0",
+        "inline-block font-semibold rounded-full shrink-0",
+        isDemo
+          ? "text-demo bg-demo/8"
+          : "text-primary bg-primary/8",
         size === "xs"
-          ? "px-1.5 py-px text-[8px] tracking-tight"
-          : "px-2 py-0.5 text-[10px] tracking-tighter",
+          ? "px-1.5 py-px text-[9px]"
+          : "px-2.5 py-0.5 text-[11px]",
         className
       )}
     >

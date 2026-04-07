@@ -105,7 +105,7 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
       <button
         type="button"
         onClick={() => scroll("left")}
-        className="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 left-3 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/15 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100"
+        className="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 left-3 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/8 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100"
       >
         <span className="material-symbols-outlined text-[16px]">chevron_left</span>
       </button>
@@ -132,7 +132,7 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
       <button
         type="button"
         onClick={() => scroll("right")}
-        className="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 right-3 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/15 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100"
+        className="hidden md:flex absolute top-1/2 -translate-y-1/2 z-10 right-3 w-8 h-8 rounded-full bg-surface/95 border border-outline-variant/8 shadow-md items-center justify-center text-on-surface/50 hover:text-primary hover:border-primary/30 transition-all backdrop-blur-sm opacity-0 group-hover/scroll:opacity-100"
       >
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
       </button>
@@ -167,7 +167,7 @@ function BuildCommentItem({
   }
 
   return (
-    <div className="flex items-start gap-2.5 py-2 group/comment">
+    <div className="flex items-start gap-2 py-2 group/comment">
       <UserHoverCard
         user={comment.author}
         avatarSize="sm"
@@ -182,11 +182,11 @@ function BuildCommentItem({
         />
       </UserHoverCard>
       <div className="flex-1 min-w-0">
-        <div className="text-[15px] text-on-surface leading-[1.6]">
+        <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
           <UserHoverCard
             user={comment.author}
             showAvatar={false}
-            nameClassName="font-semibold text-on-surface text-[15px] cursor-pointer hover:underline"
+            nameClassName={cn("font-semibold text-on-surface cursor-pointer hover:underline", COMMENT_TEXT_SIZE)}
           />
           <span className="ml-1.5">
             <MentionText text={comment.content} />
@@ -264,19 +264,19 @@ function BuildReplyItem({
         <Avatar
           src={comment.author.avatar}
           name={comment.author.name}
-          size="xs"
+          size="sm"
           className="mt-0.5 cursor-pointer"
         />
       </UserHoverCard>
       <div className="flex-1 min-w-0">
-        <div className="text-[14px] text-on-surface leading-[1.6]">
+        <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
           <UserHoverCard
             user={comment.author}
             showAvatar={false}
-            nameClassName="font-semibold text-on-surface text-[14px] cursor-pointer hover:underline"
+            nameClassName={cn("font-semibold text-on-surface cursor-pointer hover:underline", COMMENT_TEXT_SIZE)}
           />
           {replyToUser && replyToUser.id !== parentAuthor.id && (
-            <span className="text-secondary/50 font-normal mx-1 text-[13px]">
+            <span className={cn("text-secondary/50 font-normal mx-1", COMMENT_TEXT_SIZE)}>
               {">"} @{replyToUser.name}({replyToUser.realName})
             </span>
           )}
@@ -328,6 +328,9 @@ function BuildReplyItem({
 
 const PREVIEW_REPLIES = 1
 
+// Single source of truth for comment font size — change here to resize all comments
+const COMMENT_TEXT_SIZE = "text-[14px]"
+
 function CommentThread({
   comment,
   onReply,
@@ -347,7 +350,7 @@ function CommentThread({
     <div className="py-1">
       <BuildCommentItem comment={comment} onReply={onReply} />
       {(replies.length > 0 || inputSlot) && (
-        <div className="pl-9 mt-0.5 border-l-2 border-outline-variant/10 ml-3.5">
+        <div className="pl-9 mt-0.5 border-l-2 border-outline-variant/6 ml-3.5">
           {visibleReplies.map((reply) => (
             <BuildReplyItem
               key={reply.id}
@@ -390,7 +393,7 @@ function SponsorCommentItem({ comment }: { comment: Comment }) {
 
   return (
     <div className="border-l-2 border-l-primary/50 pl-3 -ml-0.5 bg-primary/[0.03] rounded-r-lg py-2.5 pr-3">
-      <div className="flex items-start gap-2.5">
+      <div className="flex items-start gap-2">
         <UserHoverCard
           user={comment.author}
           avatarSize="sm"
@@ -405,11 +408,11 @@ function SponsorCommentItem({ comment }: { comment: Comment }) {
           />
         </UserHoverCard>
         <div className="flex-1 min-w-0">
-          <div className="text-[15px] text-on-surface leading-[1.6]">
+          <div className={cn(COMMENT_TEXT_SIZE, "text-on-surface leading-[1.6]")}>
             <UserHoverCard
               user={comment.author}
               showAvatar={false}
-              nameClassName="font-semibold text-on-surface text-[15px] cursor-pointer hover:underline"
+              nameClassName={cn("font-semibold text-on-surface cursor-pointer hover:underline", COMMENT_TEXT_SIZE)}
             />
             <span className="ml-1.5">
               <MentionText text={comment.content} />
@@ -577,7 +580,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
   return (
     <PageContainer>
       {/* Mobile sticky header */}
-      <div className="sticky top-0 z-40 lg:hidden bg-surface/90 backdrop-blur-xl -mx-4 px-4 py-3 flex items-center gap-3 border-b border-outline-variant/10">
+      <div className="sticky top-0 z-40 lg:hidden bg-surface/90 backdrop-blur-xl -mx-4 px-4 py-3 flex items-center gap-3 border-b border-outline-variant/6">
         <Link
           href="/gallery"
           className="text-on-surface/50 hover:text-on-surface transition-colors"
@@ -644,7 +647,7 @@ export function BuildDetailClient({ buildId }: { buildId: string }) {
           {/* ===== Tabs ===== */}
           <section className="pb-10">
             {/* Tab header */}
-            <div className="flex items-center border-b border-outline-variant/15 mb-6">
+            <div className="flex items-center border-b border-outline-variant/8 mb-6">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}

@@ -238,7 +238,7 @@ export function CommentInput({
         {showMentionDropdown && filteredUsers.length > 0 && (
           <div
             ref={dropdownRef}
-            className="absolute left-0 right-0 bottom-full z-50 mb-1.5 bg-surface-container-lowest rounded-xl border border-outline-variant/15 shadow-lg max-h-[220px] overflow-y-auto"
+            className="absolute left-0 right-0 bottom-full z-50 mb-1.5 bg-surface-container-lowest rounded-xl border border-outline-variant/8 shadow-lg max-h-[220px] overflow-y-auto"
           >
             {filteredUsers.slice(0, 6).map((user, i) => (
               <button

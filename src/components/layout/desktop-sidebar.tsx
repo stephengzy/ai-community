@@ -14,7 +14,7 @@ export function DesktopSidebar() {
   const unreadCount = useUnreadNotificationCount()
 
   return (
-    <aside className="hidden lg:flex w-64 h-screen sticky top-0 flex-col border-r border-outline-variant/10 bg-surface z-30">
+    <aside className="hidden lg:flex w-64 h-screen sticky top-0 flex-col border-r border-outline-variant/6 bg-surface z-30">
       {/* Logo */}
       <div className="px-6 py-7">
         <h1 className="font-headline text-[28px] font-semibold tracking-wide text-on-surface leading-tight">
@@ -63,7 +63,7 @@ export function DesktopSidebar() {
         </div>
 
         {/* Me Section */}
-        <div className="mt-5 pt-4 border-t border-outline-variant/10">
+        <div className="mt-5 pt-4 border-t border-outline-variant/6">
           <p className="px-4 mb-2 text-[11px] font-semibold text-secondary/50 uppercase tracking-widest">Me</p>
           <div className="space-y-0.5">
             {desktopNavMeItems.map((item) => {
@@ -118,7 +118,7 @@ export function DesktopSidebar() {
       </div>
 
       {/* Current User */}
-      <Link href="/profile" className="block px-4 py-4 border-t border-outline-variant/10 group/user">
+      <Link href="/profile" className="block px-4 py-4 border-t border-outline-variant/6 group/user">
         <div className="flex items-center gap-3">
           {currentUser.avatar ? (
             <img

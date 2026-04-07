@@ -23,7 +23,7 @@ export function NotificationContent() {
   return (
     <>
       {/* Sticky header */}
-      <div className="lg:sticky lg:top-0 z-30 lg:bg-surface/90 lg:backdrop-blur-md -mx-4 px-4 lg:-mx-6 lg:px-6 xl:-mx-10 xl:px-10 border-b border-outline-variant/10">
+      <div className="lg:sticky lg:top-0 z-30 lg:bg-surface/90 lg:backdrop-blur-md -mx-4 px-4 lg:-mx-6 lg:px-6 xl:-mx-10 xl:px-10 border-b border-outline-variant/6">
         <div className="flex items-center justify-between py-2.5 lg:py-3">
           <h1 className="text-[16px] lg:text-[18px] font-headline font-semibold text-on-surface tracking-tight">Notifications</h1>
           {unreadCount > 0 && (

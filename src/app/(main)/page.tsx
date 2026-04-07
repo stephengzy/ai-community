@@ -29,7 +29,7 @@ export default function FeedPage() {
       </div>
 
       {/* Right Sidebar (desktop only) */}
-      <aside className="hidden xl:block w-[340px] shrink-0 px-6 pt-7 pb-6 h-screen sticky top-0 overflow-y-auto hide-scrollbar border-l border-outline-variant/10">
+      <aside className="hidden xl:block w-[340px] shrink-0 px-6 pt-7 pb-6 h-screen sticky top-0 overflow-y-auto hide-scrollbar border-l border-outline-variant/6">
         <SearchBox />
         <div className="mt-8"><EventCarousel /></div>
         <div className="mt-5"><TrendingList /></div>

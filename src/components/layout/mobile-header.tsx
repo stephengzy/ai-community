@@ -11,7 +11,7 @@ export function MobileHeader() {
   const unreadCount = useUnreadNotificationCount()
 
   return (
-    <header className="lg:hidden sticky top-0 z-50 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10">
+    <header className="lg:hidden sticky top-0 z-50 w-full bg-surface/80 backdrop-blur-xl border-b border-outline-variant/6">
       {!showSearch ? (
         <div className="flex justify-between items-center px-4 h-14">
           <Link href="/" className="font-headline text-lg font-semibold tracking-wide text-on-surface">

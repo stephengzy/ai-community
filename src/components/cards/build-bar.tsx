@@ -3,7 +3,8 @@
 import { useState } from "react"
 import Link from "next/link"
 import type { Build } from "@/types"
-import { categoryLabels } from "@/data/constants"
+import { categoryIcons } from "@/data/constants"
+import { CategoryTag } from "@/components/content/category-tag"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
 import { cn } from "@/lib/utils"
 
@@ -15,6 +16,7 @@ interface BuildBarProps {
 export function BuildBar({ build, className }: BuildBarProps) {
   const [upvoted, setUpvoted] = useState(false)
   const [count, setCount] = useState(build.upvotes)
+  const isDemo = build.category === "DEMO"
 
   const handleUpvote = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -27,14 +29,20 @@ export function BuildBar({ build, className }: BuildBarProps) {
     <Link
       href={`/builds/${build.id}`}
       className={cn(
-        "flex items-center gap-4 rounded-xl py-3.5 px-4 bg-surface-container-low/50 border border-outline-variant/15 hover:border-primary/30 hover:bg-surface-container-low transition-all duration-200 group",
+        "flex items-center gap-4 rounded-xl py-3.5 px-4 bg-surface-container-low/50 border border-outline-variant/8 hover:border-primary/30 hover:bg-surface-container-low transition-all duration-200 group",
         className
       )}
     >
       {/* Icon */}
-      <div className="w-12 h-12 bg-primary/6 rounded-lg flex items-center justify-center shrink-0">
-        <span className="material-symbols-outlined text-[22px] text-primary">
-          deployed_code
+      <div className={cn(
+        "w-12 h-12 rounded-lg flex items-center justify-center shrink-0",
+        isDemo ? "bg-demo/10" : "bg-primary/6"
+      )}>
+        <span className={cn(
+          "material-symbols-outlined text-[22px]",
+          isDemo ? "text-demo" : "text-primary"
+        )}>
+          {categoryIcons[build.category] ?? "category"}
         </span>
       </div>
 
@@ -47,9 +55,7 @@ export function BuildBar({ build, className }: BuildBarProps) {
           {build.description}
         </p>
         <div className="flex items-center gap-2 mt-1.5">
-          <span className="text-[10px] font-medium text-primary bg-primary/8 px-1.5 py-0.5 rounded">
-            {categoryLabels[build.category] ?? build.category}
-          </span>
+          <CategoryTag category={build.category} size="xs" />
           <span className="flex items-center gap-1 text-[11px] text-secondary">
             <span className="material-symbols-outlined text-[13px]">download</span>
             {build.downloads}
@@ -62,14 +68,14 @@ export function BuildBar({ build, className }: BuildBarProps) {
         type="button"
         onClick={handleUpvote}
         className={cn(
-          "shrink-0 flex flex-col items-center justify-center w-14 h-14 rounded-lg border transition-colors",
+          "shrink-0 flex flex-col items-center justify-center w-12 h-12 rounded-xl border transition-all cursor-pointer",
           upvoted
-            ? "border-primary/30 bg-primary/8 text-primary"
-            : "border-outline-variant/20 bg-surface-container-lowest hover:border-primary/40 text-on-surface"
+            ? "border-outline-variant/8 bg-surface-container-lowest text-primary"
+            : "border-outline-variant/15 bg-surface-container-lowest text-on-surface/70 hover:text-primary hover:border-primary/20"
         )}
       >
-        <UpvoteIcon size={18} className="text-primary" filled={upvoted} />
-        <span className={cn("text-[13px] font-semibold", upvoted && "text-primary")}>
+        <UpvoteIcon size={16} filled={upvoted} />
+        <span className="text-[11px] font-bold tabular-nums mt-0.5">
           {count}
         </span>
       </button>
