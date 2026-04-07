@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
+import Link from "next/link"
 import type { User } from "@/types"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser } from "@/hooks/use-store"
@@ -65,6 +66,7 @@ export function UserHoverCard({
 
   const displayName = `${user.name}(${user.realName})`
   const isSelf = user.id === currentUser.id
+  const profileHref = isSelf ? "/profile" : `/users/${user.id}`
 
   return (
     <div
@@ -74,16 +76,18 @@ export function UserHoverCard({
       onMouseLeave={handleLeave}
     >
       {children ? (
-        children
+        <Link href={profileHref} onClick={(e) => e.stopPropagation()}>
+          {children}
+        </Link>
       ) : (
-        <>
+        <Link href={profileHref} className="inline-flex items-center gap-2.5" onClick={(e) => e.stopPropagation()}>
           {showAvatar && (
             <Avatar src={user.avatar} name={user.name} size={avatarSize} className="cursor-pointer" />
           )}
           <span className={cn("text-[15px] font-semibold text-on-surface cursor-pointer", nameClassName)}>
             {namePrefix}{displayName}
           </span>
-        </>
+        </Link>
       )}
 
       {open && (
@@ -94,17 +98,17 @@ export function UserHoverCard({
           onMouseLeave={handleLeave}
         >
           {/* Header: avatar + name */}
-          <div className="flex items-start gap-3">
+          <Link href={profileHref} className="flex items-start gap-3 group/profile" onClick={(e) => e.stopPropagation()}>
             <Avatar src={user.avatar} name={user.name} size="lg" className="shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-semibold text-on-surface leading-tight truncate">
+              <p className="text-[14px] font-semibold text-on-surface leading-tight truncate group-hover/profile:text-primary transition-colors">
                 {displayName}
               </p>
               <p className="text-[12px] text-secondary mt-0.5">
                 {user.role}
               </p>
             </div>
-          </div>
+          </Link>
 
           {/* Bio */}
           {user.bio && (

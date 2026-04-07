@@ -61,7 +61,7 @@ function MentionTag({ user }: { user: User }) {
       user={user}
       avatarSize="xs"
       showAvatar={false}
-      nameClassName="text-primary font-medium cursor-pointer hover:underline text-[inherit]"
+      nameClassName="text-primary font-medium cursor-pointer hover:underline"
       namePrefix="@"
     />
   )
