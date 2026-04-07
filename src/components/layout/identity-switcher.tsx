@@ -6,7 +6,7 @@ import { useCurrentUser } from "@/hooks/use-store"
 import { useStore } from "@/store"
 
 /** Users available for identity switching */
-const SWITCHABLE_USER_IDS = ["u1", "u6"] // 恒宇 (IC), 曼巴 (L2 Leader)
+const SWITCHABLE_USER_IDS = ["u1", "u6"] // 初一 (IC), 曼巴 (L2 Leader)
 
 export function IdentitySwitcher() {
   const currentUser = useCurrentUser()
