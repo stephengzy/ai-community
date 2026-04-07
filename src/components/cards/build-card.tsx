@@ -51,9 +51,11 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
         </h3>
 
         {/* Description */}
-        <p className="text-[11px] md:text-[12px] text-on-surface/45 line-clamp-1 leading-relaxed hidden md:block">
-          {build.description}
-        </p>
+        <div className="hidden md:block">
+          <p className="text-[11px] md:text-[12px] text-on-surface/45 line-clamp-1 leading-relaxed">
+            {build.description}
+          </p>
+        </div>
 
         {/* Spacer */}
         <div className="flex-1" />
