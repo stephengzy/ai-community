@@ -400,13 +400,12 @@ export function GalleryContent({ builds }: GalleryContentProps) {
               >
                 {/* Collection header */}
                 <div className="px-5 pt-5 pb-3">
-                  <div className="flex items-center gap-2.5 mb-1">
-                    <span className="text-[20px]">{pick.emoji}</span>
+                  <div className="mb-1">
                     <h3 className="text-[15px] font-headline font-semibold text-on-surface">
                       {pick.title}
                     </h3>
                   </div>
-                  <p className="text-[12px] text-secondary/40 ml-[33px] leading-relaxed">
+                  <p className="text-[12px] text-secondary/40 leading-relaxed">
                     {pick.description}
                   </p>
                 </div>
@@ -489,10 +488,10 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                 type="button"
                 onClick={() => setActiveCategory(cat.key)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
+                  "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
                   isActive
                     ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                    : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
                 )}
               >
                 <span className={cn("material-symbols-outlined text-[14px]", isActive ? "text-on-primary" : "text-on-surface/35")}>
@@ -520,10 +519,10 @@ export function GalleryContent({ builds }: GalleryContentProps) {
               type="button"
               onClick={() => setDeptFilter("all")}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
                 deptFilter === "all"
                   ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                  : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
               )}
             >
               全部门
@@ -533,10 +532,10 @@ export function GalleryContent({ builds }: GalleryContentProps) {
               type="button"
               onClick={() => setDeptFilter("mine")}
               className={cn(
-                "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
                 deptFilter === "mine"
                   ? "bg-primary text-on-primary border-primary shadow-sm"
-                  : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                  : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
               )}
             >
               <span className={cn("material-symbols-outlined text-[14px]", deptFilter === "mine" ? "text-on-primary" : "text-on-surface/35")}>
@@ -550,10 +549,10 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                 type="button"
                 onClick={() => setDeptDropdownOpen((v) => !v)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                  "flex items-center gap-1.5 px-3.5 h-8 rounded-full text-[12px] font-medium transition-all duration-200 border",
                   deptFilter !== "all" && deptFilter !== "mine"
                     ? "bg-primary text-on-primary border-primary shadow-sm"
-                    : "bg-transparent text-on-surface/50 border-outline-variant/8 hover:text-on-surface/80 hover:border-outline-variant/20 hover:bg-surface-container-low"
+                    : "bg-transparent text-on-surface/50 border-outline-variant/20 hover:text-on-surface/80 hover:border-outline-variant/40 hover:bg-surface-container-low"
                 )}
               >
                 <span className={cn("material-symbols-outlined text-[14px]", deptFilter !== "all" && deptFilter !== "mine" ? "text-on-primary" : "text-on-surface/35")}>

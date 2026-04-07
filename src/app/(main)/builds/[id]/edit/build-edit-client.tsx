@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { FormTextarea } from "@/components/build-form/form-textarea"
+import { BuildPreview } from "@/components/build-form/build-preview"
 import { Avatar } from "@/components/content/avatar"
 import { CategoryTag } from "@/components/content/category-tag"
 import { useStore } from "@/store"
@@ -57,6 +58,7 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
   const [version, setVersion] = useState(() => rawBuild?.version ?? "1.0")
   const [versionBump, setVersionBump] = useState<"patch" | "minor" | null>(null)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
+  const [showPreview, setShowPreview] = useState(false)
   const isComposingRef = useRef(false)
 
   // Auto-save indicator
@@ -496,6 +498,14 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
               </div>
               <button
                 type="button"
+                onClick={() => setShowPreview(true)}
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
+              >
+                <span className="material-symbols-outlined text-[16px]">visibility</span>
+                Preview
+              </button>
+              <button
+                type="button"
                 onClick={handleUpdate}
                 className="px-6 py-2 rounded-xl text-[14px] font-headline font-semibold bg-primary text-on-primary hover:opacity-90 transition-all"
               >
@@ -505,6 +515,25 @@ export function BuildEditClient({ buildId }: { buildId: string }) {
           </div>
         </div>
       </div>
+
+      {/* Preview modal */}
+      {showPreview && (
+        <BuildPreview
+          name={name}
+          tagline={tagline}
+          category={selectedCategory as any}
+          pitch={pitch}
+          problem={problem}
+          solution={solution}
+          techTags={techTags}
+          links={links.map((l) => ({ title: l.title, url: l.url }))}
+          coverImage={rawBuild.coverImage}
+          iconImage={rawBuild.iconImage}
+          author={{ ...currentUser, id: currentUserId } as any}
+          version={computedVersion}
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </>
   )
 }

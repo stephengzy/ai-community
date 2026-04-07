@@ -5,6 +5,7 @@ import { FormInput } from "@/components/build-form/form-input"
 import { FormTextarea } from "@/components/build-form/form-textarea"
 import { MediaUpload } from "@/components/build-form/media-upload"
 import { VisibilitySelector } from "@/components/build-form/visibility-selector"
+import { BuildPreview } from "@/components/build-form/build-preview"
 import { Avatar } from "@/components/content/avatar"
 import { useCurrentUser, useUsers } from "@/hooks/use-store"
 import { cn } from "@/lib/utils"
@@ -36,6 +37,7 @@ export default function BuildSubmissionPage() {
   const collabRef = useRef<HTMLDivElement>(null)
   const [lastSaved, setLastSaved] = useState<Date | null>(null)
   const [errors, setErrors] = useState<Record<string, boolean>>({})
+  const [showPreview, setShowPreview] = useState(false)
 
   // Simulate auto-save on any form change
   useEffect(() => {
@@ -362,7 +364,7 @@ export default function BuildSubmissionPage() {
                         removeTag(techTags[techTags.length - 1])
                       }
                     }}
-                    placeholder={techTags.length === 0 ? "e.g. 社区、商业化" : "Add more..."}
+                    placeholder={techTags.length === 0 ? "e.g. 组织穿透、日常数据报表、财务分析" : "Add more..."}
                     className="flex-1 min-w-[120px] bg-transparent focus:ring-0 focus:outline-none h-[30px] text-[14px] font-body placeholder:text-on-surface/30 text-on-surface"
                   />
                 </div>
@@ -556,11 +558,19 @@ export default function BuildSubmissionPage() {
           <div className="max-w-[960px] mx-auto flex items-center justify-between px-10 py-3.5">
             <button
               type="button"
-              className="text-[14px] text-on-surface/35 hover:text-on-surface/60 transition-colors font-medium"
+              className="text-[14px] font-headline font-semibold text-on-surface/35 hover:text-on-surface/60 transition-colors"
             >
               Discard
             </button>
             <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowPreview(true)}
+                className="flex items-center gap-1.5 px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
+              >
+                <span className="material-symbols-outlined text-[16px]">visibility</span>
+                Preview
+              </button>
               <button
                 type="button"
                 className="px-5 py-2 rounded-xl border border-outline-variant/15 text-[14px] font-headline font-semibold text-on-surface/55 hover:bg-surface-container hover:text-on-surface/80 hover:border-outline-variant/40 transition-all"
@@ -578,6 +588,23 @@ export default function BuildSubmissionPage() {
           </div>
         </div>
       </div>
+
+      {/* Preview modal */}
+      {showPreview && (
+        <BuildPreview
+          name={buildName}
+          tagline={tagline}
+          category={selectedCategory as any}
+          pitch={pitch}
+          problem={problem}
+          solution={solution}
+          techTags={techTags}
+          links={links.map((l) => ({ title: l.title, url: l.url }))}
+          author={currentUser}
+          version="1.0"
+          onClose={() => setShowPreview(false)}
+        />
+      )}
     </>
   )
 }
