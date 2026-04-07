@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import type { Post, Comment, User } from "@/types"
 import { UserHoverCard } from "@/components/content/user-hover-card"
 import { Avatar } from "@/components/content/avatar"
-import { ImageCrop } from "@/components/content/image-crop"
+import { ImageLightbox } from "@/components/content/image-lightbox"
 import { BuildBar } from "@/components/cards/build-bar"
 import { LikeButton } from "@/components/interactions/like-button"
 import { ShareButton } from "@/components/interactions/share-button"
@@ -72,6 +72,7 @@ export function PostCard({ post, className }: PostCardProps) {
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
   const [comments, setComments] = useState<Comment[]>(post.comments)
   const [expandedReplies, setExpandedReplies] = useState<Set<string>>(new Set())
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const contentRef = useRef<HTMLParagraphElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const timeAgo = getTimeAgo(post.createdAt)
@@ -270,12 +271,24 @@ export function PostCard({ post, className }: PostCardProps) {
       {/* Images */}
       {post.images && post.images.length > 0 && (
         <div className="flex gap-1.5 mb-2 overflow-x-auto">
-          {post.images.map((img) => (
-            <div key={img} className="w-28 h-28 shrink-0 rounded-lg overflow-hidden bg-surface-container-low">
+          {post.images.map((img, i) => (
+            <button
+              key={img}
+              type="button"
+              onClick={() => setLightboxIndex(i)}
+              className="w-28 h-28 shrink-0 rounded-lg overflow-hidden bg-surface-container-low cursor-zoom-in"
+            >
               <img src={img} alt="Post image" className="w-full h-full object-cover" />
-            </div>
+            </button>
           ))}
         </div>
+      )}
+      {lightboxIndex !== null && post.images && (
+        <ImageLightbox
+          images={post.images}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
       )}
 
       {/* Linked Build */}

@@ -12,6 +12,7 @@ import { PostCard } from "@/components/cards/post-card"
 import { Avatar } from "@/components/content/avatar"
 import { UserHoverCard } from "@/components/content/user-hover-card"
 import { CommentInput } from "@/components/interactions/comment-input"
+import { ImageLightbox } from "@/components/content/image-lightbox"
 import { cn } from "@/lib/utils"
 
 // ===== Helpers =====
@@ -89,6 +90,7 @@ function SectionDivider({ title }: { title: string }) {
 
 function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return
@@ -115,7 +117,8 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
         {images.map((src, i) => (
           <div
             key={`${src}-${i}`}
-            className="snap-start shrink-0 w-full sm:w-[80%] aspect-video rounded-xl overflow-hidden bg-surface-container-low"
+            className="snap-start shrink-0 w-full sm:w-[80%] aspect-video rounded-xl overflow-hidden bg-surface-container-low cursor-zoom-in"
+            onClick={() => setLightboxIndex(i)}
           >
             <img
               src={src}
@@ -133,6 +136,14 @@ function ImageGallery({ images, alt }: { images: string[]; alt: string }) {
       >
         <span className="material-symbols-outlined text-[16px]">chevron_right</span>
       </button>
+
+      {lightboxIndex !== null && (
+        <ImageLightbox
+          images={images}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+        />
+      )}
     </div>
   )
 }
