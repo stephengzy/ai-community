@@ -158,6 +158,9 @@ export interface StoreActions {
 
   // Editor's Picks
   updateEditorsPicks: (picks: NEditorsPick[]) => void
+
+  // Identity
+  setCurrentUserId: (userId: string) => void
 }
 
 export type Store = StoreState & StoreActions

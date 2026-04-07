@@ -269,5 +269,14 @@ export const useStore = create<Store>()(
       set((s) => {
         s.editorsPicks = picks
       }),
+
+    // ── Identity ────────────────────────────────────────────
+
+    setCurrentUserId: (userId) =>
+      set((s) => {
+        if (s.users[userId]) {
+          s.currentUserId = userId
+        }
+      }),
   }))
 )

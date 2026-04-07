@@ -642,20 +642,20 @@ const comments: Record<string, Comment[]> = {
   ],
   p3: [
     {
+      id: "c5",
+      author: users[10],
+      content: "从社区生态角度看，这个功能对新创作者的留存帮助会很大。建议在创作引导流程里加入这个入口。",
+      isSponsor: false,
+      likes: 12,
+      createdAt: "2026-03-26T10:00:00Z",
+    },
+    {
       id: "c4",
       author: users[2],
       content: "试了一下美妆方向的，生成的灵感和近期热门笔记的方向很接近，感觉能切中用户需求。",
       isSponsor: false,
       likes: 9,
       createdAt: "2026-03-26T11:00:00Z",
-    },
-    {
-      id: "c5",
-      author: users[10],
-      content: "从社区生态角度看，这个功能对新创作者的留存帮助会很大。建议在创作引导流程里加入这个入口。",
-      isSponsor: false,
-      likes: 7,
-      createdAt: "2026-03-26T14:00:00Z",
     },
   ],
   p4: [

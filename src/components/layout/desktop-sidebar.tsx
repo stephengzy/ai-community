@@ -4,11 +4,11 @@ import Link from "next/link"
 import { usePathname, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { desktopNavItems, desktopNavMeItems } from "@/data/constants"
-import { useCurrentUser, useUnreadNotificationCount } from "@/hooks/use-store"
+import { useUnreadNotificationCount } from "@/hooks/use-store"
 import { UpvoteIcon } from "@/components/interactions/upvote-icon"
+import { IdentitySwitcher } from "@/components/layout/identity-switcher"
 
 export function DesktopSidebar() {
-  const currentUser = useCurrentUser()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const unreadCount = useUnreadNotificationCount()
@@ -118,27 +118,8 @@ export function DesktopSidebar() {
         </Link>
       </div>
 
-      {/* Current User */}
-      <Link href="/profile" className="block px-4 py-4 border-t border-outline-variant/6 group/user">
-        <div className="flex items-center gap-3">
-          {currentUser.avatar ? (
-            <img
-              src={currentUser.avatar}
-              alt={currentUser.name}
-              className="w-10 h-10 rounded-full object-cover shrink-0"
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-              {currentUser.name.charAt(0)}
-            </div>
-          )}
-          <div>
-            <p className="text-sm font-semibold text-on-surface group-hover/user:text-primary transition-colors">
-              {currentUser.name}({currentUser.realName})
-            </p>
-          </div>
-        </div>
-      </Link>
+      {/* Current User / Identity Switcher */}
+      <IdentitySwitcher />
     </aside>
   )
 }

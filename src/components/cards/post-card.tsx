@@ -8,6 +8,7 @@ import { ImageLightbox } from "@/components/content/image-lightbox"
 import { BuildBar } from "@/components/cards/build-bar"
 import { LikeButton } from "@/components/interactions/like-button"
 import { ShareButton } from "@/components/interactions/share-button"
+import { SponsorButton } from "@/components/interactions/sponsor-button"
 import { CommentInput } from "@/components/interactions/comment-input"
 import { useCurrentUser, useUsers } from "@/hooks/use-store"
 import { TOPIC_MAP } from "@/data/constants"
@@ -80,6 +81,14 @@ export function PostCard({ post, className }: PostCardProps) {
   const contentRef = useRef<HTMLParagraphElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const timeAgo = getTimeAgo(post.createdAt)
+
+  // Sync comments when store changes (e.g., sponsor comment added via store action)
+  // Use a stable key (comment IDs) to avoid infinite loops from new array references
+  const commentIdKey = post.comments.map((c) => c.id).join(",")
+  useEffect(() => {
+    setComments(post.comments)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentIdKey])
 
   useEffect(() => {
     const el = contentRef.current
@@ -186,13 +195,16 @@ export function PostCard({ post, className }: PostCardProps) {
   // Which thread is being replied to? Used to position the input inline
   const replyThreadId = replyingTo ? findTopLevelParent(replyingTo) : null
 
-  // Always show all sponsor comments; if none, show 1 non-sponsor comment
+  // Sort comments by likes (highest first) for preview; expanded shows all in sorted order
+  const sortedComments = [...comments].sort((a, b) => b.likes - a.likes)
+
+  // Always show all sponsor comments; if none, show top-liked non-sponsor comment
   const visibleComments = expanded
-    ? comments
+    ? sortedComments
     : (() => {
-        const sponsors = comments.filter((c) => c.isSponsor)
+        const sponsors = sortedComments.filter((c) => c.isSponsor)
         if (sponsors.length > 0) return sponsors
-        return comments.slice(0, PREVIEW_NON_SPONSOR)
+        return sortedComments.slice(0, PREVIEW_NON_SPONSOR)
       })()
   const hiddenCount = comments.length - visibleComments.length
 
@@ -336,6 +348,7 @@ export function PostCard({ post, className }: PostCardProps) {
           <span className="text-[13px]">{totalComments}</span>
         </button>
         <ShareButton />
+        {post.linkedBuild && <SponsorButton postId={post.id} />}
       </div>
 
       {/* Comments Section */}

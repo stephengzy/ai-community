@@ -326,5 +326,6 @@ export function useActions() {
     markNotificationRead: s.markNotificationRead,
     markAllNotificationsRead: s.markAllNotificationsRead,
     updateEditorsPicks: s.updateEditorsPicks,
+    setCurrentUserId: s.setCurrentUserId,
   }))
 }
