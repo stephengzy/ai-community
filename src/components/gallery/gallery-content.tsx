@@ -11,7 +11,7 @@ import { useEditorsPicks, useUsers, usePosts, useCurrentUser } from "@/hooks/use
 import { cn } from "@/lib/utils"
 
 /** Consistent horizontal padding used across all sections */
-const SECTION_PX = "px-6 md:px-10"
+const SECTION_PX = "px-4 md:px-10"
 
 /* ── Category definitions with user-friendly labels ── */
 const CATEGORIES: {
@@ -273,8 +273,8 @@ export function GalleryContent({ builds }: GalleryContentProps) {
       {/* ══════════════════════════════════════════════
           Search + Filter header
           ══════════════════════════════════════════════ */}
-      <div className={cn(SECTION_PX, "pt-7 pb-4")}>
-        {/* Search bar — matches feed SearchBox style, supports big search */}
+      <div className={cn(SECTION_PX, "pt-5 md:pt-7 pb-4")}>
+        {/* Search bar */}
         <div ref={searchContainerRef} className="relative max-w-2xl">
           <div className="relative">
             <span className="material-symbols-outlined text-[18px] text-secondary absolute left-3 top-1/2 -translate-y-1/2">
@@ -336,7 +336,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
         </div>
 
         {/* Category tabs + department filter */}
-        <div className="mt-4 flex flex-wrap items-center gap-2">
+        <div className="mt-3 md:mt-4 flex items-center gap-2 overflow-x-auto hide-scrollbar md:flex-wrap">
           {CATEGORIES.map((cat) => {
             const isActive = activeCategory === cat.key
             return (
@@ -345,7 +345,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
                 type="button"
                 onClick={() => setActiveCategory(cat.key)}
                 className={cn(
-                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border",
+                  "flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium transition-all duration-200 border shrink-0",
                   isActive
                     ? "bg-primary text-on-primary border-primary shadow-sm"
                     : "bg-transparent text-on-surface/50 border-outline-variant/15 hover:text-on-surface/80 hover:border-outline-variant/30 hover:bg-surface-container-low"
@@ -370,8 +370,8 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           {/* Divider */}
           <div className="w-px h-5 bg-outline-variant/15 mx-1 hidden md:block" />
 
-          {/* Department filter: "全部门" + "我的部门" quick pill + dropdown for others */}
-          <div className="flex items-center gap-1.5">
+          {/* Department filter — hidden on mobile */}
+          <div className="hidden md:flex items-center gap-1.5">
             {/* All departments */}
             <button
               type="button"
@@ -459,8 +459,8 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           Trending This Week / Month
           ══════════════════════════════════════════════ */}
       <section className="pt-4 pb-5">
-        <div className={cn(SECTION_PX, "flex items-center justify-between mb-4")}>
-          <h2 className="text-xl md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
+        <div className={cn(SECTION_PX, "flex items-center justify-between mb-3 md:mb-4")}>
+          <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
             Trending {timePeriod === "week" ? "This Week" : "This Month"}
           </h2>
           <TogglePills
@@ -483,7 +483,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
             className="flex gap-5 overflow-x-auto pb-2 hide-scrollbar snap-x"
           >
             {trendingBuilds.map((build) => (
-              <div key={build.id} className="w-[280px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start">
+              <div key={build.id} className="w-[240px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start">
                 <BuildCard build={build} />
               </div>
             ))}
@@ -499,7 +499,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           Editor's Pick — clean numbered list
           ══════════════════════════════════════════════ */}
       <section className="pt-5 pb-5 border-t border-outline-variant/8">
-        <h2 className={cn(SECTION_PX, "text-xl md:text-2xl font-headline font-semibold tracking-wide text-on-surface mb-4")}>
+        <h2 className={cn(SECTION_PX, "text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface mb-3 md:mb-4")}>
           Editor&apos;s Pick
         </h2>
 
@@ -515,7 +515,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
             {editorsPicks.map((pick) => (
               <div
                 key={pick.id}
-                className="w-[300px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden"
+                className="w-[260px] md:w-[calc((100%-40px)/3)] shrink-0 snap-start bg-surface-container-lowest rounded-2xl border border-outline-variant/10 overflow-hidden"
               >
                 {/* Collection header */}
                 <div className="px-5 pt-5 pb-3">
@@ -581,8 +581,8 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           All Builds grid
           ══════════════════════════════════════════════ */}
       <section className={cn(SECTION_PX, "pt-5 pb-12 border-t border-outline-variant/8")}>
-        <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xl md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
+        <div className="flex items-center justify-between mb-4 md:mb-5">
+          <h2 className="text-lg md:text-2xl font-headline font-semibold tracking-wide text-on-surface">
             {sortOrder === "latest" ? "Latest Builds" : "Most Upvoted"}
           </h2>
           <TogglePills
@@ -595,7 +595,7 @@ export function GalleryContent({ builds }: GalleryContentProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
           {sortedBuilds.map((build) => (
             <BuildCard key={build.id} build={build} />
           ))}

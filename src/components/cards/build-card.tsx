@@ -17,12 +17,12 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
     <Link
       href={`/builds/${build.id}`}
       className={cn(
-        "group block bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/20",
+        "group flex flex-col bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-outline-variant/20 h-full",
         className
       )}
     >
-      {/* Cover image — consistent aspect-video across all usages */}
-      <div className="aspect-video overflow-hidden bg-surface-container-low relative">
+      {/* Cover image */}
+      <div className="aspect-video overflow-hidden bg-surface-container-low relative shrink-0">
         <img
           src={build.coverImage}
           alt={build.name}
@@ -34,31 +34,34 @@ export function BuildCard({ build, badge, className }: BuildCardProps) {
       </div>
 
       {/* Content */}
-      <div className="px-4 pt-3 pb-3.5 space-y-1.5">
+      <div className="flex flex-col flex-1 px-2.5 pt-2 pb-2.5 md:px-4 md:pt-3 md:pb-3.5 gap-1 md:gap-1.5">
         {/* Category + badge */}
         <div className="flex items-center justify-between">
           <CategoryTag category={build.category} />
           {badge && (
-            <span className="text-[10px] text-secondary/50 font-medium">
+            <span className="text-[9px] md:text-[10px] text-secondary/50 font-medium">
               {badge}
             </span>
           )}
         </div>
 
-        {/* Title — 2 lines max to accommodate longer names */}
-        <h3 className="text-[15px] font-semibold font-headline leading-snug group-hover:text-primary transition-colors line-clamp-2">
+        {/* Title */}
+        <h3 className="text-[13px] md:text-[15px] font-semibold font-headline leading-snug group-hover:text-primary transition-colors line-clamp-2">
           {build.name}
         </h3>
 
         {/* Description */}
-        <p className="text-[12px] text-on-surface/45 line-clamp-1 leading-relaxed">
+        <p className="text-[11px] md:text-[12px] text-on-surface/45 line-clamp-1 leading-relaxed hidden md:block">
           {build.description}
         </p>
 
+        {/* Spacer */}
+        <div className="flex-1" />
+
         {/* Footer: author */}
-        <div className="flex items-center gap-2 pt-1">
-          <Avatar src={build.author.avatar} name={build.author.name} size="sm" />
-          <span className="text-[11px] font-medium text-on-surface/55">
+        <div className="flex items-center gap-1.5 md:gap-2 pt-0.5 md:pt-1">
+          <Avatar src={build.author.avatar} name={build.author.name} size="sm" className="w-5 h-5 md:w-7 md:h-7" />
+          <span className="text-[10px] md:text-[11px] font-medium text-on-surface/55 truncate">
             {build.author.name}({build.author.realName})
           </span>
         </div>

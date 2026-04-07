@@ -15,7 +15,7 @@ export function FeedTabs({ className, onTabChange }: FeedTabsProps) {
 
   return (
     <div className={cn("border-b border-surface-container-high pb-2", className)}>
-      <div className="flex gap-6">
+      <div className="flex gap-5 md:gap-6">
         {tabs.map((tab) => (
           <button
             key={tab}
@@ -25,7 +25,7 @@ export function FeedTabs({ className, onTabChange }: FeedTabsProps) {
               onTabChange?.(tab)
             }}
             className={cn(
-              "relative text-base font-headline font-semibold tracking-tight pb-2 transition-colors",
+              "relative text-[15px] md:text-base font-headline font-semibold tracking-tight pb-2 transition-colors",
               activeTab === tab
                 ? "text-on-surface after:content-[''] after:absolute after:-bottom-[9px] after:left-0 after:w-full after:h-[2px] after:bg-primary"
                 : "text-on-surface/40 hover:text-on-surface/60"

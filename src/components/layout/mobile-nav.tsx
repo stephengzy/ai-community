@@ -34,7 +34,7 @@ export function MobileNav() {
             >
               {item.icon}
             </span>
-            <span className="font-label uppercase tracking-tight text-[9px] font-bold mt-0.5">
+            <span className="font-label uppercase tracking-tight text-[10px] font-semibold mt-0.5">
               {item.label}
             </span>
           </Link>

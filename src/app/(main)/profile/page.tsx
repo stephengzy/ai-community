@@ -178,7 +178,7 @@ function ProfileContent() {
             {userBuilds.length === 0 ? (
               <EmptyState icon="inventory_2" text="No builds yet. Create your first one!" />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
                 {userBuilds.map((build) => (
                   <BuildCard
                     key={build.id}
@@ -210,7 +210,7 @@ function ProfileContent() {
             {upvotedBuilds.length === 0 ? (
               <EmptyState icon="arrow_upward" text="No upvoted builds yet. Explore the gallery!" />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
                 {upvotedBuilds.map((build) => (
                   <BuildCard key={build.id} build={build} />
                 ))}
