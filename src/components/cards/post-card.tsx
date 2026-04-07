@@ -383,7 +383,7 @@ export function PostCard({ post, className }: PostCardProps) {
               View all {totalComments} comments →
             </button>
           )}
-          {expanded && hiddenCount > 0 && (
+          {expanded && comments.length > 1 && (
             <button
               type="button"
               onClick={() => setExpanded(false)}
