@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Builder Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,700;1,6..72,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#002021",
+                        "tertiary": "#005d60",
+                        "surface-container-high": "#e8e8e7",
+                        "inverse-primary": "#ffb598",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-surface-variant": "#54433d",
+                        "secondary-container": "#e2dfde",
+                        "on-primary-fixed-variant": "#763314",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#dac1b9",
+                        "tertiary-fixed-dim": "#7bd5d8",
+                        "tertiary-container": "#00787b",
+                        "surface-dim": "#dadad9",
+                        "surface-container-low": "#f3f4f3",
+                        "background": "#f9f9f8",
+                        "primary-fixed-dim": "#ffb598",
+                        "primary-fixed": "#ffdbce",
+                        "on-background": "#1a1c1c",
+                        "outline": "#87736b",
+                        "tertiary-fixed": "#98f1f4",
+                        "surface-container": "#eeeeed",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#004f51",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-secondary-container": "#636262",
+                        "surface": "#f9f9f8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "on-surface": "#1a1c1c",
+                        "error": "#ba1a1a",
+                        "primary-container": "#a45635",
+                        "inverse-on-surface": "#f1f1f0",
+                        "primary": "#863f20",
+                        "on-primary-fixed": "#370e00",
+                        "surface-variant": "#e2e2e2",
+                        "inverse-surface": "#2f3130",
+                        "on-secondary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed": "#e5e2e1",
+                        "surface-tint": "#944929",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#ffe9e2",
+                        "on-tertiary-container": "#a7fcff",
+                        "surface-bright": "#f9f9f8",
+                        "secondary": "#5f5e5e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F9F8; }
+        .serif-italic { font-family: 'Newsreader', serif; font-style: italic; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<div class="flex min-h-screen">
+<!-- Left Sidebar -->
+<aside class="hidden lg:flex flex-col h-screen w-64 border-r border-[#DAC1B9]/20 bg-[#F9F9F8] sticky top-0">
+<div class="p-6 mb-4">
+<span class="text-xl font-serif italic text-[#1A1A1A]">Builder Community</span>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#863F20] font-bold border-r-2 border-[#863F20]" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="dynamic_feed">dynamic_feed</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">Feed</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#1A1A1A]/60 hover:bg-[#F3F4F3] transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="grid_view">grid_view</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">Gallery</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#1A1A1A]/60 hover:bg-[#F3F4F3] transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">Notifications</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#1A1A1A]/60 hover:bg-[#F3F4F3] transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="architecture">architecture</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">My Builds</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2.5 text-[#1A1A1A]/60 hover:bg-[#F3F4F3] transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="favorite">favorite</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">My Upvotes</span>
+</a>
+<div class="pt-4">
+<button class="w-full bg-[#A45635] text-white rounded-lg py-2.5 flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-lg" data-icon="add_box">add_box</span>
+<span class="text-[0.6875rem] font-semibold uppercase tracking-wider">Build</span>
+</button>
+</div>
+</nav>
+<div class="mt-auto p-4 border-t border-[#DAC1B9]/10">
+<div class="flex items-center gap-3 p-2">
+<img alt="User avatar" class="w-10 h-10 rounded-full grayscale object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh1dU9Svok2weYX7f6Hm4yIIeXMaJMqIduhsXEL7koqvFY_PjVeP-sa5kFPbO7YZ6-QHk9BF8BpOnGBTwmbZYPuAlvKVZtnmW0q2EvXkbCv86Zw_aAR1TEhxVUsv4hWBvbIZZUS6Qz7rraSfB_Eg5xAhXWZ5vGuUD9Bg4kq5TI-8Ut6_Bm8DEAHUEyJ6ycE-UkmFXLadJd83jI9qh5o1RKSgC5J0HnSxUAfwzn1pI4XdHAWAyEpYgb86F4TbUmy_ZXnXhlwk7zdhI"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold tracking-wider">李明</span>
+<span class="text-[10px] text-secondary">高级工程师</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 min-w-0 bg-surface">
+<header class="flex lg:hidden justify-between items-center px-4 h-16 w-full sticky top-0 z-50 bg-[#F9F9F8]/70 backdrop-blur-xl border-b border-[#DAC1B9]/20">
+<span class="text-lg font-serif italic text-[#1A1A1A]">Builder Community</span>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#863F20]" data-icon="search">search</span>
+<span class="material-symbols-outlined text-[#863F20]" data-icon="notifications">notifications</span>
+<img alt="User avatar" class="w-8 h-8 rounded-full border border-outline-variant/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmcd35Fi9ejx2HX_tJd4XgZEODgH17_nB14Zhw0GShtCvLEHpCgCwwkZkDc4jtW9uKybAKAeYNVYpnBPehEsrEiHbPviyLpmmgW6jwpaNqa7LtIPwKg1RNStwqYobQJUJMuSVqC5PaMQqEnWnuE2YoMpsEsDMNO8OTa0rHZCAD7WvsJyEg31dgPwSSPBfDCNPc3xg0zQVOo7I0R7UrJK0kDqKAmeJkm0mQ34bNDgmidg5l1wEvwQJQKviV6UarGMXlJ_w1pX_KEuA"/>
+</div>
+</header>
+<div class="max-w-[680px] mx-auto py-6 px-4 md:px-8">
+<!-- Post Composer -->
+<div class="bg-surface-container-lowest rounded-xl p-5 mb-6 border border-surface-container shadow-sm">
+<div class="flex gap-4">
+<img alt="Your Avatar" class="w-10 h-10 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9frsaiYC5HS-aXvZB6-ErPervipVsN9JBDTAeV6hnmAz0Usi5XFxdOTto8rlHG2Jv6lIUTdz-l6g1-qUyx3amCJZ5lVvD_j9dSxh5NmZmKTwD6s8qtg2hMobLnr0irI3djQ_a9a4GUuP-1bP9Hk6FZvNpPjyTa67-POspVgRZ5VBrTVwTY5Wee5RKCJWaSlwyiPZCaHNOoxh4qVdFSN_u26uE3fEE9onV-MkvvvLhdyxgAJbed5Pq1vVioif1LGibbl-0jDjXals"/>
+<div class="flex-1">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-base font-body placeholder:text-outline-variant resize-none h-16" placeholder="What did you build?"></textarea>
+<div class="flex items-center justify-between mt-2 pt-3 border-t border-surface-container-low">
+<div class="flex gap-4">
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="image">image</span></button>
+<button class="text-secondary hover:text-primary transition-colors"><span class="material-symbols-outlined text-xl" data-icon="architecture">architecture</span></button>
+</div>
+<button class="bg-[#A45635] text-white px-5 py-1.5 rounded-lg text-[0.6875rem] font-semibold uppercase tracking-wider hover:opacity-90 active:scale-95 transition-all">Post</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feed Controls -->
+<div class="mb-6 space-y-4">
+<div class="flex gap-8 border-b border-surface-container-high pb-2">
+<button class="text-on-surface font-bold text-xs uppercase tracking-wider relative after:content-[''] after:absolute after:-bottom-[9px] after:left-0 after:w-full after:h-[2px] after:bg-primary">Latest</button>
+<button class="text-secondary font-semibold text-xs uppercase tracking-wider hover:text-on-surface transition-colors">Trending</button>
+<button class="text-secondary font-semibold text-xs uppercase tracking-wider hover:text-on-surface transition-colors">Following</button>
+</div>
+</div>
+<!-- Feed Posts (Reduced Density) -->
+<div class="space-y-6">
+<!-- Post 1: 李明 -->
+<article class="bg-surface-container-lowest rounded-xl p-4 border border-surface-container/50 shadow-sm transition-all hover:shadow-md">
+<div class="flex items-center gap-3 mb-3">
+<img alt="李明" class="w-8 h-8 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCS-GKTxLeQt0ReKBUb2bMmMQPvdYxv6LYa95cJfrCHjAO5kju7Gf4wusab9RGd4uZjww0N03Aoh5RUpwf2vMeU9LadDvs-P8R1bmlEFjIKPPfB6SpCl1zEhR31woTTo4vD60fwZ9Y-uK36A6XwpdjSaP8bYFbNJvo_K0j-1XUYJbl8h8HHnUhR-0NrVdCxobaPkuzToXyPdZjrfwEfjUDCLyfbYmgVEXZ-mZ8dqhg5rFxp9LECle4iYjw9lJPsCaoLc0Yf_aOhv2o"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold tracking-tight">李明</span>
+<span class="text-[9px] text-secondary uppercase tracking-widest">HR · 2h ago</span>
+</div>
+</div>
+<div class="mb-3">
+<p class="text-on-surface text-[0.875rem] leading-[1.4] font-body line-clamp-3">HR team built a resume screener that cut initial screening by 70%. We used a combination of custom LLM prompts and an internal database for skill matching that has significantly improved our throughput for technical roles... <span class="text-primary font-bold cursor-pointer">Show more</span></p>
+</div>
+<!-- Build Bar (Compact) -->
+<div class="bg-surface-container-low rounded-lg py-2 px-3 flex items-center justify-between group hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-base" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Smart Resume Screener</span>
+<span class="text-[9px] text-secondary uppercase">AI screening tool</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-1 border border-outline-variant/10 shadow-sm">
+<span class="material-symbols-outlined text-[10px]" data-icon="arrow_drop_up" data-weight="fill">arrow_drop_up</span>
+<span class="text-[10px] font-bold">214</span>
+</div>
+</div>
+<!-- Interaction Bar -->
+<div class="flex items-center gap-5 pt-3 mt-3 border-t border-surface-container-low">
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="favorite">favorite</span>
+<span class="text-[9px] font-bold uppercase">24 Like</span>
+</button>
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="chat_bubble">chat_bubble</span>
+<span class="text-[9px] font-bold uppercase">8 Comments</span>
+</button>
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="ios_share">ios_share</span>
+<span class="text-[9px] font-bold uppercase">Share</span>
+</button>
+</div>
+<!-- Comments (Tighter) -->
+<div class="space-y-2 mt-3 pt-2">
+<div class="bg-[#F9F7F4] p-3 rounded-xl border-l-2 border-primary/40">
+<div class="flex items-start gap-2">
+<img alt="星矢" class="w-6 h-6 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXaLH-nl9AR7Z0yWa9aq2m4Uixxeor3WQ-3np2xmDtPmVmECdKTXzgU0q9iOonUEtP30sN6fWnsbV-Iph30J0kX7YxcqJLNmfvKMy9B3hJhcQB90hnh7TfiVElfORhO3w-nRhN-H-dtZpQBgaYlYO0c_7gWaIIw_1e6E0J_s2KA5a59Ich3pOCba8SWUOVG9qY2_Nk_3tIrCbxKah7-XwiUh3pumqwduF2OSwBhkM3Z1iJ5vOxRfBh--XEWXmZmwDid8QTC7dYzDI"/>
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-0.5">
+<span class="text-[11px] font-bold">星矢</span>
+<span class="text-[8px] bg-[#F0F0F0] text-[#666] px-1.5 py-0.5 rounded-full font-bold">SPONSORED</span>
+</div>
+<p class="text-[11px] text-[#888] leading-[1.3] font-body">Incredible efficiency gains here. We're looking at how to roll this architecture out across all internal administrative modules next quarter.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- Post 2: 王鑫 -->
+<article class="bg-surface-container-lowest rounded-xl p-4 border border-surface-container/50 shadow-sm transition-all hover:shadow-md">
+<div class="flex items-center gap-3 mb-3">
+<img alt="王鑫" class="w-8 h-8 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe_7asUU8T8ThtZaEUTxuFfpwIOjPubEluznGo6_Zh1SfJQ9sTFh0MKfF01gTA1S_K15Reooxvv2rpMICLyLpUG9VPrCOyGuU_xdMLnDFDVFE2ASmNY8Lwo-XdsO1Y4QxdsHmHsb7iRWM8Ex8frfSSeFPwuXFYvNUx8MfgZhj80QXIcjIGHmO4Y20sJyrWilfi-kY34U4zRRaAr6Q54IHyuvy9Zdgy_LlYp8FsUvGIIYAQt4H-7tLbO-9AhaALaQC5_GJ3MRvoeaY"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold tracking-tight">王鑫</span>
+<span class="text-[9px] text-secondary uppercase tracking-widest">Engineering · 4h ago</span>
+</div>
+</div>
+<div class="mb-3">
+<p class="text-on-surface text-[0.875rem] leading-[1.4] font-body line-clamp-3">Made a Code Review Bot that catches style guide violations and automates the boring parts of PR audits. It has saved the team approximately 12 hours of manual review time per week by focusing on formatting and obvious logic errors... <span class="text-primary font-bold cursor-pointer">Show more</span></p>
+</div>
+<!-- Build Bar (Compact) -->
+<div class="bg-surface-container-low rounded-lg py-2 px-3 flex items-center justify-between group hover:bg-surface-container-high transition-colors cursor-pointer border border-transparent hover:border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary/10 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-base" data-icon="robot_2">robot_2</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Code Review Bot</span>
+<span class="text-[9px] text-secondary uppercase">Engineering Tool</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest px-2 py-1 rounded flex items-center gap-1 border border-outline-variant/10 shadow-sm">
+<span class="material-symbols-outlined text-[10px]" data-icon="arrow_drop_up" data-weight="fill">arrow_drop_up</span>
+<span class="text-[10px] font-bold">156</span>
+</div>
+</div>
+<!-- Interaction Bar -->
+<div class="flex items-center gap-5 pt-3 mt-3 border-t border-surface-container-low">
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="favorite">favorite</span>
+<span class="text-[9px] font-bold uppercase">42 Like</span>
+</button>
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="chat_bubble">chat_bubble</span>
+<span class="text-[9px] font-bold uppercase">12 Comments</span>
+</button>
+<button class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg" data-icon="ios_share">ios_share</span>
+<span class="text-[9px] font-bold uppercase">Share</span>
+</button>
+</div>
+</article>
+<!-- Post 3: 张薇 (Truncated view for density) -->
+<article class="bg-surface-container-lowest rounded-xl p-4 border border-surface-container/50 shadow-sm transition-all hover:shadow-md">
+<div class="flex items-center gap-3 mb-3">
+<img alt="张薇" class="w-8 h-8 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGx2eo6sNLEbmvpLANTz59kGGlvefeZ-B4crdG1oHzZ9wYn8__g_WermeYsLYq9irC2QKl6HCaJEQnqhrJ1a_OvvIGwS_HOWWS7qgHH9ObjFa5BSEYfU_sSF8IEeB969WMXGsV6SmQmH42f5t9vRxPPNboUSfIShUKXkniv9iR_KFeZTts5qQ3xqAXSI3LVI6pzeNsSKebyUkhdaTPcUeLQHYEvTVQXJMEeB0Ie2ANvYsdWmv-jemo5jdsBbZcCGJAdosUThMT1cY"/>
+<div class="flex flex-col">
+<span class="text-xs font-bold tracking-tight">张薇</span>
+<span class="text-[9px] text-secondary uppercase tracking-widest">Design · 6h ago</span>
+</div>
+</div>
+<div class="mb-3">
+<p class="text-on-surface text-[0.875rem] leading-[1.4] font-body line-clamp-3">Finally finished the new design system tokenizer for our mobile apps. This should help keep all colors and spacing consistent across platforms with almost zero overhead for developers... <span class="text-primary font-bold cursor-pointer">Show more</span></p>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Right Sidebar -->
+<aside class="hidden xl:block w-80 p-6 space-y-10 h-screen overflow-y-auto border-l border-[#DAC1B9]/20 sticky top-0 bg-surface">
+<!-- Hackathon Carousel Card -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container p-5 aspect-[4/5] flex flex-col justify-end group shadow-sm">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBp3QW8ZuBbqqHIiiFSgyp76ogRwdAld3ghBUg3YWThrKtZgGp1bNGaiokhKQM0roJI7npOeuLWRdUB-ErUBRfEx6wysHK614-YhxcD7HcEx_0X9pAP-zIQ_9eVsvgGjChQ4QeVoXAlA_lfQ7f9KS_h6nVIBWutUbmGor5yfaR0CCnLMW9ZQRu_LmMFxFWT70RNFPkfW9Vk5p-JpeM5H5hfNLNFNHNaeLFh9lm0AFBRb5-Wu7Al7Pox0yCuyfSec05O6NZ5XlDCUjo')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/30 to-transparent"></div>
+<div class="relative z-10">
+<span class="inline-block px-2 py-0.5 bg-primary text-[8px] font-bold text-white uppercase tracking-widest mb-2">Live Event</span>
+<h3 class="font-headline text-xl text-white mb-2 leading-tight italic">The Autumn Hackathon 2026</h3>
+<p class="text-[10px] text-white/80 font-body mb-4 leading-relaxed line-clamp-2">Join 400+ builders in our largest internal sprint yet. $10k in prize pool.</p>
+<div class="flex justify-center gap-1.5 mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-white/40"></span>
+</div>
+<button class="w-full bg-white text-on-surface py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors">Apply Now</button>
+</div>
+<!-- Peek of next card indicator -->
+<div class="absolute right-[-20px] top-1/2 -translate-y-1/2 w-8 h-32 bg-white/10 blur-md rounded-full pointer-events-none"></div>
+</div>
+<!-- Trending Builds -->
+<section>
+<h4 class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-secondary mb-5 border-b border-surface-container pb-2">Trending Builds</h4>
+<div class="space-y-5">
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs text-primary group-hover:scale-110 transition-transform">01</span>
+<span class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Smart Resume Screener</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-on-surface/60">
+<span>▲</span><span>214</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs text-primary">02</span>
+<span class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Meeting Notes Summarizer</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-on-surface/60">
+<span>▲</span><span>203</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs text-primary">03</span>
+<span class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Code Review Bot</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-on-surface/60">
+<span>▲</span><span>156</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs text-primary">04</span>
+<span class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Data Quality Checker</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-on-surface/60">
+<span>▲</span><span>112</span>
+</div>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs text-primary">05</span>
+<span class="text-xs font-bold leading-tight group-hover:text-primary transition-colors">Ad Copy Generator</span>
+</div>
+<div class="flex items-center gap-1 text-[10px] font-bold text-on-surface/60">
+<span>▲</span><span>94</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Top Builders -->
+<section>
+<h4 class="text-[0.625rem] font-bold uppercase tracking-[0.2em] text-secondary mb-5 border-b border-surface-container pb-2">Top Builders</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs w-4">01</span>
+<img alt="李明" class="w-7 h-7 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlwDEZyBKpp0bZQsfvEsNR1NH4xnGHhblbRwrJrTiRlnVhaa-FDAJ9Sn-r9_ibqsvA331fXsBITbFv5LizasOihw1BWYb4Q3_gHjC_Lli_WFEfP0D1QFHLF-ppF7XH0VEvs4k3HyGVp3LsNALkJAw66UktiNqy7dRui9iBgyottxhL1syVIR0eqs75XUfQLqL2xIAn_ekZ7E_KSY3cprdWx_cZbgEFeWsKhc3ISQ5v6ODNC2vRSFPA3vZSeQQL0NFEUgDFEzhwMeU"/>
+<div><p class="text-[11px] font-bold">李明</p><p class="text-[8px] text-secondary uppercase">HR</p></div>
+</div>
+<span class="material-symbols-outlined text-primary text-[10px]" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs w-4">02</span>
+<img alt="张薇" class="w-7 h-7 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAme5qvS8TNMnRgccZAlDZcEHe3tiq0KJpJtchMqslH0YsgLa4FXxjiQDg1CTLaJRYF-glW_J-6ckeBzP35-BbwZWkqNzx0PmdZr5ziFFwq1gkJeBpmO9nN8fDtjdbx6ZJbjHwaIph2bPaCRwf5KrrX7HHHWCzEJtLpOcX5HE7nmMfTMH9ERNOBPKH4-NQa5ni6nx8gVKJfbGDF1hLyDG__bwYyJpOSoEVTQnG7VplHsWUIjocJiYfJMZH0gKTITUxCfw6t50vtVIk"/>
+<div><p class="text-[11px] font-bold">张薇</p><p class="text-[8px] text-secondary uppercase">Design</p></div>
+</div>
+<span class="material-symbols-outlined text-primary text-[10px]" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs w-4">03</span>
+<img alt="王鑫" class="w-7 h-7 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTwbhY_gORc41-K4e3DKcpYE0k1rXOghobPGUupw9qalj-OyHTbVMhoHp5okPICHdL-DoTkjeIF8FBfeP5E6JIum6qGsm60AOrbEnJZA1pFHbxO1zuj-QCTYHGQIuH1O0V9191idIOLhAnD-GsIN2P01cdds4l-4aoiRRq9Jxj68vfX1zLb0C5e_PjfmitVBHbLrz-wR_fswKSzlyRBwKDTQGjDbg8Zvn-RsEH6oCpWaRLegynJzgAw_MEHoxKfEm2wa1Ammv8gjg"/>
+<div><p class="text-[11px] font-bold">王鑫</p><p class="text-[8px] text-secondary uppercase">Engineering</p></div>
+</div>
+<span class="material-symbols-outlined text-secondary text-[10px]" data-icon="horizontal_rule">horizontal_rule</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs w-4">04</span>
+<img alt="陈璐" class="w-7 h-7 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSVgbm5niSWIoJLSEfuP8IdyzfzL9OmmFI1Y0c70V8I8cfPTx4mhjGXJSUpKvzp1-yiOj-XkEkrLxjqD5pAexdMEYkkNuVnbCg9TKFqTfEGgWk3Gl55IfWKve_OfMJ1old8vV0xG86qCdRVJytdLVQ3VWUVNF_RUHvez2JvZZSMjgbhQi6ShvIJJNwbv3BUey_6KVk4pbOLQq4swLbmBncrRW3fK2DxusMh_zIfzxw0nEGbltkALhjidK0zjus_uuJFmpyhzhiQ0c"/>
+<div><p class="text-[11px] font-bold">陈璐</p><p class="text-[8px] text-secondary uppercase">Operations</p></div>
+</div>
+<span class="material-symbols-outlined text-primary text-[10px]" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-headline italic text-xs w-4">05</span>
+<img alt="刘洋" class="w-7 h-7 rounded-full grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbHNoBMs20RL6txEPo563rGH9AU3aiDmX0Rd5JYcsYd6bdUaQYr-JB-i4BjkvR7A5bYZPJY9biwIzLr9q3ABcdMc4xqMQdVt75i4dds1phPTAdQHN5vq74S9JTph01cQpGpFNH4Q9EjwGBKGy1bpBATAPMhGiDeZF36p4nOvqmnn-e9ry7fMXLdGt5H7PU2JjV4QYy5wEvB2_oHBbULd1eLUFdc3FElajpdqO5giEf2lmQK2fYR1ubxoq2bbaiYSMB8kgqCVhwu4Y"/>
+<div><p class="text-[11px] font-bold">刘洋</p><p class="text-[8px] text-secondary uppercase">Data</p></div>
+</div>
+<span class="material-symbols-outlined text-error text-[10px]" data-icon="trending_down">trending_down</span>
+</div>
+</div>
+</section>
+</aside>
+<!-- BottomNavBar (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 pb-safe bg-[#F9F9F8] border-t border-[#DAC1B9]/20 shadow-[0_-4px_20px_rgba(26,28,28,0.06)] z-50">
+<a class="flex flex-col items-center justify-center bg-[#A45635]/10 text-[#863F20] rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="apps">apps</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Gallery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

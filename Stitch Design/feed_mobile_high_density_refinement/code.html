@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Builder Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#002021",
+                    "tertiary": "#005d60",
+                    "surface-container-high": "#e8e8e7",
+                    "inverse-primary": "#ffb598",
+                    "surface-container-highest": "#e2e2e2",
+                    "on-surface-variant": "#54433d",
+                    "secondary-container": "#e2dfde",
+                    "on-primary-fixed-variant": "#763314",
+                    "on-error-container": "#93000a",
+                    "outline-variant": "#dac1b9",
+                    "tertiary-fixed-dim": "#7bd5d8",
+                    "tertiary-container": "#00787b",
+                    "surface-dim": "#dadad9",
+                    "surface-container-low": "#f3f4f3",
+                    "background": "#f9f9f8",
+                    "primary-fixed-dim": "#ffb598",
+                    "primary-fixed": "#ffdbce",
+                    "on-background": "#1a1c1c",
+                    "outline": "#87736b",
+                    "tertiary-fixed": "#98f1f4",
+                    "surface-container": "#eeeeed",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004f51",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-secondary-container": "#636262",
+                    "surface": "#f9f9f8",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "on-surface": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "primary-container": "#a45635",
+                    "inverse-on-surface": "#f1f1f0",
+                    "primary": "#863f20",
+                    "on-primary-fixed": "#370e00",
+                    "surface-variant": "#e2e2e2",
+                    "inverse-surface": "#2f3130",
+                    "on-secondary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "secondary-fixed": "#e5e2e1",
+                    "surface-tint": "#944929",
+                    "on-tertiary": "#ffffff",
+                    "on-primary-container": "#ffe9e2",
+                    "on-tertiary-container": "#a7fcff",
+                    "surface-bright": "#f9f9f8",
+                    "secondary": "#5f5e5e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Newsreader", "serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F9F8; }
+        h1, h2, .font-serif { font-family: 'Newsreader', serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-20">
+<!-- TopAppBar -->
+<header class="bg-[#F9F9F8]/70 backdrop-blur-xl docked full-width top-0 sticky z-50 flex lg:hidden justify-between items-center px-4 h-14 w-full border-b border-[#DAC1B9]/20">
+<div class="text-lg font-serif italic text-[#1A1A1A]">Builder Community</div>
+<div class="flex items-center gap-3">
+<button class="text-[#863F20] hover:opacity-80">
+<span class="material-symbols-outlined text-[22px]" data-icon="search">search</span>
+</button>
+<button class="text-[#863F20] hover:opacity-80 relative">
+<span class="material-symbols-outlined text-[22px]" data-icon="notifications">notifications</span>
+<span class="fixed bottom-20 right-5 w-11 h-11 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center z-50 active:scale-95 transition-transform"></span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto">
+<!-- Tab Switcher & Filters -->
+<div class="sticky top-14 z-40 bg-surface">
+<div class="flex border-b border-outline-variant/10 px-4">
+<button class="py-3 px-3 text-[13px] font-semibold border-b-2 border-primary text-on-surface">Latest</button>
+<button class="py-3 px-3 text-[13px] font-medium text-on-surface/40">Trending</button>
+<button class="py-3 px-3 text-[13px] font-medium text-on-surface/40">Following</button>
+</div>
+<div class="flex overflow-x-auto no-scrollbar gap-2 px-4 py-3">
+<span class="bg-[#863F20] text-white px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight shrink-0">ALL</span>
+<span class="bg-[#E5E2E1] text-[#474746] px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight shrink-0 uppercase">Product</span>
+<span class="bg-[#E5E2E1] text-[#474746] px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight shrink-0 uppercase">Engineering</span>
+<span class="bg-[#E5E2E1] text-[#474746] px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight shrink-0 uppercase">Design</span>
+<span class="bg-[#E5E2E1] text-[#474746] px-4 py-1.5 rounded-full text-[11px] font-bold tracking-tight shrink-0 uppercase">Data</span>
+</div>
+</div>
+<!-- Feed List -->
+<div class="space-y-2 px-3 pb-8">
+<!-- Post 1 -->
+<article class="bg-surface-container-lowest rounded-lg p-3 overflow-hidden shadow-[0_2px_12px_rgba(26,28,28,0.04)]">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="Professional headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA28Tf7KSPPjP2VbN4DK6jsNnTvgO2FmdJfASkTzoXmsc0CgycGRXkHqOvpXdFyRH-mZnJ4jgpp7YdwnJ5z8NzBbE947Ez12O0V_29bMoic95eTtZuizyQZs87EZBlHEu0OhjZLKM_JiSexcr-qrTaE1oOBDV11UWtDFuOmghxW5T_UOQT-3luiS-8mOVNG0ioUF6sCMp4RQgXpJ5tzpjk0FdWZ8x5PT8khPqtoCTYqIHCodd5fKXJa5aJAL5qIE2PFgZNUU4uxu-E"/>
+<div>
+<div class="font-bold text-[13px] leading-tight">李明</div>
+<div class="text-[9px] text-on-surface/40 uppercase tracking-wider font-bold">HR BP • 2h ago</div>
+</div>
+</div>
+<div class="text-on-surface text-[13px] leading-[1.4] mb-2">
+<p class="line-clamp-3">HR team built a resume screener that cut initial screening by 70%. It uses semantic analysis to rank candidates based on actual experience rather than just keywords. This allows us to focus more on cultural fit during the first interview phase. <span class="text-primary font-medium cursor-pointer">Show more</span></p>
+</div>
+<div class="mb-2 rounded overflow-hidden max-h-[140px]">
+<img class="w-full h-full object-cover" data-alt="UI Dashboard" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKaLEomI8csXeyYWVrtDBS0BdAneqCJJTyJbf9g3SIgGPgTuU9KZeE43W9a0R5S8kU3nb6N4II37S9fEmL_fcndnOdjCfOBxq2PcxnH17s6Xws38EXs8jwPwJ0ZsXjkg7J6cBQoZsKAhd-JFN0NxtPn4uylzNVp7o6qisHu8CTLy9GF9A39U4l5AFKbAxKerl1HDs5FwWHkfABnRSWwQJ94u6jj8-B4UclicD6ZuExtNef8rOeA5tbwwzs9RR5-RZeoAQ0r1xATj8"/>
+</div>
+<!-- Build Bar -->
+<div class="bg-surface-container-low rounded p-2 flex items-center justify-between mb-2 border border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="bg-primary/10 text-primary w-8 h-8 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="description">description</span>
+</div>
+<div>
+<div class="text-[11px] font-bold leading-tight">Smart Resume Screener</div>
+<div class="text-[9px] text-on-surface/60 line-clamp-1">AI-powered recruitment efficiency tool</div>
+</div>
+</div>
+<div class="bg-white px-1.5 py-0.5 rounded border border-outline-variant/30 text-[9px] font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]" data-icon="arrow_drop_up">arrow_drop_up</span>
+                        214
+                    </div>
+</div>
+<!-- Interaction -->
+<div class="flex items-center gap-5 text-on-surface/60 mb-2">
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="favorite">favorite</span> 24
+                    </button>
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat_bubble">chat_bubble</span> 8
+                    </button>
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="share">share</span> Share
+                    </button>
+</div>
+<!-- Comments Preview -->
+<div class="space-y-1.5 border-t border-outline-variant/5 pt-2">
+<div class="flex gap-2">
+<img class="w-4 h-4 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWERMi7YSuUZcanwCb88ksUUJ2Dvy23HjM1Fbwd_2Xu44ITqiCN8zYPTUSvbVKgYqvzm5GV_gCAfa2h_88h_v6cQx_kJL7CXYTsd_2CjgvyBm28lZ3hchudOtxMB-LPm-Zw-FIbSGV3mikoL1h2HDpf7dS2yttGYwK3bQ-UOLnZRxsufOJ1Qu7GJ5qjWx946kfylIq6fIPpKY6e_aoiIjwv0w1wBrfyu7ciGebwLb9Zh8bZOUEHtzUl2kiyWDiWWaEZTF6NQHJA7I"/>
+<div class="flex items-center gap-1.5">
+<span class="text-[10px] font-bold">星矢</span>
+<span class="bg-[#F0F0F0] text-[#666] text-[7px] px-1.5 py-0.5 rounded-full font-bold">SPONSORED</span>
+<span class="text-[10px] text-[#888] line-clamp-1">Perfect for Q3 hiring surge!</span>
+</div>
+</div>
+<div class="flex gap-2">
+<img class="w-4 h-4 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB5djMzZegrpkSq7Ou-qbGJl1sHuUb2CPg476k4ufx4aENVlw2FdnV_KtASKygtWk_wjfHj0rGfGsWiyY9z5A1bgK5rkAXTcaDFPSzOfPh9L6Wu6x60Vs5C1bSM4kUdOz-TeU0MJ7SkguhvmpITjY_xGU5V--LO4Ipkb3A2RHetqljqyGY3uhpCTXh-gPb_qFsXkYr0p9nIMSoeNRp6YQo9AcTy7ZpnxZJRuh60lPFrZFJjEZYxoXV9ShEi09LMByPAyEqcPUxLWw"/>
+<div class="text-[10px] text-[#888]"><span class="font-bold text-on-surface">王磊:</span> Awesome work on the semantic layer.</div>
+</div>
+</div>
+</article>
+<!-- Post 2 -->
+<article class="bg-surface-container-lowest rounded-lg p-3 overflow-hidden shadow-[0_2px_12px_rgba(26,28,28,0.04)]">
+<div class="flex items-center gap-2 mb-2">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="DevOps focused" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWQfuCsY4mgLUdvf2sJE8Z61h3kEJdKKvT0AzvZFXNqSxhZgDWpxXRgLnqk3qqpoxdYVSXvXI-6woys_BBXHMgp58YEEVhHjzZmWXwzygD2IzBSTKewyIcQDOVIfyqrO1OV5C6hn_nSeXL8P_zAuXStaFORHxn-7vH8H-2880D23RHO1I1FZDtx0dsWMGq4hjWaG7o4dGfAzuDzgDmIQmdyynkU--BG02kiP1mKAAlrkVoikXiJOoYdfUNsWI8uq0LKmS3CJtB4Hc"/>
+<div>
+<div class="font-bold text-[13px] leading-tight">王鑫</div>
+<div class="text-[9px] text-on-surface/40 uppercase tracking-wider font-bold">DevOps • 5h ago</div>
+</div>
+</div>
+<div class="text-on-surface text-[13px] leading-[1.4] mb-2">
+<p class="line-clamp-3">Made a Code Review Bot that catches style guide violations automatically and suggests refactoring based on our internal patterns. It integrates with our GitLab CI pipeline. <span class="text-primary font-medium cursor-pointer">Show more</span></p>
+</div>
+<!-- Build Bar -->
+<div class="bg-surface-container-low rounded p-2 flex items-center justify-between mb-2 border border-outline-variant/10">
+<div class="flex items-center gap-2">
+<div class="bg-primary/10 text-primary w-8 h-8 rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]" data-icon="smart_toy">smart_toy</span>
+</div>
+<div>
+<div class="text-[11px] font-bold leading-tight">Code Review Bot</div>
+<div class="text-[9px] text-on-surface/60 line-clamp-1">Automated code quality &amp; style auditor</div>
+</div>
+</div>
+<div class="bg-white px-1.5 py-0.5 rounded border border-outline-variant/30 text-[9px] font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]" data-icon="arrow_drop_up">arrow_drop_up</span>
+                        156
+                    </div>
+</div>
+<!-- Interaction -->
+<div class="flex items-center gap-5 text-on-surface/60 mb-2">
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="favorite">favorite</span> 12
+                    </button>
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="chat_bubble">chat_bubble</span> 4
+                    </button>
+<button class="flex items-center gap-1 text-[11px] font-medium">
+<span class="material-symbols-outlined text-[18px]" data-icon="share">share</span> Share
+                    </button>
+</div>
+<!-- Comments Preview -->
+<div class="space-y-1.5 border-t border-outline-variant/5 pt-2">
+<div class="flex gap-2">
+<img class="w-4 h-4 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATB-OfgtMqUy3mvW98gGeXnuhoJ8TGUUS3mmdkgsYY7aKGy6C3PnOFJMgo8dThW6btjBARJtIMqxmbwVVCT5G540jW25OTU9SeJYcuwYeJyoZQMupvF6Ra4u8ujbUeAuP1OQF3s16ufgIZCPzhqoLp3HnwCzH1pR3NmquOXesiGDQ-e4fZTs-uFKjrwYVpg4lvs13JNT4GaDRpVnWIFnVmJd3-WtF__2SwmGkRED_f8W4yNMA4ue2er0siK72KG-hRdV4twQ43jMw"/>
+<div class="text-[10px] text-[#888]"><span class="font-bold text-on-surface">张强:</span> Does it support TypeScript decorators?</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-20 right-5 w-11 h-11 bg-primary text-on-primary rounded-xl shadow-lg flex items-center justify-center z-50 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-xl" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="lg:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-16 pb-safe bg-[#F9F9F8] border-t border-[#DAC1B9]/20 shadow-[0_-4px_20px_rgba(26,28,28,0.06)] z-50">
+<a class="flex flex-col items-center justify-center bg-[#A45635]/10 text-[#863F20] rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="home" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="Inter uppercase tracking-tight text-[9px] font-bold mt-0.5">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 px-4 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="apps">apps</span>
+<span class="Inter uppercase tracking-tight text-[9px] font-bold mt-0.5">Gallery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 px-4 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="Inter uppercase tracking-tight text-[9px] font-bold mt-0.5">Profile</span>
+</a>
+</nav>
+</body></html>

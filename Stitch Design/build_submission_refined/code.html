@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eeeeed",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#863f20",
+                        "on-surface": "#1a1c1c",
+                        "secondary": "#5f5e5e",
+                        "on-tertiary-fixed": "#002021",
+                        "background": "#f9f9f8",
+                        "tertiary-fixed": "#98f1f4",
+                        "on-tertiary-fixed-variant": "#004f51",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-dim": "#dadad9",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#7bd5d8",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#54433d",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f1f1f0",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#87736b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "inverse-primary": "#ffb598",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005d60",
+                        "on-primary-container": "#ffe9e2",
+                        "on-secondary-container": "#636262",
+                        "on-primary-fixed": "#370e00",
+                        "tertiary-container": "#00787b",
+                        "on-tertiary-container": "#a7fcff",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-low": "#f3f4f3",
+                        "surface-container-high": "#e8e8e7",
+                        "surface": "#f9f9f8",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#a45635",
+                        "surface-tint": "#944929",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-bright": "#f9f9f8",
+                        "on-primary-fixed-variant": "#763314",
+                        "outline-variant": "#dac1b9",
+                        "primary-fixed-dim": "#ffb598",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Newsreader"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-input:focus {
+            outline: none;
+            border-bottom-color: #863f20;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-primary">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col py-8 px-6 space-y-8 h-screen w-64 border-r border-[#DAC1B9]/20 bg-[#F3F4F3] dark:bg-stone-900 sticky top-0">
+<div class="flex flex-col space-y-2">
+<h1 class="text-xl font-semibold tracking-tight text-[#1A1A1A] dark:text-stone-50">Builder Community</h1>
+</div>
+<nav class="flex-1 flex flex-col space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[11px] uppercase tracking-wider font-label text-[#1A1A1A]/60 dark:text-stone-400 hover:text-[#863F20] hover:bg-stone-200/50 dark:hover:bg-stone-800 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="dynamic_feed">dynamic_feed</span>
+                Feed
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[11px] uppercase tracking-wider font-label text-[#1A1A1A]/60 dark:text-stone-400 hover:text-[#863F20] hover:bg-stone-200/50 dark:hover:bg-stone-800 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="grid_view">grid_view</span>
+                Gallery
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[11px] uppercase tracking-wider font-label text-[#1A1A1A]/60 dark:text-stone-400 hover:text-[#863F20] hover:bg-stone-200/50 dark:hover:bg-stone-800 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+                Notifications
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[11px] uppercase tracking-wider font-label text-[#863F20] font-semibold border-r-2 border-[#863F20] transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="architecture">architecture</span>
+                My Builds
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[11px] uppercase tracking-wider font-label text-[#1A1A1A]/60 dark:text-stone-400 hover:text-[#863F20] hover:bg-stone-200/50 dark:hover:bg-stone-800 transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="thumb_up">thumb_up</span>
+                My Upvotes
+            </a>
+</nav>
+<div class="pt-6 border-t border-[#DAC1B9]/20 space-y-4">
+<button class="w-full py-2.5 bg-[#A45635] text-white text-[11px] uppercase tracking-widest font-label font-bold rounded shadow-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                Build
+            </button>
+<div class="flex items-center gap-3 px-3 py-1">
+<img alt="李明" class="h-8 w-8 rounded-full border border-outline-variant/20 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjmcIBGYAmMAw9LQhmwa08CDso0BT1-vqEspTK0Pm_P6Df7NtO2wRlm_5MdTI-VWht0Qqcz1pGkjM3Chx28_Ty3Mj1dUmLT-8wKQEe6SMEqebG5nf6daIrtkUcIP3Y_QUBGZ4z8h_Xyz93P7lMCUAd_SeDKcEaTBqKp5PNXhZF2uHcaZ46ZRrcZdx7HhPLPPHFGIKYKEN9SIVgkSFCJ6jhZ2W4Jt6vlkp38wW4Tei50mTGB7ZkKElOS1Qspq24tThN5Lth-sGu6Dk"/>
+<span class="text-xs font-medium text-on-surface">李明</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto relative">
+<!-- Top Bar -->
+<header class="sticky top-0 z-10 h-16 bg-background/80 backdrop-blur-md flex items-center justify-between px-8 border-b border-outline-variant/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="edit_note">edit_note</span>
+<span class="text-xs font-label uppercase tracking-widest text-secondary font-medium">New Build</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-xs font-label uppercase tracking-widest text-secondary hover:text-on-surface transition-colors">Draft Saved 12:45 PM</button>
+<div class="h-4 w-[1px] bg-outline-variant/20"></div>
+<img class="h-8 w-8 rounded-full border border-outline-variant/20" data-alt="Close-up portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjmcIBGYAmMAw9LQhmwa08CDso0BT1-vqEspTK0Pm_P6Df7NtO2wRlm_5MdTI-VWht0Qqcz1pGkjM3Chx28_Ty3Mj1dUmLT-8wKQEe6SMEqebG5nf6daIrtkUcIP3Y_QUBGZ4z8h_Xyz93P7lMCUAd_SeDKcEaTBqKp5PNXhZF2uHcaZ46ZRrcZdx7HhPLPPHFGIKYKEN9SIVgkSFCJ6jhZ2W4Jt6vlkp38wW4Tei50mTGB7ZkKElOS1Qspq24tThN5Lth-sGu6Dk"/>
+</div>
+</header>
+<!-- Form Content -->
+<section class="max-w-[680px] mx-auto py-20 px-6">
+<form class="space-y-16">
+<!-- Build Name -->
+<div class="space-y-4">
+<input class="editorial-input w-full bg-transparent border-0 border-b-2 border-outline-variant/20 px-0 py-4 text-4xl md:text-5xl font-headline font-medium focus:ring-0 placeholder:text-surface-dim transition-all" placeholder="Build Name" type="text"/>
+</div>
+<!-- Type & Description -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+<div class="space-y-2">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-primary">Category</label>
+<select class="w-full bg-surface-container-low border-0 border-b border-outline/30 rounded-none text-sm py-2 px-0 focus:ring-0 focus:border-primary">
+<option>Skill</option>
+<option>Workflow</option>
+<option>Data Product</option>
+<option selected="">Tool</option>
+<option>Other</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-primary">One-sentence summary</label>
+<input class="w-full bg-transparent border-0 border-b border-outline/30 px-0 py-2 text-sm focus:ring-0 focus:border-primary placeholder:text-surface-dim/60" placeholder="Explain what this is in 140 characters" type="text"/>
+</div>
+</div>
+<!-- Media Section -->
+<div class="space-y-6">
+<div class="flex items-baseline justify-between border-b border-outline-variant/10 pb-2">
+<h3 class="font-headline text-xl">Screenshots &amp; Video</h3>
+<span class="text-[10px] uppercase tracking-wider font-label text-secondary">Images &amp; Video</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="aspect-video bg-surface-container-low border-2 border-dashed border-outline-variant/30 flex flex-col items-center justify-center space-y-3 group hover:border-primary/50 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-4xl text-outline-variant group-hover:text-primary" data-icon="add_photo_alternate">add_photo_alternate</span>
+<div class="text-center">
+<p class="text-[11px] uppercase tracking-wider font-label font-semibold">Drop cover images</p>
+<p class="text-[10px] text-secondary">JPG, PNG up to 10MB</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="aspect-video bg-surface-container border border-outline-variant/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-surface-dim" data-icon="smart_display">smart_display</span>
+</div>
+<input class="w-full bg-transparent border-0 border-b border-outline/30 px-0 py-2 text-[12px] font-label focus:ring-0 focus:border-primary placeholder:text-surface-dim italic" placeholder="Vimeo or YouTube Link" type="url"/>
+</div>
+</div>
+</div>
+<!-- Editorial Content -->
+<div class="space-y-12">
+<div class="space-y-6">
+<div class="p-8 bg-surface-container-low border-l-2 border-primary">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-primary block mb-4">The Problem</label>
+<textarea class="w-full bg-transparent border-0 text-lg font-headline italic focus:ring-0 placeholder:text-secondary/30 resize-none" placeholder="What work problem are you solving?" rows="3"></textarea>
+</div>
+<div class="p-8 bg-surface-container-lowest border border-outline-variant/20 shadow-sm">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-on-surface block mb-4">The Solution</label>
+<textarea class="w-full bg-transparent border-0 text-sm leading-relaxed focus:ring-0 placeholder:text-secondary/30 resize-none" placeholder="How did you use AI to solve it?" rows="5"></textarea>
+</div>
+<!-- Stacked Pitch and Good Sections -->
+<div class="p-8 bg-surface-container-low border border-outline-variant/10">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-secondary block mb-4">The Pitch (Optional)</label>
+<textarea class="w-full bg-transparent border-0 text-sm leading-relaxed focus:ring-0 placeholder:text-secondary/30 resize-none" placeholder="Why is your approach better than alternatives?" rows="4"></textarea>
+</div>
+<div class="p-8 bg-surface-container-low border border-outline-variant/10">
+<label class="text-[10px] uppercase tracking-[0.15em] font-label font-bold text-secondary block mb-4">The Good</label>
+<textarea class="w-full bg-transparent border-0 text-sm leading-relaxed focus:ring-0 placeholder:text-secondary/30 resize-none" placeholder="How can others download and start using this?" rows="4"></textarea>
+</div>
+</div>
+</div>
+<!-- Metadata & Assets -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-outline-variant/20">
+<div class="space-y-6">
+<div class="space-y-4">
+<h4 class="text-[11px] uppercase tracking-widest font-label font-bold">Links &amp; Attachments</h4>
+<div class="space-y-3">
+<div class="flex items-center gap-3 group">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="link">link</span>
+<input class="flex-1 bg-transparent border-0 border-b border-outline/10 px-0 py-1 text-xs focus:ring-0 focus:border-primary" placeholder="Live Demo URL" type="text"/>
+</div>
+<div class="flex items-center gap-3 group">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="attachment">attachment</span>
+<div class="flex-1 border-b border-outline/10 py-1">
+<button class="text-xs text-secondary hover:text-primary transition-colors" type="button">Attach documentation or source files</button>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="text-[11px] uppercase tracking-widest font-label font-bold">Collaborators</h4>
+<div class="flex -space-x-2">
+<img class="h-8 w-8 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbbAB0uowd_TrJquVmrYpxwy8cqfXyGQ_vvNu00IUsSNZXllCGDETS9gwcbjL_txw2XPwqdyNELG5c5Q38QwsOtQlVtMPGz9whdf4Ls85UUDbkvph3-gzuq3PqE0EgL98pZYU_oeqKN--PITMsPFnTR5psJawxjsxqX2SMtwTFXSf0WX4qmAFwqfj89dioa27dB7uQSv8qQhg1pCXAMUpBnykMNIFvFUYHVDXDkhvLzo4gI45k4pVZtJN1aX_x0D_QKSgtMSt_sSM"/>
+<img class="h-8 w-8 rounded-full border-2 border-background object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtkm6OZGte6dDP_WUM5o-ENusrWNs7NosaDmZm-QkqlUnn1n8Ppifj27_kEgY_44unv54nhVvGEO-xs8MmeRX5aSYmHqTRKHYmD5ErgnYN6w6PLrH6U1FK7k9Sp1Tc8AfgJTZx8t-ncnSmteB-isy_1ikZNKRAS2Xv3MDnBuNvEOOG0O6djrqf1-4-Ar82ce1PMLK7qdbRJGvfwQYoeVMINhw-vrNAtQ05wjNGkU_VgOmxCObdf8ByUv9BXxnIZnT3v5QUAgfFwe0"/>
+<button class="h-8 w-8 rounded-full border-2 border-dashed border-outline-variant/40 bg-surface-container flex items-center justify-center text-secondary hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="person_add">person_add</span>
+</button>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-4">
+<h4 class="text-[11px] uppercase tracking-widest font-label font-bold">Tech Stack Tags</h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-1 bg-secondary-container text-on-surface-variant text-[9px] uppercase tracking-wider font-label rounded-sm border border-outline-variant/10">React</span>
+<span class="px-2 py-1 bg-secondary-container text-on-surface-variant text-[9px] uppercase tracking-wider font-label rounded-sm border border-outline-variant/10">PostgreSQL</span>
+<span class="px-2 py-1 bg-secondary-container text-on-surface-variant text-[9px] uppercase tracking-wider font-label rounded-sm border border-outline-variant/10">Rust</span>
+<button class="px-2 py-1 border border-dashed border-outline-variant/50 text-secondary text-[9px] uppercase tracking-wider font-label rounded-sm hover:border-primary hover:text-primary transition-colors">+ Add Tag</button>
+</div>
+</div>
+<div class="space-y-4">
+<h4 class="text-[11px] uppercase tracking-widest font-label font-bold">Visibility</h4>
+<div class="space-y-3">
+<div class="flex gap-6">
+<label class="flex items-center gap-2 cursor-pointer group">
+<input checked="" class="text-primary focus:ring-primary h-3 w-3 border-outline-variant" name="visibility" type="radio"/>
+<span class="text-[11px] uppercase tracking-wider font-label text-on-surface group-hover:text-primary transition-colors">Public (visible to all employees)</span>
+</label>
+<label class="flex items-center gap-2 cursor-pointer group">
+<input class="text-primary focus:ring-primary h-3 w-3 border-outline-variant" name="visibility" type="radio"/>
+<span class="text-[11px] uppercase tracking-wider font-label text-on-surface group-hover:text-primary transition-colors">Department only</span>
+</label>
+</div>
+<div class="relative max-w-xs">
+<select class="w-full bg-surface-container-low border-0 border-b border-outline/30 rounded-none text-[11px] py-1 px-0 focus:ring-0 focus:border-primary appearance-none cursor-pointer">
+<option disabled="" selected="">Select Department</option>
+<option>Engineering</option>
+<option>Product &amp; Design</option>
+<option>Sales &amp; Marketing</option>
+<option>Operations</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-24"></div>
+</form>
+</section>
+<!-- Sticky Bottom Controls -->
+<footer class="fixed bottom-0 left-0 md:left-64 right-0 h-20 bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20 flex items-center justify-center px-8 z-20">
+<div class="max-w-[680px] w-full flex items-center justify-between">
+<button class="flex items-center gap-2 px-6 py-2 border border-outline-variant/30 hover:bg-surface-container-low transition-colors text-xs font-label uppercase tracking-[0.15em] font-semibold">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                    Preview
+                </button>
+<div class="flex items-center gap-6">
+<button class="text-[10px] uppercase tracking-widest font-label font-bold text-secondary hover:text-on-surface transition-colors">Discard Draft</button>
+<button class="px-10 py-3 bg-[#A45635] text-on-primary hover:opacity-90 transition-all duration-200 shadow-lg text-[11px] uppercase tracking-[0.2em] font-label font-bold rounded">
+                        Publish Build
+                    </button>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- Mobile Navigation -->
+<nav class="fixed bottom-0 left-0 w-full md:hidden flex justify-around items-center h-16 pb-safe px-4 bg-[#F9F9F8]/90 dark:bg-stone-950/90 backdrop-blur-md border-t border-[#DAC1B9]/20 z-50">
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 dark:text-stone-500 active:bg-[#F3F4F3] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+<span class="text-[10px] font-label uppercase tracking-[0.05em]">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/40 dark:text-stone-500 active:bg-[#F3F4F3] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="text-[10px] font-label uppercase tracking-[0.05em]">Gallery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#863F20] dark:text-[#A45635] font-bold active:bg-[#F3F4F3] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-label uppercase tracking-[0.05em]">Profile</span>
+</a>
+</nav>
+</body></html>

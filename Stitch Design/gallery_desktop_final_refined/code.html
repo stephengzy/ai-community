@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gallery | Builder Community</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Newsreader:ital,wght@0,400;0,500;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eeeeed",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "primary": "#863f20",
+                        "on-surface": "#1a1c1c",
+                        "secondary": "#5f5e5e",
+                        "on-tertiary-fixed": "#002021",
+                        "background": "#f9f9f8",
+                        "tertiary-fixed": "#98f1f4",
+                        "on-tertiary-fixed-variant": "#004f51",
+                        "on-secondary-fixed": "#1c1b1b",
+                        "surface-dim": "#dadad9",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#7bd5d8",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#54433d",
+                        "secondary-container": "#e2dfde",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f1f1f0",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#87736b",
+                        "on-secondary-fixed-variant": "#474746",
+                        "inverse-primary": "#ffb598",
+                        "error": "#ba1a1a",
+                        "tertiary": "#005d60",
+                        "on-primary-container": "#ffe9e2",
+                        "on-secondary-container": "#636262",
+                        "on-primary-fixed": "#370e00",
+                        "tertiary-container": "#00787b",
+                        "on-tertiary-container": "#a7fcff",
+                        "surface-variant": "#e2e2e2",
+                        "surface-container-low": "#f3f4f3",
+                        "surface-container-high": "#e8e8e7",
+                        "surface": "#f9f9f8",
+                        "primary-fixed": "#ffdbce",
+                        "primary-container": "#a45635",
+                        "surface-tint": "#944929",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-bright": "#f9f9f8",
+                        "on-primary-fixed-variant": "#763314",
+                        "outline-variant": "#dac1b9",
+                        "primary-fixed-dim": "#ffb598",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "secondary-fixed": "#e5e2e1",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .material-symbols-fill { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col py-8 px-6 space-y-8 h-screen w-64 border-r border-outline-variant/20 bg-surface-container-low sticky top-0">
+<div class="flex flex-col space-y-1">
+<span class="text-xl font-semibold text-on-surface">Builder Community</span>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface/60 hover:text-primary hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">dynamic_feed</span>
+<span class="text-[11px] uppercase tracking-wider">Feed</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-primary font-semibold border-r-2 border-primary bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="text-[11px] uppercase tracking-wider">Gallery</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface/60 hover:text-primary hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="text-[11px] uppercase tracking-wider">Notifications</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface/60 hover:text-primary hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">architecture</span>
+<span class="text-[11px] uppercase tracking-wider">My Builds</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface/60 hover:text-primary hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">thumb_up</span>
+<span class="text-[11px] uppercase tracking-wider">My Upvotes</span>
+</a>
+</nav>
+<button class="bg-primary text-on-primary py-3 rounded-lg text-[11px] uppercase tracking-widest font-bold hover:bg-primary-container transition-colors">
+            Build
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 min-w-0">
+<!-- Mobile TopNavBar -->
+<header class="flex md:hidden justify-between items-center w-full px-6 h-16 bg-background/80 backdrop-blur-xl border-b border-outline-variant/20 sticky top-0 z-50">
+<span class="text-xl font-bold tracking-tight text-on-surface uppercase">Builder Community</span>
+<span class="material-symbols-outlined text-primary">notifications</span>
+</header>
+<!-- Search & Filters -->
+<section class="px-6 md:px-12 pt-8 space-y-6">
+<div class="max-w-4xl">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface/40 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-b-2 border-outline/20 focus:border-primary focus:ring-0 py-4 pl-12 pr-4 text-on-surface placeholder:text-on-surface/40 font-body transition-all" placeholder="Search builds by name, type, or keyword..." type="text"/>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex space-x-3 overflow-x-auto no-scrollbar">
+<button class="px-6 py-2 rounded-full bg-primary text-on-primary text-[10px] uppercase tracking-widest font-bold whitespace-nowrap">All</button>
+<button class="px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-medium hover:bg-surface-variant transition-colors whitespace-nowrap">Skill</button>
+<button class="px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-medium hover:bg-surface-variant transition-colors whitespace-nowrap">Workflow</button>
+<button class="px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-medium hover:bg-surface-variant transition-colors whitespace-nowrap">Data Product</button>
+<button class="px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-medium hover:bg-surface-variant transition-colors whitespace-nowrap">Tool</button>
+<button class="px-6 py-2 rounded-full bg-secondary-container text-on-secondary-container text-[10px] uppercase tracking-widest font-medium hover:bg-surface-variant transition-colors whitespace-nowrap">Other</button>
+</div>
+<div class="flex items-center space-x-2 overflow-x-auto no-scrollbar text-[11px] text-on-surface/60 font-medium">
+<button class="px-3 py-1 rounded border border-primary text-primary whitespace-nowrap">All Departments</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Engineering</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Product</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Design</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">HR</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Data</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Operations</button>
+<button class="px-3 py-1 rounded border border-outline-variant/30 hover:border-outline transition-colors whitespace-nowrap">Marketing</button>
+</div>
+</div>
+</section>
+<!-- 🔥 Trending Section -->
+<section class="px-6 md:px-12 py-10">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-xl font-semibold text-on-surface">🔥 Trending This Week</h2>
+<div class="flex p-1 bg-surface-container rounded-lg">
+<button class="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-md bg-surface-container-lowest shadow-sm">This Week</button>
+<button class="px-4 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-md text-on-surface/40 hover:text-on-surface/70 transition-colors">This Month</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Trending Card 1 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Dashboard UI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6InyXDWYQNHF6nhQ1gsibV_ttIUsEjSjI0gW5coLaT2tnRXgjnhRPSK209SsrMwFXR_8CDni7W65luwaX_LQDPBt7LCeXxEbjV2T03CueIoHyqwEWTHlS8zGec1tkkkvE-C5ZNTocC9J0u6nfRn83pM0C4-B-JDOcDbLw_06rW3_EclbRAidaYzGbPiECFaVGTf-OD_jgwkNqg1HYFtnFmhce4HhWl1JR3J5uEHj7tcTT4P918LX9d6k2ScXKtOhmdetKmVuBs5U"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-surface-container-lowest/90 backdrop-blur rounded-md flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] text-primary material-symbols-fill">change_history</span>
+<span class="text-[12px] font-bold text-on-surface">342</span>
+</div>
+</div>
+<div class="p-6 space-y-3">
+<h3 class="text-xl font-bold font-body leading-tight">Weekly Report Generator</h3>
+<p class="text-sm text-on-surface/60 line-clamp-2 leading-relaxed">Summarizes weekly activities into professional stakeholder reports using project data.</p>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">张薇</div>
+<span class="text-[11px] font-medium text-on-surface/80">张薇</span>
+</div>
+<span class="px-2 py-0.5 bg-primary/10 text-[10px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">WORKFLOW</span>
+</div>
+</div>
+</div>
+<!-- Trending Card 2 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Code Editor UI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoUJg1emzz6RPYmU5UbAsT8i-A_VqqxslX_eEwdzGVcopQg8jThi-lZMBP8fYKFk4xvD0MqBXXxKXrmJGjvmNF-2XqFB-LpujmiDkD9-V21S1VixjVK2yjjgD-Epgdf4jg8DdNMjetKPUSJAGDR0ZFw4IGrQ61jO4z1wlhNMh_g4BP5YIMr_RQpS2uGxmgedlsI0k1gmWgqkzZUH5UkVOVfmDjCC9eJ0rrdkv7EYfdHPAYbfXZI3K5GjkmBrylm-SF3ePNSvIjxug"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-surface-container-lowest/90 backdrop-blur rounded-md flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] text-primary material-symbols-fill">change_history</span>
+<span class="text-[12px] font-bold text-on-surface">289</span>
+</div>
+</div>
+<div class="p-6 space-y-3">
+<h3 class="text-xl font-bold font-body leading-tight">Code Review Bot</h3>
+<p class="text-sm text-on-surface/60 line-clamp-2 leading-relaxed">AI-driven automated code analysis and suggestions for faster development cycles.</p>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">王鑫</div>
+<span class="text-[11px] font-medium text-on-surface/80">王鑫</span>
+</div>
+<span class="px-2 py-0.5 bg-primary/10 text-[10px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">TOOL</span>
+</div>
+</div>
+</div>
+<!-- Trending Card 3 -->
+<div class="group bg-surface-container-lowest border border-outline-variant/10 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300">
+<div class="aspect-video relative overflow-hidden">
+<img alt="Chat UI" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcXPd8TxhAfBW1fV4S2pWBwE2Kxlu-unMaytQfZxEVOUsrOSSk30r0EYHyORl3Rp0IPKFvbqINkJQX2RD4zdkgN1LMhtKQrcWPk5O4zPl7Y2betdloByyhdetNgHWa7b1Xjf6H4h7CAD7AqpPYxSJlurTUrWWUn3683Vo41cS8w1akj9LFWj4lnJyWYR_tdTSX6-XhCUU97DgTInjiN9ypTtgG0-icKPCK4yxvCy370FYARnUN6nlDXTqjGSHmMoJiM-GlUezlkFE"/>
+<div class="absolute top-4 right-4 px-3 py-1 bg-surface-container-lowest/90 backdrop-blur rounded-md flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] text-primary material-symbols-fill">change_history</span>
+<span class="text-[12px] font-bold text-on-surface">215</span>
+</div>
+</div>
+<div class="p-6 space-y-3">
+<h3 class="text-xl font-bold font-body leading-tight">Smart Resume Screener</h3>
+<p class="text-sm text-on-surface/60 line-clamp-2 leading-relaxed">Automated high-fidelity screening tool for matching technical candidates.</p>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center space-x-2">
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">李明</div>
+<span class="text-[11px] font-medium text-on-surface/80">李明</span>
+</div>
+<span class="px-2 py-0.5 bg-primary/10 text-[10px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">HR ONLY</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Latest Builds -->
+<section class="px-6 md:px-12 py-10 bg-surface-container-low/30">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface/40">Latest Builds</h3>
+<div class="flex items-center space-x-4">
+<div class="flex items-center space-x-2 text-[11px] text-on-surface/60">
+<span>Sort by:</span>
+<select class="bg-transparent border-none p-0 text-on-surface font-semibold focus:ring-0 cursor-pointer">
+<option>Latest</option>
+<option>Most Upvoted</option>
+<option>Most Commented</option>
+</select>
+</div>
+<span class="material-symbols-outlined text-on-surface/40 cursor-pointer text-xl">filter_list</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12">
+<!-- Build Card 4 -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE5lvBnenHYT86QVeYw_FyPvUlwrI3WoTIqLcoliG1hu3FDhE5y0ytf-LXN61lQwqGjBeDQVarExs-QfbLCmN1hRCcre2ctuFy_rPWd7g8wP9rX7fIA-1W2HtC4FcihG6mZyrK81GNXtU9IKSp7p5h6_V4jt5E1p7aD3rpOBX5iikGvm9oWicENk0ca9NUdT0YEXi4rIR77tXEdQPCgQPD7j20ThiiQiEcqRsC5LfcaV0zPRAZw1OpFLX_oduDAv_090E7Mjqtadk"/>
+<div class="absolute inset-0 bg-primary/0 group-hover:bg-primary/5 transition-colors"></div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Ad Copy Generator</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">SKILL</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Rapid creative generation for multiple platforms.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">陈璐</div>
+<span class="text-[11px] text-on-surface/80">陈璐</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">89</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Build Card 5 -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeIC3lbNqjEYpLyIRSNHWXEGdOSkBOSOZ65qSvra5HJpdtySSgVx5RlQvfu96qbq18ilPQ36Fd3Sdsvnxd-CNwInEtHkqP01Pcqu4OPwLMJ6v2iQujP8kHLU6Ocx5g96HKdrRxd-TvsRAHywZ6Qd2pureLBeQLbAF7c7hH68B-C1OBXccp2E4c5dRvQJJY2FgCn8ePQyd88XyG_GVW8SuSzqKJriP5RrU3vm9Bht_2nWq_5_Hc5OeAi-LlX_fZW5wRH5w9VGg4mXk"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Data Quality Checker</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">TOOL</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Automated anomaly detection in pipeline data.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">刘洋</div>
+<span class="text-[11px] text-on-surface/80">刘洋</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">142</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Build Card 6 -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo11i9zEFrMrXhFkqqHv3wGhL3-kNWQynL2rh6KDP-wS-NA54x6clf01UuB-yrB5fCG4vpwSSCgQSh_0Jg7Ve5MfvUbjeggAv1NSjLnbZefkFiit3elsdPHVGtIqdypyypa-8pV_mgmTexA_nQLssq94yoNB7xd7tHd42ZKrGYk6Q7IzeUVP_zfipOLD357DnwubW6VCij4rVAk9HbE4e7XvM49DyczQ-trwboVwA-k-jrDbG4Vc9_7XndBG_21yaJxgexJ_FMrFU"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Customer FAQ Auto-responder</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">TOOL</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Intelligent support bot with direct CRM integration.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">赵强</div>
+<span class="text-[11px] text-on-surface/80">赵强</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">67</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Build Card 7 -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeVHSCwnjZWYoPXHFf9BQcZhmj2EyncE1Lv0MYBtF35NBp36Aad6eAej47kk2jlEVnq8jfbALRNBCTocYwmN7Cuc1uwYUVq4AGYNncbISkhcYbkVfgoCvSNEyxTlJggbT6sYJT6Kx5VHrGKiKoyE6DunY1masiTtlR5J75WdrDADA820qkKMxs9oC4Jgyy7Ryf0Tz10CijobKC0m7yrkggZEgA63RXjJZzCVyYjTVHQDgCCt70id_XhYpvNJ7bl-MH7JdVTfgTKgU"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Competitive Intel Dashboard</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">DATA PRODUCT</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Visualizing market trends and competitor moves.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">林晓</div>
+<span class="text-[11px] text-on-surface/80">林晓</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">112</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Build Card 8 (Updated) -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7A4GPAbwZVyuL7E7mZrmqyXJWoobPzlXdVD9Epm_ml0MrMrySMOFoJDrm57YXeKQgQXm5FSIjCAa7F_ybNEkQfu5XN049zd4rnDP45MSaSKTXlJ6BfnNuz0OS-7cO1pDhqUULCnp5JincZ_twUqOtA7ZLu9_neOcPusH3Cf47jNJwiffSajbf-i3-ECf11MU4uExbefwKAb_EuqWqCiALGZ9ojk2y6QEelU0d80Uil1bCtfX8aKfCjtnneLUSynHZ49vi4EU9rP0"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Weekly Report Generator</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">WORKFLOW</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Professional stakeholder report automation tool.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">李明</div>
+<span class="text-[11px] text-on-surface/80">李明</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">89</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Build Card 9 (Updated) -->
+<div class="group flex flex-col space-y-4">
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn4uXAeXeIQXpeok5QbpYu8WfHZGOFn7QpdkE8NBDmCD_xP3CMkYt3lMBpSxlAGQ-ic3lUa1FRiQrhPjOynCVLhyLDdBVIJv80rJQhnTK0L0XIaYy-LooHCuyjLffBtsw9BfawcaCtpn0Ve4o0dNmj7ewDhXX0F6oizxdc3DCO5cXSKtQvGpKlsXPFfEgX0KY-F_yFQm6u0O4mEmtC854SZ8LI00exKk_QC48VaBl0V76ooPtYO795x8PyfcwDHyE4IzesTRWtAj0"/>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-start">
+<h4 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Customer FAQ Auto-responder</h4>
+<span class="px-2 py-0.5 bg-primary/10 text-[9px] font-bold rounded uppercase tracking-tighter text-primary border border-primary/20">TOOL</span>
+</div>
+<p class="text-xs text-on-surface/60 line-clamp-1">Support bot with intelligent FAQ resolution.</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center space-x-2">
+<div class="w-5 h-5 rounded-full bg-primary/10 flex items-center justify-center text-[8px] font-bold text-primary">赵强</div>
+<span class="text-[11px] text-on-surface/80">赵强</span>
+</div>
+<div class="flex items-center space-x-3 text-on-surface/40">
+<div class="flex items-center space-x-1">
+<span class="material-symbols-outlined text-[16px] material-symbols-fill">change_history</span>
+<span class="text-[10px]">78</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full md:hidden flex justify-around items-center h-16 bg-background/90 backdrop-blur-md border-t border-outline-variant/20 pb-safe px-4 z-50">
+<a class="flex flex-col items-center justify-center text-on-surface/40" href="#">
+<span class="material-symbols-outlined">dynamic_feed</span>
+<span class="text-[10px] font-body uppercase tracking-[0.05em] mt-1">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] font-body uppercase tracking-[0.05em] mt-1">Gallery</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface/40" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-body uppercase tracking-[0.05em] mt-1">Profile</span>
+</a>
+</nav>
+</div>
+</body></html>

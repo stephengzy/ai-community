@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Builder Community - Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#e2dfde",
+                    "surface-container-high": "#e8e8e7",
+                    "surface-bright": "#f9f9f8",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-primary-fixed-variant": "#763314",
+                    "primary-container": "#a45635",
+                    "on-secondary-fixed": "#1c1b1b",
+                    "tertiary-fixed": "#98f1f4",
+                    "surface-container-low": "#f3f4f3",
+                    "inverse-surface": "#2f3130",
+                    "tertiary-fixed-dim": "#7bd5d8",
+                    "on-secondary-container": "#636262",
+                    "inverse-primary": "#ffb598",
+                    "surface-container-highest": "#e2e2e2",
+                    "surface-dim": "#dadad9",
+                    "tertiary": "#005d60",
+                    "outline-variant": "#dac1b9",
+                    "surface-tint": "#944929",
+                    "secondary": "#5f5e5e",
+                    "secondary-fixed": "#e5e2e1",
+                    "on-surface-variant": "#54433d",
+                    "on-tertiary-fixed-variant": "#004f51",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "background": "#f9f9f8",
+                    "primary-fixed": "#ffdbce",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f1f1f0",
+                    "primary-fixed-dim": "#ffb598",
+                    "on-primary-container": "#ffe9e2",
+                    "tertiary-container": "#00787b",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "surface": "#f9f9f8",
+                    "on-surface": "#1a1c1c",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#eeeeed",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#863f20",
+                    "surface-container-lowest": "#ffffff",
+                    "on-background": "#1a1c1c",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#a7fcff",
+                    "outline": "#87736b",
+                    "surface-variant": "#e2e2e2",
+                    "on-primary-fixed": "#370e00",
+                    "on-tertiary-fixed": "#002021"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Newsreader"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #F9F9F8; color: #1A1C1C; }
+        .editorial-title { font-family: 'Newsreader', serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-[#F9F9F8] dark:bg-stone-900">
+<div class="flex items-center justify-between px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#863F20] dark:text-[#A45635] scale-95 active:opacity-80 transition-all hover:bg-[#F3F4F3] dark:hover:bg-stone-800 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-['Newsreader'] text-xl font-bold text-[#1A1A1A] dark:text-[#F9F9F8]">Builder Community</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-[#1A1A1A] dark:text-[#F9F9F8] scale-95 active:opacity-80 transition-all hover:bg-[#F3F4F3] dark:hover:bg-stone-800 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-[#1A1A1A] dark:text-[#F9F9F8] scale-95 active:opacity-80 transition-all hover:bg-[#F3F4F3] dark:hover:bg-stone-800 p-2 rounded-lg">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</div>
+<div class="bg-[#F3F4F3] dark:bg-stone-800 h-px w-full"></div>
+</header>
+<!-- Profile Hero Section -->
+<section class="flex flex-col items-center pt-8 pb-6 px-6 text-center">
+<div class="relative mb-4">
+<div class="w-24 h-24 rounded-full p-1 ring-2 ring-primary">
+<img alt="Profile Portrait" class="w-full h-full rounded-full object-cover" data-alt="Realistic close-up portrait of a professional man in his 30s, neutral background, soft studio lighting, focused gaze" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfbtHNOBmY4NFK1WadBYEE__r_fjvI_5AmQTUQ-3yM_bz1J-9sy_8G8H9KPydrs7PuIsIlAVOEaZHLJy-ssH1YbUt-m3QO5YY-bEKBuBLG7hDsWncPHwkRiztraxdpGYKYn0BshydzMJ1jujDadwEDTiyqkO_GC1dWov1R-BXhNI7VcPezNk2K_iDDct5UnwmsLhheHf_FON-U7Mpe-hgFtiOVz9kz6g4hxnA7f1NX6Lv7_dDjpFdLjLOZysIzU70LUYzmrGc3u7w"/>
+</div>
+</div>
+<h2 class="editorial-title text-2xl font-bold tracking-tight">李明</h2>
+<p class="text-primary font-medium text-sm mb-3">Engineering</p>
+<p class="text-on-surface-variant text-sm max-w-[280px] leading-relaxed font-headline">
+            Engineering 效率工具爱好者，专注用 AI 解决重复性工作。已发布 3 个内部工具，累计被 6 个团队采用。
+        </p>
+<!-- Stats Row -->
+<div class="flex justify-center gap-8 mt-6 w-full border-y border-outline-variant/20 py-4">
+<div class="flex flex-col">
+<span class="text-lg font-bold text-on-surface">3</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary font-medium">Builds</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-bold text-on-surface">4</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary font-medium">Posts</span>
+</div>
+<div class="flex flex-col">
+<span class="text-lg font-bold text-on-surface">412</span>
+<span class="text-[10px] uppercase tracking-widest text-secondary font-medium">Upvotes</span>
+</div>
+</div>
+</section>
+<!-- Tab Switcher -->
+<div class="sticky top-[69px] z-40 bg-surface/90 backdrop-blur-md px-6 py-2">
+<div class="flex gap-8 border-b border-outline-variant/10">
+<button class="pb-3 text-sm font-bold border-b-2 border-primary text-primary">My Builds</button>
+<button class="pb-3 text-sm font-medium text-secondary hover:text-on-surface transition-colors">My Posts</button>
+</div>
+</div>
+<!-- Content: My Builds Grid -->
+<main class="px-6 py-6">
+<div class="grid grid-cols-2 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col group transition-all duration-300">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img alt="Product Screenshot" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Dashboard UI screenshot with clean dark mode interface, vibrant data visualizations, and minimalist typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBolGwpADEyoBTvzL56bR2Xarqpiy_9L7MH_vcr4uqGUOZ-g45eGvFEqzptHKWa5EHk9_YLCLwt7wAzbKMNUhWcuPqp5q8YybsRSma6dX7VryHYGxi2db6LXke5Zog2rUZTVxza3pvovVL5iy8nDYs0Ykc_wrzMaxA6sxCP7TL5rzWRExvi15pH9h9F94YE9Oex_EuBNa-d4154yKQD6Jr6ArM6fVP2bDLbAVr85Mf8ZIh4LTCA0Pl3H4bUjSTnfV8b_496ODeuCsI"/>
+</div>
+<div class="p-3 flex flex-col gap-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold">WORKFLOW</span>
+<h3 class="font-bold text-sm truncate text-on-surface">Weekly Report Generator</h3>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">89</span>
+<span class="text-xs font-semibold">89</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col group transition-all duration-300">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img alt="Product Screenshot" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A clean mobile app interface showing a productivity timer with a dark aesthetic and accent primary colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZm9VHMa-R9KuwhzCbYj5mLMmmG_2NjT9kar9jd_gzVktXahH2RHD_eNHwYeed4W10eSerk0sqTsCq-j5V67w9JXDb9yabp3ozPe6eoOP-WpzqqXrfqVbj-1V1I7xGlkCImEQ1mcncmcr7xxUA4vkZqRCy9pg1CfUtWQbhKR-viM11p_abC1zOexCZj7oLcVduCo-JTbtBIV0b_P-kEtUt_Wv1ctxUFe-oT_oci6dnX_aCT_8teIArfiaviPO44gyPieDA_8cHkqE"/>
+</div>
+<div class="p-3 flex flex-col gap-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold">TOOL</span>
+<h3 class="font-bold text-sm truncate text-on-surface">Data Quality Checker</h3>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">112</span>
+<span class="text-xs font-semibold">112</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col group transition-all duration-300">
+<div class="aspect-square relative overflow-hidden bg-surface-container-low">
+<img alt="Product Screenshot" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Code editor interface with syntax highlighting and a clean side panel for file navigation in a high-end tech environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6B2-nGngq6JHCqZTGe3J_NYhmpAEPSBTyj2xSZAqJ8zuU2IKJmcSDMBxWmAnwm9_WM-FPrs79zdQNy_3yYmym8NPvSr_MRBDLoUHq0exNQY8w-QWm_MxcFTkZHNtE7C2CVPaVa-KlbH9jFKMEMXGBDLpWbW7kaYML3Tgf_523CV2zsoftbfqlMLvd37vJN5cG0_i2qdIDrhmftPghex49YDlcT2BImW2kNwcuhwfv73zteBXEfj-sm9nC3vPAsiskxqUbzV6CFDI"/>
+</div>
+<div class="p-3 flex flex-col gap-1">
+<span class="text-[9px] uppercase tracking-widest text-primary font-bold">WORKFLOW</span>
+<h3 class="font-bold text-sm truncate text-on-surface">Meeting Notes Summarizer</h3>
+<div class="flex items-center justify-between mt-2">
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">203</span>
+<span class="text-xs font-semibold">203</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State / Add Build Card -->
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 border-t border-[#DAC1B9]/20 bg-[#F9F9F8]/80 dark:bg-stone-900/80 backdrop-blur-xl">
+<div class="flex justify-around items-center pt-3 pb-8 px-4">
+<!-- Feed (Inactive) -->
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/60 dark:text-[#F9F9F8]/60 hover:text-[#863F20] transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dynamic_feed">dynamic_feed</span>
+<span class="font-['Inter'] text-[11px] font-medium tracking-wider uppercase mt-1">Feed</span>
+</a>
+<!-- Gallery (Inactive) -->
+<a class="flex flex-col items-center justify-center text-[#1A1A1A]/60 dark:text-[#F9F9F8]/60 hover:text-[#863F20] transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Inter'] text-[11px] font-medium tracking-wider uppercase mt-1">Gallery</span>
+</a>
+<!-- Profile (Active) -->
+<a class="flex flex-col items-center justify-center dark:text-[#A45635] font-bold scale-110 active:scale-90 transition-transform" href="#" style="color: #A45635;">
+<span class="material-symbols-outlined" data-icon="person" style="font-variation-settings: 'FILL' 1; color: #A45635;">person</span>
+<span class="font-['Inter'] text-[11px] font-medium tracking-wider uppercase mt-1">Profile</span>
+</a>
+</div>
+</nav>
+</body></html>
